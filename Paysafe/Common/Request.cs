@@ -19,9 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RequestType=Paysafe.RequestType;
 
 namespace Paysafe.Common
 {
@@ -30,35 +27,35 @@ namespace Paysafe.Common
         /// <summary>
         /// The uri to be accessed for this request
         /// </summary>
-        private String uri;
+        private readonly String _uri;
         
         /// <summary>
         /// The type of request to be perfomed (GET/POST/DELETE/PUT)
         /// </summary>
-        private RequestType requestMethod;
+        private readonly RequestType _requestMethod;
 
         /// <summary>
         /// The JSONObject to send as the request body
         /// </summary>
-        private JSONObject requestBody;
+        private readonly JsonObject _requestBody;
 
         /// <summary>
         /// Any additional query string parameters to be sent
         /// </summary>
-        private Dictionary<String, String> queryString;
+        private readonly Dictionary<String, String> _queryString;
 
         /// <summary>
         /// Allow the full url to be specified rather than the uri
         /// </summary>
-        private String url;
+        private readonly String _url;
 
-        public Request(String uri = "", Dictionary<String, String> queryString = null, RequestType method = RequestType.GET, JSONObject body = null, String url = null)
+        public Request(String uri = "", Dictionary<String, String> queryString = null, RequestType method = RequestType.Get, JsonObject body = null, String url = null)
         {
-            this.uri = uri;
-            this.requestMethod = method;
-            this.requestBody = body;
-            this.queryString = queryString;
-            this.url = url;
+            _uri = uri;
+            _requestMethod = method;
+            _requestBody = body;
+            _queryString = queryString;
+            _url = url;
         }
 
         /// <summary>
@@ -66,39 +63,39 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="apiEndPoint">string</param>
         /// <returns>string</returns>
-        public String buildUrl(String apiEndPoint)
+        public String BuildUrl(String apiEndPoint)
         {
-            if(null == this.url) {
-                return apiEndPoint + '/' + this.uri + this.buildQueryString();
+            if(null == _url) {
+                return apiEndPoint + '/' + _uri + BuildQueryString();
             }
-            if (this.url.IndexOf(apiEndPoint, StringComparison.CurrentCulture) != 0)
+            if (_url.IndexOf(apiEndPoint, StringComparison.CurrentCulture) != 0)
             {
-                throw new PaysafeException("Unexpected endpoint in url: " + this.url + " expected: " + apiEndPoint);
+                throw new PaysafeException("Unexpected endpoint in url: " + _url + " expected: " + apiEndPoint);
             }
-            return this.url;
+            return _url;
         }
 
         /// <summary>
         /// Builds the query string if applicable
         /// </summary>
         /// <returns>string</returns>
-        private String buildQueryString()
+        private String BuildQueryString()
         {
             String response = "";
-            if(this.queryString != null && this.queryString.Count > 0) {
-                if (this.uri != null && this.uri.IndexOf("?", StringComparison.CurrentCulture) >= 0)
+            if(_queryString != null && _queryString.Count > 0) {
+                if (_uri != null && _uri.IndexOf("?", StringComparison.CurrentCulture) >= 0)
                 {
                     response += "&";
                 } else {
                     response += "?";
                 }
-                foreach (KeyValuePair<String, String> entry in this.queryString)
+                foreach (KeyValuePair<String, String> entry in _queryString)
                 {
                     if (response.Length > 1)
                     {
                         response += '&';
                     }
-                    response += entry.Key + '=' + System.Uri.EscapeDataString(entry.Value);
+                    response += entry.Key + '=' + Uri.EscapeDataString(entry.Value);
                 }
                 
             }
@@ -109,18 +106,18 @@ namespace Paysafe.Common
         /// Get the type fo request to be performed
         /// </summary>
         /// <returns></returns>
-        public string method()
+        public string Method()
         {
-            return this.requestMethod.ToString();
+            return _requestMethod.ToString();
         }
 
         /// <summary>
         /// returns the JSON encoded body object
         /// </summary>
         /// <returns></returns>
-        public string body()
+        public string Body()
         {
-            return this.requestBody.ToString();
+            return _requestBody.ToString();
         }
     }
 }

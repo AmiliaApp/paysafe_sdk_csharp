@@ -18,9 +18,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.CardPayments
 {
@@ -31,21 +28,21 @@ namespace Paysafe.CardPayments
         /// number of results per page
         /// </summary>
        
-        public int? limit = null;
+        public int? Limit = null;
 
         /// <summary>
         /// The offset to start the request
         /// </summary>
-        public int? offset = null;
+        public int? Offset = null;
 
         /// <summary>
         /// The earliest date to match
         /// </summary>
-        public String startDate = null;
+        public String StartDate = null;
 
         /// <summary>
         /// The latest date to match
         /// </summary>
-        public String endDate = null;
+        public String EndDate = null;
     }
 }

@@ -17,33 +17,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is Profile class.
-    public class Profile : JSONObject
+    public class Profile : JsonObject
     {
         /// <summary>
         /// Initialize the Profile object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Profile(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {DirectDebitConstants.firstName, STRING_TYPE},
-             {DirectDebitConstants.lastName, STRING_TYPE},
-             {DirectDebitConstants.email, EMAIL_TYPE},
+             {GlobalConstants.FirstName, StringType},
+             {GlobalConstants.LastName, StringType},
+             {GlobalConstants.Email, EmailType},
             // {DirectDebitConstants.ssn,STRING_TYPE},
-             {DirectDebitConstants.dateOfBirth,typeof(DateOfBirth)},
+             {GlobalConstants.DateOfBirth,typeof(DateOfBirth)},
          };
 
 
@@ -51,91 +48,91 @@ namespace Paysafe.DirectDebit
         /// Get the firstName
         /// </summary>
         /// <returns>string</returns>
-        public string firstName()
+        public string FirstName()
         {
-            return this.getProperty(DirectDebitConstants.firstName);
+            return GetProperty(GlobalConstants.FirstName);
         }
 
         /// <summary>
         /// Set the firstName
         /// </summary>
         /// <returns>void</returns>
-        public void firstName(string data)
+        public void FirstName(string data)
         {
-            this.setProperty(DirectDebitConstants.firstName, data);
+            SetProperty(GlobalConstants.FirstName, data);
         }
 
         /// <summary>
         /// Get the lastName
         /// </summary>
         /// <returns>string</returns>
-        public string lastName()
+        public string LastName()
         {
-            return this.getProperty(DirectDebitConstants.lastName);
+            return GetProperty(GlobalConstants.LastName);
         }
 
         /// <summary>
         /// Set the lastName
         /// </summary>
         /// <returns>void</returns>
-        public void lastName(string data)
+        public void LastName(string data)
         {
-            this.setProperty(DirectDebitConstants.lastName, data);
+            SetProperty(GlobalConstants.LastName, data);
         }
 
         /// <summary>
         /// Get the email
         /// </summary>
         /// <returns>string</returns>
-        public string email()
+        public string Email()
         {
-            return this.getProperty(DirectDebitConstants.email);
+            return GetProperty(GlobalConstants.Email);
         }
 
         /// <summary>
         /// Set the email
         /// </summary>
         /// <returns>void</returns>
-        public void email(string data)
+        public void Email(string data)
         {
-            this.setProperty(DirectDebitConstants.email, data);
+            SetProperty(GlobalConstants.Email, data);
         }
 
         /// <summary>
         /// Get the dateOfBirth
         /// </summary>
         /// <returns>DateOfBirth</returns>
-        public DateOfBirth dateOfBirth()
+        public DateOfBirth DateOfBirth()
         {
-            return this.getProperty(DirectDebitConstants.dateOfBirth);
+            return GetProperty(GlobalConstants.DateOfBirth);
         }
 
         /// <summary>
         /// Set the dateOfBirth
         /// </summary>
         /// <returns>void</returns>
-        public void dateOfBirth(DateOfBirth data)
+        public void DateOfBirth(DateOfBirth data)
         {
-            this.setProperty(DirectDebitConstants.dateOfBirth, data);
+            SetProperty(GlobalConstants.DateOfBirth, data);
         }
 
 
         /// <summary>
-        /// ProfileBuilder<typeparam name="TBLDR"></typeparam> will allow a Profile to be initialized
+        /// ProfileBuilder<typeparam name="TBldr"></typeparam> will allow a Profile to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class ProfileBuilder<TBLDR> : NestedJSONBuilder<Profile, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class ProfileBuilder<TBldr> : NestedJsonBuilder<Profile, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Profile builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public ProfileBuilder(TBLDR parent)
+            public ProfileBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -143,9 +140,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> firstName(string data)
+            public ProfileBuilder<TBldr> FirstName(string data)
             {
-                this.properties[DirectDebitConstants.firstName] = data;
+                Properties[GlobalConstants.FirstName] = data;
                 return this;
             }
 
@@ -154,9 +151,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> lastName(string data)
+            public ProfileBuilder<TBldr> LastName(string data)
             {
-                this.properties[DirectDebitConstants.lastName] = data;
+                Properties[GlobalConstants.LastName] = data;
                 return this;
             }
 
@@ -165,9 +162,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> email(string data)
+            public ProfileBuilder<TBldr> Email(string data)
             {
-                this.properties[DirectDebitConstants.email] = data;
+                Properties[GlobalConstants.Email] = data;
                 return this;
             }           
         }

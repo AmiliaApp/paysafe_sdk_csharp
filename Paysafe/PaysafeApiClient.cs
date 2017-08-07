@@ -38,27 +38,27 @@ namespace Paysafe
         /// <summary>
         /// The api key id
         /// </summary>
-        private String apiKeyId;
+        private String _apiKeyId;
 
         /// <summary>
         /// The api key passsword
         /// </summary>
-        private String apiKeyPassword;
+        private String _apiKeyPassword;
 
         /// <summary>
         /// The api environment (test/live)
         /// </summary>
-        private Environment apiEnvironment;
+        private Environment _apiEnvironment;
 
         /// <summary>
         /// The merchant account (used only by the CardPayments api)
         /// </summary>
-        private String apiAccount;
+        private String _apiAccount;
 
         /// <summary>
         /// The api endpoint to which all requests should be sent
         /// </summary>
-        private String apiEndPoint;
+        private String _apiEndPoint;
 
         /// <summary>
         /// Initialize the api client.
@@ -69,53 +69,53 @@ namespace Paysafe
         /// <param name="account">string</param>
         public PaysafeApiClient(string keyId, string keyPassword, Environment environment, string account = "")
         {
-            this.apiKey(keyId);
-            this.apiPassword(keyPassword);
-            this.environment(environment);
-            this.account(account);
+            ApiKey(keyId);
+            ApiPassword(keyPassword);
+            Environment(environment);
+            Account(account);
         }
 
         /// <summary>
         /// Sets the api key id
         /// </summary>
         /// <param name="newKeyId">string</param>
-        protected void apiKey(string newKeyId)
+        protected void ApiKey(string newKeyId)
         {
             if (newKeyId == null)
             {
                 throw new PaysafeException("You must specify an API Key");
             }
-            this.apiKeyId = newKeyId;
+            _apiKeyId = newKeyId;
         }
 
         /// <summary>
         /// Sets the api key password
         /// </summary>
         /// <param name="newKeyPassword">string</param>
-        protected void apiPassword(string newKeyPassword)
+        protected void ApiPassword(string newKeyPassword)
         {
             if (newKeyPassword == null)
             {
                 throw new PaysafeException("You must specify an API Password");
             }
-            this.apiKeyPassword = newKeyPassword;
+            _apiKeyPassword = newKeyPassword;
         }
 
         /// <summary>
         /// Sets the environment, and api endpoint
         /// </summary>
         /// <param name="newEnvironment">Environment</param>
-        protected void environment(Environment newEnvironment)
+        protected void Environment(Environment newEnvironment)
         {
-            this.apiEnvironment = newEnvironment;
+            _apiEnvironment = newEnvironment;
 
-            if (this.apiEnvironment == Environment.TEST)
+            if (_apiEnvironment == Paysafe.Environment.Test)
             {
-                this.apiEndPoint = "https://api.test.netbanx.com";
+                _apiEndPoint = "https://api.test.netbanx.com";
             }
             else
             {
-                this.apiEndPoint = "https://api.netbanx.com";
+                _apiEndPoint = "https://api.netbanx.com";
             }
 
         }
@@ -124,18 +124,18 @@ namespace Paysafe
         /// Sets the merchant account number for use with the card payments api
         /// </summary>
         /// <param name="account">string</param>
-        public void account(string newAccount)
+        public void Account(string newAccount)
         {
-            this.apiAccount = newAccount;
+            _apiAccount = newAccount;
         }
 
         /// <summary>
         /// Get the merchant account number
         /// </summary>
         /// <returns>string</returns>
-        public String account()
+        public String Account()
         {
-            return this.apiAccount;
+            return _apiAccount;
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Paysafe
         /// </summary>
         /// <returns>CustomerVaultService</returns>
         public CustomerVaultService customerVaultService() {
-            return new Paysafe.CustomerVault.CustomerVaultService(this);
+            return new CustomerVaultService(this);
         }
 
 	    
@@ -180,9 +180,9 @@ namespace Paysafe
         /// Returns the base64 encoded authentication string for the http request headers
         /// </summary>
         /// <returns>string</returns>
-        private string getAuthString()
+        private string GetAuthString()
         {
-            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(this.apiKeyId + ":" + this.apiKeyPassword));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(_apiKeyId + ":" + _apiKeyPassword));
         }
 
         /// <summary>
@@ -190,17 +190,17 @@ namespace Paysafe
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Dictionary<string,object></returns>
-        public Dictionary<string,object> processRequest(Request request)
+        public Dictionary<string,object> ProcessRequest(Request request)
         {
-            HttpWebRequest conn = (HttpWebRequest)WebRequest.CreateHttp(request.buildUrl(this.apiEndPoint));
-            conn.Headers["Authorization"] = "Basic " + this.getAuthString();
+            HttpWebRequest conn = (HttpWebRequest)WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
+            conn.Headers["Authorization"] = "Basic " + GetAuthString();
             conn.ContentType = "application/json; charset=utf-8";
 
-            conn.Method = request.method();
-            if (request.method().Equals(RequestType.POST.ToString())
-                || request.method().Equals(RequestType.PUT.ToString()))
+            conn.Method = request.Method();
+            if (request.Method().Equals(RequestType.Post.ToString())
+                || request.Method().Equals(RequestType.Put.ToString()))
             {
-                string requestBody = request.body();
+                string requestBody = request.Body();
                 byte[] requestData = Encoding.UTF8.GetBytes(requestBody);
 
                 var resultRequest = conn.BeginGetRequestStream(null, null);
@@ -215,9 +215,9 @@ namespace Paysafe
                 WebResponse responseObject = conn.EndGetResponse(responseRequest);
 
                 StreamReader sr = new StreamReader(responseObject.GetResponseStream());
-                return PaysafeApiClient.parseResponse(sr.ReadToEnd());
+                return ParseResponse(sr.ReadToEnd());
             }
-            catch (System.Net.WebException ex)
+            catch (WebException ex)
             {
                 HttpWebResponse response = (HttpWebResponse)ex.Response;
                 StreamReader sr = new StreamReader(response.GetResponseStream());
@@ -258,28 +258,28 @@ namespace Paysafe
                 if (exceptionType != null)
                 {
                     String message = ex.Message;
-                    Dictionary<string, dynamic> rawResponse = PaysafeApiClient.parseResponse(body);
+                    Dictionary<string, dynamic> rawResponse = ParseResponse(body);
                     if (rawResponse.ContainsKey("error"))
                     {
                         message = rawResponse["error"]["message"];
                     }
 
                     Object[] args = { message, ex.InnerException };
-                    PaysafeException PaysafeException = Activator.CreateInstance
+                    PaysafeException paysafeException = Activator.CreateInstance
                         (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
-                    PaysafeException.rawResponse(rawResponse);
+                    paysafeException.RawResponse(rawResponse);
                     if (rawResponse.ContainsKey("error"))
                     {
-                        PaysafeException.code(int.Parse(rawResponse["error"]["code"]));
+                        paysafeException.Code(int.Parse(rawResponse["error"]["code"]));
                     }
-                    throw PaysafeException;
+                    throw paysafeException;
                 }
                 throw;
             }
             throw new PaysafeException("An unknown error has occurred.");
         }
 
-        public static Dictionary<string, object> parseResponse(string response)
+        public static Dictionary<string, object> ParseResponse(string response)
         {
             if (String.IsNullOrWhiteSpace(response))
             {

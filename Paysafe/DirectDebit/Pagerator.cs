@@ -19,8 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
@@ -31,22 +29,22 @@ namespace Paysafe.DirectDebit
         public Pagerator(PaysafeApiClient apiClient, Type pagingClassType, Dictionary<string, object> data)
             : base(apiClient, pagingClassType)
         {
-            this.parseResponse(data);
+            ParseResponse(data);
         }
 
-        override protected sealed void parseResponse(Dictionary<string, dynamic> data)
+        protected sealed override void ParseResponse(Dictionary<string, dynamic> data)
         {
-            if (!data.ContainsKey(this.arrayKey) || !(data[this.arrayKey] is List<dynamic>))
+            if (!data.ContainsKey(ArrayKey) || !(data[ArrayKey] is List<dynamic>))
             {
                 throw new PaysafeException("Missing array key from results");
             }
-            foreach (dynamic obj in data[this.arrayKey] as List<dynamic>)
+            foreach (dynamic obj in data[ArrayKey] as List<dynamic>)
             {
                 Object[] args = { obj };
-                dynamic result = Activator.CreateInstance(this.classType, args);
-                this.results.Add(result);
+                dynamic result = Activator.CreateInstance(ClassType, args);
+                Results.Add(result);
             }
-            this.nextPage = null;
+            NextPage = null;
 
             if (data.ContainsKey("links")
                 && data["links"] is List<dynamic>)
@@ -54,9 +52,9 @@ namespace Paysafe.DirectDebit
                 foreach (dynamic obj in (List<dynamic>)data["links"])
                 {
                     Link tmpLink = new Link(obj);
-                    if (tmpLink.rel().Equals("next"))
+                    if (tmpLink.Rel().Equals("next"))
                     {
-                        this.nextPage = tmpLink.href();
+                        NextPage = tmpLink.Href();
                         break;
                     }
                 }
@@ -68,9 +66,9 @@ namespace Paysafe.DirectDebit
                 foreach (dynamic obj in data["links"] as List<dynamic>)
                 {
                     Link tmpLink = new Link(obj);
-                    if (tmpLink.rel().Equals("self"))
+                    if (tmpLink.Rel().Equals("self"))
                     {                       
-                       this.selfPage = tmpLink.href();
+                       SelfPage = tmpLink.Href();
                         break;
                     }
                 }
@@ -82,9 +80,9 @@ namespace Paysafe.DirectDebit
                 foreach (dynamic obj in (List<dynamic>)data["links"])
                 {
                     Link tmpLink = new Link(obj);
-                    if (tmpLink.rel().Equals("previous"))
+                    if (tmpLink.Rel().Equals("previous"))
                     {
-                        this.previousPage = tmpLink.href();
+                        PreviousPage = tmpLink.Href();
                         break;
                     }
                 }

@@ -17,121 +17,118 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
-    public class AccordD : JSONObject
+    public class AccordD : JsonObject
     {
         /// <summary>
         /// Initialize the AccordD object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public AccordD(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static readonly Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CardPaymentsConstants.financingType, CardPaymentsConstants.enumFinancingType},
-            {CardPaymentsConstants.plan, STRING_TYPE},
-            {CardPaymentsConstants.gracePeriod, INT_TYPE},
-            {CardPaymentsConstants.term, INT_TYPE}
+            {GlobalConstants.FinancingType, CardPaymentsConstants.EnumFinancingType},
+            {GlobalConstants.Plan, StringType},
+            {GlobalConstants.GracePeriod, IntType},
+            {GlobalConstants.Term, IntType}
         };
 
         /// <summary>
         /// Get the financingType
         /// </summary>
         /// <returns>string</returns>
-        public string financingType()
+        public string FinancingType()
         {
-            return this.getProperty(CardPaymentsConstants.financingType);
+            return GetProperty(GlobalConstants.FinancingType);
         }
 
         /// <summary>
         /// Set the financingType
         /// </summary>
         /// <returns>void</returns>
-        public void financingType(string data)
+        public void FinancingType(string data)
         {
-            this.setProperty(CardPaymentsConstants.financingType, data);
+            SetProperty(GlobalConstants.FinancingType, data);
         }
 
         /// <summary>
         /// Get the plan
         /// </summary>
         /// <returns>string</returns>
-        public string plan()
+        public string Plan()
         {
-            return this.getProperty(CardPaymentsConstants.plan);
+            return GetProperty(GlobalConstants.Plan);
         }
 
         /// <summary>
         /// Set the plan
         /// </summary>
         /// <returns>void</returns>
-        public void plan(string data)
+        public void Plan(string data)
         {
-            this.setProperty(CardPaymentsConstants.plan, data);
+            SetProperty(GlobalConstants.Plan, data);
         }
 
         /// <summary>
         /// Get the gracePeriod
         /// </summary>
         /// <returns>int</returns>
-        public int gracePeriod()
+        public int GracePeriod()
         {
-            return this.getProperty(CardPaymentsConstants.gracePeriod);
+            return GetProperty(GlobalConstants.GracePeriod);
         }
 
         /// <summary>
         /// Set the gracePeriod
         /// </summary>
         /// <returns>void</returns>
-        public void gracePeriod(int data)
+        public void GracePeriod(int data)
         {
-            this.setProperty(CardPaymentsConstants.gracePeriod, data);
+            SetProperty(GlobalConstants.GracePeriod, data);
         }
 
         /// <summary>
         /// Get the term
         /// </summary>
         /// <returns>int</returns>
-        public int term()
+        public int Term()
         {
-            return this.getProperty(CardPaymentsConstants.term);
+            return GetProperty(GlobalConstants.Term);
         }
 
         /// <summary>
         /// Set the term
         /// </summary>
         /// <returns>void</returns>
-        public void term(int data)
+        public void Term(int data)
         {
-            this.setProperty(CardPaymentsConstants.term, data);
+            SetProperty(GlobalConstants.Term, data);
         }
 
         /// <summary>
-        /// AccordDBuilder<typeparam name="TBLDR"></typeparam> will allow a AccordD to be initialized
+        /// AccordDBuilder<typeparam name="TBldr"></typeparam> will allow a AccordD to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class AccordDBuilder<TBLDR> : NestedJSONBuilder<AccordD, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class AccordDBuilder<TBldr> : NestedJsonBuilder<AccordD, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the AccordD builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public AccordDBuilder(TBLDR parent)
+            public AccordDBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -139,9 +136,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AccordDBuilder<TBLDR></returns>
-            public AccordDBuilder<TBLDR> financingType(string data)
+            public AccordDBuilder<TBldr> FinancingType(string data)
             {
-                this.properties[CardPaymentsConstants.financingType] = data;
+                Properties[GlobalConstants.FinancingType] = data;
                 return this;
             }
 
@@ -150,9 +147,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AccordDBuilder<TBLDR></returns>
-            public AccordDBuilder<TBLDR> plan(string data)
+            public AccordDBuilder<TBldr> Plan(string data)
             {
-                this.properties[CardPaymentsConstants.plan] = data;
+                Properties[GlobalConstants.Plan] = data;
                 return this;
             }
 
@@ -161,9 +158,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>AccordDBuilder<TBLDR></returns>
-            public AccordDBuilder<TBLDR> gracePeriod(int data)
+            public AccordDBuilder<TBldr> GracePeriod(int data)
             {
-                this.properties[CardPaymentsConstants.gracePeriod] = data;
+                Properties[GlobalConstants.GracePeriod] = data;
                 return this;
             }
 
@@ -172,9 +169,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>AccordDBuilder<TBLDR></returns>
-            public AccordDBuilder<TBLDR> term(int data)
+            public AccordDBuilder<TBldr> Term(int data)
             {
-                this.properties[CardPaymentsConstants.term] = data;
+                Properties[GlobalConstants.Term] = data;
                 return this;
             }
         }

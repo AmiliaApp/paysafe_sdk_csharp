@@ -19,119 +19,117 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public class OptError: JSONObject
+    public class OptError: JsonObject
     {
         /// <summary>
         /// Initialize the Error object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public OptError(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CommonConstants.code, STRING_TYPE},
-             {CommonConstants.message, STRING_TYPE},
-             {CommonConstants.details, typeof(List<string>)},
-             {CommonConstants.fieldErrors, typeof(List<FieldError>)},
-             {CommonConstants.links, typeof(List<Link>)}
+             {GlobalConstants.Code, StringType},
+             {GlobalConstants.Message, StringType},
+             {GlobalConstants.Details, typeof(List<string>)},
+             {GlobalConstants.FieldErrors, typeof(List<FieldError>)},
+             {GlobalConstants.Links, typeof(List<Link>)}
          };
 
         /// <summary>
         /// Get the code
         /// </summary>
         /// <returns>string</returns>
-        public string code()
+        public string Code()
         {
-            return this.getProperty(CommonConstants.code);
+            return GetProperty(GlobalConstants.Code);
         }
 
         /// <summary>
         /// Set the code
         /// </summary>
         /// <returns>void</returns>
-        public void code(string data)
+        public void Code(string data)
         {
-            this.setProperty(CommonConstants.code, data);
+            SetProperty(GlobalConstants.Code, data);
         }
 
         /// <summary>
         /// Get the message
         /// </summary>
         /// <returns>string</returns>
-        public string message()
+        public string Message()
         {
-            return this.getProperty(CommonConstants.message);
+            return GetProperty(GlobalConstants.Message);
         }
 
         /// <summary>
         /// Set the message
         /// </summary>
         /// <returns>void</returns>
-        public void message(string data)
+        public void Message(string data)
         {
-            this.setProperty(CommonConstants.message, data);
+            SetProperty(GlobalConstants.Message, data);
         }
 
         /// <summary>
         /// Get the details
         /// </summary>
         /// <returns>Array</returns>
-        public List<string> details()
+        public List<string> Details()
         {
-            return this.getProperty(CommonConstants.details);
+            return GetProperty(GlobalConstants.Details);
         }
 
         /// <summary>
         /// Set the details
         /// </summary>
         /// <returns>Array of strings</returns>
-        public void details(List<string> data)
+        public void Details(List<string> data)
         {
-            this.setProperty(CommonConstants.details, data);
+            SetProperty(GlobalConstants.Details, data);
         }
 
         /// <summary>
         /// Get the fieldErrors
         /// </summary>
         /// <returns>array of strings</returns>
-        public List<FieldError> fieldErrors()
+        public List<FieldError> FieldErrors()
         {
-            return this.getProperty(CommonConstants.fieldErrors);
+            return GetProperty(GlobalConstants.FieldErrors);
         }
 
         /// <summary>
         /// Set the fieldErrors
         /// </summary>
         /// <returns>void</returns>
-        public void fieldErrors(Array data)
+        public void FieldErrors(Array data)
         {
-            this.setProperty(CommonConstants.fieldErrors, data);
+            SetProperty(GlobalConstants.FieldErrors, data);
         }
 
         /// <summary>
         /// Get the links
         /// </summary>
         /// <returns>Array of Paysafe.Common.Link</returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(CommonConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(CommonConstants.links, data);
+            SetProperty(GlobalConstants.Links, data);
         }
     }
 }

@@ -17,38 +17,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Paysafe.Common
 {
-    public class NestedJSONBuilder<TRTN, TBLDR> : BaseJSONBuilder<TRTN>
-        where TBLDR : GenericJSONBuilder
-        where TRTN : JSONObject
+    public class NestedJsonBuilder<TRtn, TBldr> : BaseJsonBuilder<TRtn>
+        where TBldr : GenericJsonBuilder
+        where TRtn : JsonObject
     {
         /// <summary>
         /// A reference to the builder object which instantiated this builder
         /// </summary>
-        protected TBLDR parent;
+        protected TBldr Parent;
 
         /// <summary>
         /// Return the parent builder
         /// </summary>
         /// <returns>TBLDR</returns>
-        public TBLDR Done()
+        public TBldr Done()
         {
-            return parent;
+            return Parent;
         }
 
         /// <summary>
         /// Initialize this builder with a reference to the parent builder
         /// </summary>
         /// <param name="parent"></param>
-        public NestedJSONBuilder(TBLDR parent)
+        public NestedJsonBuilder(TBldr parent)
         {
-            this.parent = parent;
+            Parent = parent;
         }
     }
 }

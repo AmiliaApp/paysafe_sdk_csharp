@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Paysafe.Common;
 
@@ -31,12 +30,12 @@ namespace Paysafe.ThreeDSecure
         /// <summary>
         /// The api client, performs all http requests
         /// </summary>
-        private PaysafeApiClient client;
+        private readonly PaysafeApiClient _client;
 
         /// <summary>
         /// The ThreeDSecure api base uri 
         /// </summary>
-        private string uri = "threedsecure/v1";
+        private string _uri = "threedsecure/v1";
 
         /// <summary>
         /// Initialize the ThreeDSecure service with an client object
@@ -44,19 +43,19 @@ namespace Paysafe.ThreeDSecure
         /// <param name="client">PaysafeApiClient</param>
         public ThreeDSecureService(PaysafeApiClient client)
         {
-            this.client = client;
+            _client = client;
         }
 
         /// <summary>
         /// Check if the service is available
         /// </summary>
         /// <returns>true if successful</returns>
-        public Boolean monitor()
+        public Boolean Monitor()
         {
             Request request = new Request(uri: "threedsecure/monitor");
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return ("READY".Equals((string)(response[ThreeDSecureConstants.status])));
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
         /// <summary>
@@ -64,27 +63,27 @@ namespace Paysafe.ThreeDSecure
         /// </summary>
         /// <param name="EnrollmentLookups">EnrollmentLookups</param>
         /// <returns>EnrollmentLookups</returns>
-        public EnrollmentChecks submit(EnrollmentChecks enrollmentChecks)
+        public EnrollmentChecks Submit(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.setRequiredFields(new List<string> {
-                ThreeDSecureConstants.merchantRefNum,
-                ThreeDSecureConstants.amount,
-                ThreeDSecureConstants.currency,
-                ThreeDSecureConstants.card,
-                ThreeDSecureConstants.customerIp,
-                ThreeDSecureConstants.userAgent,
-                ThreeDSecureConstants.acceptHeader,
-                ThreeDSecureConstants.merchantUrl
+            enrollmentChecks.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,
+                GlobalConstants.Currency,
+                GlobalConstants.Card,
+                GlobalConstants.CustomerIp,
+                GlobalConstants.UserAgent,
+                GlobalConstants.AcceptHeader,
+                GlobalConstants.MerchantUrl
             });
 
-            enrollmentChecks.checkRequiredFields();
+            enrollmentChecks.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/accounts/" + client.account() +"/enrollmentchecks"),
+                method: RequestType.Post,
+                uri: PrepareUri("/accounts/" + _client.Account() +"/enrollmentchecks"),
                 body: enrollmentChecks
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new EnrollmentChecks(response);
         }
@@ -94,16 +93,16 @@ namespace Paysafe.ThreeDSecure
         /// </summary>
         /// <param name="auth">EnrollmentLookups</param>
         /// <returns>EnrollmentLookups</returns>
-        public EnrollmentChecks get(EnrollmentChecks enrollmentChecks)
+        public EnrollmentChecks Get(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.setRequiredFields(new List<string> { ThreeDSecureConstants.id });
-            enrollmentChecks.checkRequiredFields();
+            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            enrollmentChecks.CheckRequiredFields();
 
             Request request = new Request(
-                uri: this.prepareURI("/accounts/" + client.account() + "/enrollmentchecks/" + enrollmentChecks.id())
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new EnrollmentChecks(response);
         }
@@ -113,20 +112,20 @@ namespace Paysafe.ThreeDSecure
         /// </summary>
         /// <param name="Authentications">Authentications</param>
         /// <returns>Authentications</returns>
-        public Authentications submit(Authentications authentications)
+        public Authentications Submit(Authentications authentications)
         {
-            authentications.setRequiredFields(new List<string> {
-                ThreeDSecureConstants.merchantRefNum,
-                ThreeDSecureConstants.paResp,
+            authentications.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.PaResp,
             });
 
-            authentications.checkRequiredFields();                     
+            authentications.CheckRequiredFields();                     
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/accounts/" + client.account() + "/enrollmentchecks/" + authentications.enrollmentId() + "/authentications"),
+                method: RequestType.Post,
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + authentications.EnrollmentId() + "/authentications"),
                 body: authentications
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authentications(response);
         }
@@ -136,10 +135,10 @@ namespace Paysafe.ThreeDSecure
         /// </summary>
         /// <param name="auth">Authentications</param>
         /// <returns>Authentications</returns>
-        public Authentications get(Authentications authentications, bool includeEnrollment = false)
+        public Authentications Get(Authentications authentications, bool includeEnrollment = false)
         {
-            authentications.setRequiredFields(new List<string> { ThreeDSecureConstants.id });
-            authentications.checkRequiredFields();
+            authentications.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            authentications.CheckRequiredFields();
 
             Dictionary<string, string> queryStr = new Dictionary<string, string>();
             StringBuilder toInclude = new StringBuilder();
@@ -151,18 +150,18 @@ namespace Paysafe.ThreeDSecure
             queryStr.Add("fields", toInclude.ToString());                                          
 
             Request request = new Request(
-                uri: this.prepareURI("/accounts/" + client.account() + "/authentications/" + authentications.id()),
+                uri: PrepareUri("/accounts/" + _client.Account() + "/authentications/" + authentications.Id()),
                 queryString : queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authentications(response);
         }
 
-        private string prepareURI(string path)
+        private string PrepareUri(string path)
         {
-            return this.uri + path;
+            return _uri + path;
         }
     }
 }

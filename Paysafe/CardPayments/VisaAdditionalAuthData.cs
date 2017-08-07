@@ -17,103 +17,100 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
-    public class VisaAdditionalAuthData : JSONObject
+    public class VisaAdditionalAuthData : JsonObject
     {
         /// <summary>
         /// Initialize the VisaAdditionalAuthData object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public VisaAdditionalAuthData(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CardPaymentsConstants.recipientDateOfBirth, typeof(RecipientDateOfBirth)},
-            {CardPaymentsConstants.recipientZip, STRING_TYPE},
-            {CardPaymentsConstants.recipientLastName, STRING_TYPE},
-            {CardPaymentsConstants.recipientAccountNumber, STRING_TYPE}
+            {GlobalConstants.RecipientDateOfBirth, typeof(RecipientDateOfBirth)},
+            {GlobalConstants.RecipientZip, StringType},
+            {GlobalConstants.RecipientLastName, StringType},
+            {GlobalConstants.RecipientAccountNumber, StringType}
         };
 
         /// <summary>
         /// Get the recipientDateOfBirth
         /// </summary>
         /// <returns>string</returns>
-        public string recipientDateOfBirth()
+        public string RecipientDateOfBirth()
         {
-            return this.getProperty(CardPaymentsConstants.recipientDateOfBirth);
+            return GetProperty(GlobalConstants.RecipientDateOfBirth);
         }
 
         /// <summary>
         /// Set the recipientDateOfBirth
         /// </summary>
         /// <returns>void</returns>
-        public void recipientDateOfBirth(string data)
+        public void RecipientDateOfBirth(string data)
         {
-            this.setProperty(CardPaymentsConstants.recipientDateOfBirth, data);
+            SetProperty(GlobalConstants.RecipientDateOfBirth, data);
         }
 
         /// <summary>
         /// Get the recipientZip
         /// </summary>
         /// <returns>string</returns>
-        public string recipientZip()
+        public string RecipientZip()
         {
-            return this.getProperty(CardPaymentsConstants.recipientZip);
+            return GetProperty(GlobalConstants.RecipientZip);
         }
 
         /// <summary>
         /// Set the recipientZip
         /// </summary>
         /// <returns>void</returns>
-        public void recipientZip(string data)
+        public void RecipientZip(string data)
         {
-            this.setProperty(CardPaymentsConstants.recipientZip, data);
+            SetProperty(GlobalConstants.RecipientZip, data);
         }
 
         /// <summary>
         /// Get the recipientLastName
         /// </summary>
         /// <returns>string</returns>
-        public string recipientLastName()
+        public string RecipientLastName()
         {
-            return this.getProperty(CardPaymentsConstants.recipientLastName);
+            return GetProperty(GlobalConstants.RecipientLastName);
         }
 
         /// <summary>
         /// Set the recipientLastName
         /// </summary>
         /// <returns>void</returns>
-        public void recipientLastName(string data)
+        public void RecipientLastName(string data)
         {
-            this.setProperty(CardPaymentsConstants.recipientLastName, data);
+            SetProperty(GlobalConstants.RecipientLastName, data);
         }
 
         /// <summary>
         /// Get the recipientAccountNumber
         /// </summary>
         /// <returns>string</returns>
-        public string recipientAccountNumbere()
+        public string RecipientAccountNumbere()
         {
-            return this.getProperty(CardPaymentsConstants.recipientAccountNumber);
+            return GetProperty(GlobalConstants.RecipientAccountNumber);
         }
 
         /// <summary>
         /// Set the recipientAccountNumber
         /// </summary>
         /// <returns>void</returns>
-        public void recipientAccountNumber(string data)
+        public void RecipientAccountNumber(string data)
         {
-            this.setProperty(CardPaymentsConstants.recipientAccountNumber, data);
+            SetProperty(GlobalConstants.RecipientAccountNumber, data);
         }
     }
 }

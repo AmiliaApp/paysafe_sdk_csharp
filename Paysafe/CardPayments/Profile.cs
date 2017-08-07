@@ -17,30 +17,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
-    public class Profile : JSONObject
+    public class Profile : JsonObject
     {
         /// <summary>
         /// Initialize the Profile object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Profile(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CardPaymentsConstants.firstName, STRING_TYPE},
-             {CardPaymentsConstants.lastName, STRING_TYPE},
-             {CardPaymentsConstants.email, EMAIL_TYPE}
+             {GlobalConstants.FirstName, StringType},
+             {GlobalConstants.LastName, StringType},
+             {GlobalConstants.Email, EmailType}
          };
 
 
@@ -48,73 +45,73 @@ namespace Paysafe.CardPayments
         /// Get the firstName
         /// </summary>
         /// <returns>string</returns>
-        public string firstName()
+        public string FirstName()
         {
-            return this.getProperty(CardPaymentsConstants.firstName);
+            return GetProperty(GlobalConstants.FirstName);
         }
 
         /// <summary>
         /// Set the firstName
         /// </summary>
         /// <returns>void</returns>
-        public void firstName(string data)
+        public void FirstName(string data)
         {
-            this.setProperty(CardPaymentsConstants.firstName, data);
+            SetProperty(GlobalConstants.FirstName, data);
         }
 
         /// <summary>
         /// Get the lastName
         /// </summary>
         /// <returns>string</returns>
-        public string lastName()
+        public string LastName()
         {
-            return this.getProperty(CardPaymentsConstants.lastName);
+            return GetProperty(GlobalConstants.LastName);
         }
 
         /// <summary>
         /// Set the lastName
         /// </summary>
         /// <returns>void</returns>
-        public void lastName(string data)
+        public void LastName(string data)
         {
-            this.setProperty(CardPaymentsConstants.lastName, data);
+            SetProperty(GlobalConstants.LastName, data);
         }
 
         /// <summary>
         /// Get the email
         /// </summary>
         /// <returns>string</returns>
-        public string email()
+        public string Email()
         {
-            return this.getProperty(CardPaymentsConstants.email);
+            return GetProperty(GlobalConstants.Email);
         }
 
         /// <summary>
         /// Set the email
         /// </summary>
         /// <returns>void</returns>
-        public void email(string data)
+        public void Email(string data)
         {
-            this.setProperty(CardPaymentsConstants.email, data);
+            SetProperty(GlobalConstants.Email, data);
         }
 
 
         /// <summary>
-        /// ProfileBuilder<typeparam name="TBLDR"></typeparam> will allow a Profile to be initialized
+        /// ProfileBuilder<typeparam name="TBldr"></typeparam> will allow a Profile to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class ProfileBuilder<TBLDR> : NestedJSONBuilder<Profile, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class ProfileBuilder<TBldr> : NestedJsonBuilder<Profile, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Profile builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public ProfileBuilder(TBLDR parent)
+            public ProfileBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -122,9 +119,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> firstName(string data)
+            public ProfileBuilder<TBldr> FirstName(string data)
             {
-                this.properties[CardPaymentsConstants.firstName] = data;
+                Properties[GlobalConstants.FirstName] = data;
                 return this;
             }
 
@@ -133,9 +130,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> lastName(string data)
+            public ProfileBuilder<TBldr> LastName(string data)
             {
-                this.properties[CardPaymentsConstants.lastName] = data;
+                Properties[GlobalConstants.LastName] = data;
                 return this;
             }
 
@@ -144,9 +141,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ProfileBuilder<TBLDR></returns>
-            public ProfileBuilder<TBLDR> email(string data)
+            public ProfileBuilder<TBldr> Email(string data)
             {
-                this.properties[CardPaymentsConstants.email] = data;
+                Properties[GlobalConstants.Email] = data;
                 return this;
             }
         }

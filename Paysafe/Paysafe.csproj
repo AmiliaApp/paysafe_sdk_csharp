@@ -69,7 +69,6 @@
     <Compile Include="Common\APIException.cs" />
     <Compile Include="Common\BaseJSONBuilder.cs" />
     <Compile Include="Common\CardExpiry.cs" />
-    <Compile Include="Common\CommonConstants.cs" />
     <Compile Include="Common\Email.cs" />
     <Compile Include="Common\EntityNotFoundException.cs" />
     <Compile Include="Common\Error.cs" />
@@ -79,9 +78,9 @@
     <Compile Include="Common\InvalidCredentialsException.cs" />
     <Compile Include="Common\InvalidRequestException.cs" />
     <Compile Include="Common\JsonHelper.cs" />
-    <Compile Include="Common\JSONObject.cs" />
+    <Compile Include="Common\JsonObject.cs" />
     <Compile Include="Common\Link.cs" />
-    <Compile Include="Common\NestedJSONBuilder.cs" />
+    <Compile Include="Common\NestedJsonBuilder.cs" />
     <Compile Include="Common\PaysafeException.cs" />
     <Compile Include="Common\PermissionException.cs" />
     <Compile Include="Common\RecipientDateOfBirth.cs" />

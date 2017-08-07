@@ -5,7 +5,7 @@
 	<version>$version$</version>
 	<title>$title$</title>
 	<description>PaySafe SDK - maintained by Amilia</description>
-	<authors>kumarvipin, asawarivaidya</authors>
+	<authors>Patrick, Paquet</authors>
 	<owners>kumarvipin, asawarivaidya</owners>
 	<licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
 	<projectUrl>https://github.com/AmiliaApp/paysafe_sdk_csharp</projectUrl>

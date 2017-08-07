@@ -19,43 +19,41 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CustomerVault
 {
-    public class Card : Paysafe.Common.JSONObject
+    public class Card : JsonObject
     {
         /// <summary>
         /// Initialize the Card object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Card(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CustomerVaultConstants.id, STRING_TYPE},
-            {CustomerVaultConstants.nickName, STRING_TYPE},
-            {CustomerVaultConstants.singleUseToken, STRING_TYPE},
-            {CustomerVaultConstants.status, CustomerVaultConstants.enumStatus},
-            {CustomerVaultConstants.merchantRefNum, STRING_TYPE},
-            {CustomerVaultConstants.holderName, STRING_TYPE},
-            {CustomerVaultConstants.cardNum, STRING_TYPE},
-            {CustomerVaultConstants.cardBin, STRING_TYPE},
-            {CustomerVaultConstants.lastDigits, STRING_TYPE},
-            {CustomerVaultConstants.cardExpiry, typeof(CardExpiry)},
-            {CustomerVaultConstants.cardType, STRING_TYPE},
-            {CustomerVaultConstants.billingAddressId, STRING_TYPE},
-            {CustomerVaultConstants.defaultCardIndicator, BOOL_TYPE},
-            {CustomerVaultConstants.paymentToken, STRING_TYPE},
-            {CustomerVaultConstants.error, typeof(OptError)},
-            {CustomerVaultConstants.links, typeof(List<Link>)},
-            {CustomerVaultConstants.profileId, STRING_TYPE},
-            {CustomerVaultConstants.billingAddress, typeof(BillingAddress)}
+            {GlobalConstants.Id, StringType},
+            {GlobalConstants.NickName, StringType},
+            {GlobalConstants.SingleUseToken, StringType},
+            {GlobalConstants.Status, CustomerVaultConstants.EnumStatus},
+            {GlobalConstants.MerchantRefNum, StringType},
+            {GlobalConstants.HolderName, StringType},
+            {GlobalConstants.CardNum, StringType},
+            {GlobalConstants.CardBin, StringType},
+            {GlobalConstants.LastDigits, StringType},
+            {GlobalConstants.CardExpiry, typeof(CardExpiry)},
+            {GlobalConstants.CardType, StringType},
+            {GlobalConstants.BillingAddressId, StringType},
+            {GlobalConstants.DefaultCardIndicator, BoolType},
+            {GlobalConstants.PaymentToken, StringType},
+            {GlobalConstants.Error, typeof(OptError)},
+            {GlobalConstants.Links, typeof(List<Link>)},
+            {GlobalConstants.ProfileId, StringType},
+            {GlobalConstants.BillingAddress, typeof(BillingAddress)}
             
         };
 
@@ -63,324 +61,324 @@ namespace Paysafe.CustomerVault
         /// Get the id
         /// </summary>
         /// <returns>String</returns>
-        public String id()
+        public String Id()
         {
-            return this.getProperty(CustomerVaultConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(String data)
+        public void Id(String data)
         {
-            this.setProperty(CustomerVaultConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the singleUseToken
         /// </summary>
         /// <returns>String</returns>
-        public String singleUseToken()
+        public String SingleUseToken()
         {
-            return this.getProperty(CustomerVaultConstants.singleUseToken);
+            return GetProperty(GlobalConstants.SingleUseToken);
         }
 
         /// <summary>
         /// Set the singleUseToken
         /// </summary>
         /// <returns>void</returns>
-        public void singleUseToken(String data)
+        public void SingleUseToken(String data)
         {
-            this.setProperty(CustomerVaultConstants.singleUseToken, data);
+            SetProperty(GlobalConstants.SingleUseToken, data);
         }
 
         /// <summary>
         /// Get the nickName
         /// </summary>
         /// <returns>String</returns>
-        public String nickName()
+        public String NickName()
         {
-            return this.getProperty(CustomerVaultConstants.nickName);
+            return GetProperty(GlobalConstants.NickName);
         }
 
         /// <summary>
         /// Set the nickName
         /// </summary>
         /// <returns>void</returns>
-        public void nickName(String data)
+        public void NickName(String data)
         {
-            this.setProperty(CustomerVaultConstants.nickName, data);
+            SetProperty(GlobalConstants.NickName, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>String</returns>
-        public String status()
+        public String Status()
         {
-            return this.getProperty(CustomerVaultConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>void</returns>
-        public void status(String data)
+        public void Status(String data)
         {
-            this.setProperty(CustomerVaultConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the merchantRefNum
         /// </summary>
         /// <returns>String</returns>
-        public String merchantRefNum()
+        public String MerchantRefNum()
         {
-            return this.getProperty(CustomerVaultConstants.merchantRefNum);
+            return GetProperty(GlobalConstants.MerchantRefNum);
         }
 
         /// <summary>
         /// Set the merchantRefNum
         /// </summary>
         /// <returns>void</returns>
-        public void merchantRefNum(String data)
+        public void MerchantRefNum(String data)
         {
-            this.setProperty(CustomerVaultConstants.merchantRefNum, data);
+            SetProperty(GlobalConstants.MerchantRefNum, data);
         }
 
         /// <summary>
         /// Get the holderName
         /// </summary>
         /// <returns>String</returns>
-        public String holderName()
+        public String HolderName()
         {
-            return this.getProperty(CustomerVaultConstants.holderName);
+            return GetProperty(GlobalConstants.HolderName);
         }
 
         /// <summary>
         /// Set the holderName
         /// </summary>
         /// <returns>void</returns>
-        public void holderName(String data)
+        public void HolderName(String data)
         {
-            this.setProperty(CustomerVaultConstants.holderName, data);
+            SetProperty(GlobalConstants.HolderName, data);
         }
 
         /// <summary>
         /// Get the cardNum
         /// </summary>
         /// <returns>String</returns>
-        public String cardNum()
+        public String CardNum()
         {
-            return this.getProperty(CustomerVaultConstants.cardNum);
+            return GetProperty(GlobalConstants.CardNum);
         }
 
         /// <summary>
         /// Set the cardNum
         /// </summary>
         /// <returns>void</returns>
-        public void cardNum(String data)
+        public void CardNum(String data)
         {
-            this.setProperty(CustomerVaultConstants.cardNum, data);
+            SetProperty(GlobalConstants.CardNum, data);
         }
 
         /// <summary>
         /// Get the cardBin
         /// </summary>
         /// <returns>String</returns>
-        public String cardBin()
+        public String CardBin()
         {
-            return this.getProperty(CustomerVaultConstants.cardBin);
+            return GetProperty(GlobalConstants.CardBin);
         }
 
         /// <summary>
         /// Set the cardBin
         /// </summary>
         /// <returns>void</returns>
-        public void cardBin(String data)
+        public void CardBin(String data)
         {
-            this.setProperty(CustomerVaultConstants.cardBin, data);
+            SetProperty(GlobalConstants.CardBin, data);
         }
 
         /// <summary>
         /// Get the lastDigits
         /// </summary>
         /// <returns>String</returns>
-        public String lastDigits()
+        public String LastDigits()
         {
-            return this.getProperty(CustomerVaultConstants.lastDigits);
+            return GetProperty(GlobalConstants.LastDigits);
         }
 
         /// <summary>
         /// Set the lastDigits
         /// </summary>
         /// <returns>void</returns>
-        public void lastDigits(String data)
+        public void LastDigits(String data)
         {
-            this.setProperty(CustomerVaultConstants.lastDigits, data);
+            SetProperty(GlobalConstants.LastDigits, data);
         }
 
         /// <summary>
         /// Get the cardExpiry
         /// </summary>
         /// <returns>CardExpiry</returns>
-        public CardExpiry cardExpiry()
+        public CardExpiry CardExpiry()
         {
-            return this.getProperty(CustomerVaultConstants.cardExpiry);
+            return GetProperty(GlobalConstants.CardExpiry);
         }
 
         /// <summary>
         /// Set the cardExpiry
         /// </summary>
         /// <returns>void</returns>
-        public void cardExpiry(CardExpiry data)
+        public void CardExpiry(CardExpiry data)
         {
-            this.setProperty(CustomerVaultConstants.cardExpiry, data);
+            SetProperty(GlobalConstants.CardExpiry, data);
         }
 
         /// <summary>
         /// Get the cardType
         /// </summary>
         /// <returns>String</returns>
-        public String cardType()
+        public String CardType()
         {
-            return this.getProperty(CustomerVaultConstants.cardType);
+            return GetProperty(GlobalConstants.CardType);
         }
 
         /// <summary>
         /// Set the cardType
         /// </summary>
         /// <returns>void</returns>
-        public void cardType(String data)
+        public void CardType(String data)
         {
-            this.setProperty(CustomerVaultConstants.cardType, data);
+            SetProperty(GlobalConstants.CardType, data);
         }
   
         /// <summary>
         /// Get the billingAddressId
         /// </summary>
         /// <returns>String</returns>
-        public String billingAddressId()
+        public String BillingAddressId()
         {
-            return this.getProperty(CustomerVaultConstants.billingAddressId);
+            return GetProperty(GlobalConstants.BillingAddressId);
         }
 
         /// <summary>
         /// Set the billingAddressId
         /// </summary>
         /// <returns>void</returns>
-        public void billingAddressId(String data)
+        public void BillingAddressId(String data)
         {
-            this.setProperty(CustomerVaultConstants.billingAddressId, data);
+            SetProperty(GlobalConstants.BillingAddressId, data);
         }
         
         /// <summary>
         /// Get the defaultCardIndicator
         /// </summary>
         /// <returns>bool</returns>
-        public bool defaultCardIndicator()
+        public bool DefaultCardIndicator()
         {
-            return this.getProperty(CustomerVaultConstants.defaultCardIndicator);
+            return GetProperty(GlobalConstants.DefaultCardIndicator);
         }
 
         /// <summary>
         /// Set the defaultCardIndicator
         /// </summary>
         /// <returns>void</returns>
-        public void defaultCardIndicator(bool data)
+        public void DefaultCardIndicator(bool data)
         {
-            this.setProperty(CustomerVaultConstants.defaultCardIndicator, data);
+            SetProperty(GlobalConstants.DefaultCardIndicator, data);
         }
         
         /// <summary>
         /// Get the paymentToken
         /// </summary>
         /// <returns>String</returns>
-        public String paymentToken()
+        public String PaymentToken()
         {
-            return this.getProperty(CustomerVaultConstants.paymentToken);
+            return GetProperty(GlobalConstants.PaymentToken);
         }
 
         /// <summary>
         /// Set the paymentToken
         /// </summary>
         /// <returns>void</returns>
-        public void paymentToken(String data)
+        public void PaymentToken(String data)
         {
-            this.setProperty(CustomerVaultConstants.paymentToken, data);
+            SetProperty(GlobalConstants.PaymentToken, data);
         }
         
         /// <summary>
         /// Get the error
         /// </summary>
         /// <returns>OptError</returns>
-        public OptError error()
+        public OptError Error()
         {
-            return this.getProperty(CustomerVaultConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
         /// Set the error
         /// </summary>
         /// <returns>void</returns>
-        public void error(OptError data)
+        public void Error(OptError data)
         {
-            this.setProperty(CustomerVaultConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
 
         /// <summary>
         /// Get the links
         /// </summary>
         /// <returns>List<Link></returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(CustomerVaultConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(CustomerVaultConstants.links, data);
+            SetProperty(GlobalConstants.Links, data);
         }
 
         /// <summary>
         /// Get the profileId
         /// </summary>
         /// <returns>String</returns>
-        public String profileId()
+        public String ProfileId()
         {
-            return this.getProperty(CustomerVaultConstants.profileId);
+            return GetProperty(GlobalConstants.ProfileId);
         }
 
         /// <summary>
         /// Set the profileId
         /// </summary>
         /// <returns>void</returns>
-        public void profileId(String data)
+        public void ProfileId(String data)
         {
-            this.setProperty(CustomerVaultConstants.profileId, data);
+            SetProperty(GlobalConstants.ProfileId, data);
         }
 
         /// <summary>
         /// Get the billingAddress
         /// </summary>
         /// <returns>List<Link></returns>
-        public BillingAddress billingAddress()
+        public BillingAddress BillingAddress()
         {
-            return this.getProperty(CustomerVaultConstants.billingAddress);
+            return GetProperty(GlobalConstants.BillingAddress);
         }
 
         /// <summary>
         /// Set the billingAddress
         /// </summary>
         /// <returns>void</returns>
-        public void billingAddress(BillingAddress data)
+        public void BillingAddress(BillingAddress data)
         {
-            this.setProperty(CustomerVaultConstants.billingAddress, data);
+            SetProperty(GlobalConstants.BillingAddress, data);
         }
 
         public static CardBuilder Builder()
@@ -393,16 +391,16 @@ namespace Paysafe.CustomerVault
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated Card object
         /// </summary>
-        public class CardBuilder : BaseJSONBuilder<Card>
+        public class CardBuilder : BaseJsonBuilder<Card>
         {
             /// <summary>
             /// Set the id parameter
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder id(string data)
+            public CardBuilder Id(string data)
             {
-                this.properties[CustomerVaultConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -411,9 +409,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder profileId(string data)
+            public CardBuilder ProfileId(string data)
             {
-                this.properties[CustomerVaultConstants.profileId] = data;
+                Properties[GlobalConstants.ProfileId] = data;
                 return this;
             }
 
@@ -422,9 +420,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder cardNum(string data)
+            public CardBuilder CardNum(string data)
             {
-                this.properties[CustomerVaultConstants.cardNum] = data;
+                Properties[GlobalConstants.CardNum] = data;
                 return this;
             }
 
@@ -432,13 +430,13 @@ namespace Paysafe.CustomerVault
             /// Build an cardExpiry object within this authorization.
             /// </summary>
             /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
-            public CardExpiry.CardExpiryBuilder<CardBuilder> cardExpiry()
+            public CardExpiry.CardExpiryBuilder<CardBuilder> CardExpiry()
             {
-                if (!this.properties.ContainsKey(CustomerVaultConstants.cardExpiry))
+                if (!Properties.ContainsKey(GlobalConstants.CardExpiry))
                 {
-                    this.properties[CustomerVaultConstants.cardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder>(this);
+                    Properties[GlobalConstants.CardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder>(this);
                 }
-                return this.properties[CustomerVaultConstants.cardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder>;
+                return Properties[GlobalConstants.CardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder>;
             }
 
             /// <summary>
@@ -446,9 +444,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder nickName(string data)
+            public CardBuilder NickName(string data)
             {
-                this.properties[CustomerVaultConstants.nickName] = data;
+                Properties[GlobalConstants.NickName] = data;
                 return this;
             }
 
@@ -457,9 +455,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder merchantRefNum(string data)
+            public CardBuilder MerchantRefNum(string data)
             {
-                this.properties[CustomerVaultConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -468,9 +466,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder holderName(string data)
+            public CardBuilder HolderName(string data)
             {
-                this.properties[CustomerVaultConstants.holderName] = data;
+                Properties[GlobalConstants.HolderName] = data;
                 return this;
             }
 
@@ -479,9 +477,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilder billingAddressId(string data)
+            public CardBuilder BillingAddressId(string data)
             {
-                this.properties[CustomerVaultConstants.billingAddressId] = data;
+                Properties[GlobalConstants.BillingAddressId] = data;
                 return this;
             }
 
@@ -489,33 +487,33 @@ namespace Paysafe.CustomerVault
             /// Build an cardExpiry object within this authorization.
             /// </summary>
             /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
-            public BillingAddress.BillingAddressBuilder<CardBuilder> billingAddress()
+            public BillingAddress.BillingAddressBuilder<CardBuilder> BillingAddress()
             {
-                if (!this.properties.ContainsKey(CustomerVaultConstants.billingAddress))
+                if (!Properties.ContainsKey(GlobalConstants.BillingAddress))
                 {
-                    this.properties[CustomerVaultConstants.billingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilder>(this);
+                    Properties[GlobalConstants.BillingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilder>(this);
                 }
-                return this.properties[CustomerVaultConstants.billingAddress] as BillingAddress.BillingAddressBuilder<CardBuilder>;
+                return Properties[GlobalConstants.BillingAddress] as BillingAddress.BillingAddressBuilder<CardBuilder>;
             }
         }
 
 
         /// <summary>
-        /// CardBuilder<typeparam name="TBLDR"></typeparam> will allow an card to be initialized
+        /// CardBuilder<typeparam name="TBldr"></typeparam> will allow an card to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back tot he parent builder
         /// </summary>
-        public class CardBuilderSingelUse<TBLDR> : NestedJSONBuilder<Card, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class CardBuilderSingelUse<TBldr> : NestedJsonBuilder<Card, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Card builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public CardBuilderSingelUse(TBLDR parent)
+            public CardBuilderSingelUse(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -524,9 +522,9 @@ namespace Paysafe.CustomerVault
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
 
-            public CardBuilderSingelUse<TBLDR> singleUseToken(String data)
+            public CardBuilderSingelUse<TBldr> SingleUseToken(String data)
             {
-                this.properties[CustomerVaultConstants.singleUseToken] = data;
+                Properties[GlobalConstants.SingleUseToken] = data;
                 return this;
             }
 
@@ -535,9 +533,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> id(string data)
+            public CardBuilderSingelUse<TBldr> Id(string data)
             {
-                this.properties[CustomerVaultConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -547,9 +545,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> cardNum(string data)
+            public CardBuilderSingelUse<TBldr> CardNum(string data)
             {
-                this.properties[CustomerVaultConstants.cardNum] = data;
+                Properties[GlobalConstants.CardNum] = data;
                 return this;
             }
 
@@ -557,13 +555,13 @@ namespace Paysafe.CustomerVault
             /// Build an cardExpiry object within this authorization.
             /// </summary>
             /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
-            public CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBLDR>> cardExpiry()
+            public CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBldr>> CardExpiry()
             {
-                if (!this.properties.ContainsKey(CustomerVaultConstants.cardExpiry))
+                if (!Properties.ContainsKey(GlobalConstants.CardExpiry))
                 {
-                    this.properties[CustomerVaultConstants.cardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBLDR>>(this);
+                    Properties[GlobalConstants.CardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBldr>>(this);
                 }
-                return this.properties[CustomerVaultConstants.cardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBLDR>>;
+                return Properties[GlobalConstants.CardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilderSingelUse<TBldr>>;
             }
 
             /// <summary>
@@ -571,9 +569,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> nickName(string data)
+            public CardBuilderSingelUse<TBldr> NickName(string data)
             {
-                this.properties[CustomerVaultConstants.nickName] = data;
+                Properties[GlobalConstants.NickName] = data;
                 return this;
             }
 
@@ -582,9 +580,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> merchantRefNum(string data)
+            public CardBuilderSingelUse<TBldr> MerchantRefNum(string data)
             {
-                this.properties[CustomerVaultConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -593,9 +591,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> holderName(string data)
+            public CardBuilderSingelUse<TBldr> HolderName(string data)
             {
-                this.properties[CustomerVaultConstants.holderName] = data;
+                Properties[GlobalConstants.HolderName] = data;
                 return this;
             }
 
@@ -604,9 +602,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder</returns>
-            public CardBuilderSingelUse<TBLDR> billingAddressId(string data)
+            public CardBuilderSingelUse<TBldr> BillingAddressId(string data)
             {
-                this.properties[CustomerVaultConstants.billingAddressId] = data;
+                Properties[GlobalConstants.BillingAddressId] = data;
                 return this;
             }
 
@@ -614,13 +612,13 @@ namespace Paysafe.CustomerVault
             /// Build an cardExpiry object within this authorization.
             /// </summary>
             /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
-            public BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBLDR>> billingAddress()
+            public BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBldr>> BillingAddress()
             {
-                if (!this.properties.ContainsKey(CustomerVaultConstants.billingAddress))
+                if (!Properties.ContainsKey(GlobalConstants.BillingAddress))
                 {
-                    this.properties[CustomerVaultConstants.billingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBLDR>>(this);
+                    Properties[GlobalConstants.BillingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBldr>>(this);
                 }
-                return this.properties[CustomerVaultConstants.billingAddress] as BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBLDR>>;
+                return Properties[GlobalConstants.BillingAddress] as BillingAddress.BillingAddressBuilder<CardBuilderSingelUse<TBldr>>;
             }
 
         }
@@ -641,7 +639,7 @@ namespace Paysafe.CustomerVault
         //    public CardBuilder1(TBLDR parent)
         //        : base(parent)
         //    {
-        //        this.parent = parent;
+        //        parent = parent;
         //    }
 
 
@@ -652,7 +650,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> id(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.id] = data;
+        //        properties[CustomerVaultConstants.id] = data;
         //        return this;
         //    }
 
@@ -664,7 +662,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> cardNum(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.cardNum] = data;
+        //        properties[CustomerVaultConstants.cardNum] = data;
         //        return this;
         //    }
 
@@ -674,11 +672,11 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
         //    public CardExpiry.CardExpiryBuilder<CardBuilder1<TBLDR>> cardExpiry()
         //    {
-        //        if (!this.properties.ContainsKey(CustomerVaultConstants.cardExpiry))
+        //        if (!properties.ContainsKey(CustomerVaultConstants.cardExpiry))
         //        {
-        //            this.properties[CustomerVaultConstants.cardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder1<TBLDR>>(this);
+        //            properties[CustomerVaultConstants.cardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder1<TBLDR>>(this);
         //        }
-        //        return this.properties[CustomerVaultConstants.cardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder1<TBLDR>>;
+        //        return properties[CustomerVaultConstants.cardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder1<TBLDR>>;
         //    }
 
         //    /// <summary>
@@ -688,7 +686,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> nickName(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.nickName] = data;
+        //        properties[CustomerVaultConstants.nickName] = data;
         //        return this;
         //    }
 
@@ -699,7 +697,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> merchantRefNum(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.merchantRefNum] = data;
+        //        properties[CustomerVaultConstants.merchantRefNum] = data;
         //        return this;
         //    }
 
@@ -710,7 +708,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> holderName(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.holderName] = data;
+        //        properties[CustomerVaultConstants.holderName] = data;
         //        return this;
         //    }
 
@@ -721,7 +719,7 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardBuilder</returns>
         //    public CardBuilder1<TBLDR> billingAddressId(string data)
         //    {
-        //        this.properties[CustomerVaultConstants.billingAddressId] = data;
+        //        properties[CustomerVaultConstants.billingAddressId] = data;
         //        return this;
         //    }
 
@@ -731,11 +729,11 @@ namespace Paysafe.CustomerVault
         //    /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder></returns>
         //    public BillingAddress.BillingAddressBuilder<CardBuilder1<TBLDR>> billingAddress()
         //    {
-        //        if (!this.properties.ContainsKey(CustomerVaultConstants.billingAddress))
+        //        if (!properties.ContainsKey(CustomerVaultConstants.billingAddress))
         //        {
-        //            this.properties[CustomerVaultConstants.billingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilder1<TBLDR>>(this);
+        //            properties[CustomerVaultConstants.billingAddress] = new BillingAddress.BillingAddressBuilder<CardBuilder1<TBLDR>>(this);
         //        }
-        //        return this.properties[CustomerVaultConstants.billingAddress] as BillingAddress.BillingAddressBuilder<CardBuilder1<TBLDR>>;
+        //        return properties[CustomerVaultConstants.billingAddress] as BillingAddress.BillingAddressBuilder<CardBuilder1<TBLDR>>;
         //    }
         //}
 

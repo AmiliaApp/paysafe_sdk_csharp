@@ -17,342 +17,355 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    /**
-     * GlobalConstants class contains all strings that are sent and returned from the netbanx api
-     */
+    /// <summary>
+    /// GlobalConstants class contains all strings that are sent and returned from the netbanx api
+    /// </summary>
     public class GlobalConstants
     {
         //////////// REQUEST PARAMETER STRINGS ////////////
-        public static readonly string accordD = "accordD";
-        public static readonly string acquirerResponse = "acquirerResponse";
-        public static readonly string addendumData = "addendumData";
-        public static readonly string addresses = "addresses";
-        public static readonly string amount = "amount";
-        public static readonly string ancillaryFees = "ancillaryFees";
-        public static readonly string associatedTransactions = "associatedTransactions";
-        public static readonly string authCode = "authCode";
-        public static readonly string authentication = "authentication";
-        public static readonly string authenticationMethod = "authenticationMethod";
-        public static readonly string authorizationId = "authorizationId";
-        public static readonly string authType = "authType";
-        public static readonly string availableToRefund = "availableToRefund";
-        public static readonly string availableToSettle = "availableToSettle";
-        public static readonly string avsCode = "avsCode";
-        public static readonly string avsResponse = "avsResponse";
-        public static readonly string balanceResponse = "balanceResponse";
-        public static readonly string batchNumber = "batchNumber";
-        public static readonly string billingAddressId = "billingAddressId";
-        public static readonly string billingDetails = "billingDetails";
-        public static readonly string brand = "brand";
-        public static readonly string callback = "callback";
-        public static readonly string card = "card";
-        public static readonly string cardBin = "cardBin";
-        public static readonly string cardEnrollementMethod = "cardEnrollementMethod";
-        public static readonly string cardExpiry = "cardExpiry";
-        public static readonly string cardNum = "cardNum";
-        public static readonly string cards = "cards";
-        public static readonly string cardType = "cardType";
-        public static readonly string carrier = "carrier";
-        public static readonly string cavv = "cavv";
-        public static readonly string cellPhone = "cellPhone";
-        public static readonly string childAccountNum = "childAccountNum";
-        public static readonly string city = "city";
-        public static readonly string code = "code";
-        public static readonly string confirmationNumber = "confirmationNumber";
-        public static readonly string country = "country";
-        public static readonly string currencyCode = "currencyCode";
-        public static readonly string customerIp = "customerIp";
-        public static readonly string customerNotificationEmail = "customerNotificationEmail";
-        public static readonly string cvdVerification = "cvdVerification";
-        public static readonly string cvv = "cvv";
-        public static readonly string cvv2Result = "cvv2Result";
-        public static readonly string cvvVerification = "cvvVerification";
-        public static readonly string dateOfBirth = "dateOfBirth";
-        public static readonly string dateTime = "dateTime";
-        public static readonly string day = "day";
-        public static readonly string defaultCardIndicator = "defaultCardIndicator";
-        public static readonly string defaultShippingAddressIndicator = "defaultShippingAddressIndicator";
-        public static readonly string delimiter = "delimiter";
-        public static readonly string description = "description";
-        public static readonly string details = "details";
-        public static readonly string dueDate = "dueDate";
-        public static readonly string dupCheck = "dupCheck";
-        public static readonly string dynamicDescriptor = "dynamicDescriptor";
-        public static readonly string eci = "eci";
-        public static readonly string effectiveDate = "effectiveDate";
-        public static readonly string email = "email";
-        public static readonly string error = "error";
-        public static readonly string errorCode = "errorCode";
-        public static readonly string errorMessage = "errorMessage";
-        public static readonly string expiry = "expiry";
-        public static readonly string extendedOptions = "extendedOptions";
-        public static readonly string field = "field";
-        public static readonly string fieldErrors = "fieldErrors";
-        public static readonly string financingType = "financingType";
-        public static readonly string firstName = "firstName";
-        public static readonly string format = "format";
-        public static readonly string gender = "gender";
-        public static readonly string gracePeriod = "gracePeriod";
-        public static readonly string holderName = "holderName";
-        public static readonly string houseNumberVerification = "houseNumberVerification";
-        public static readonly string href = "href";
-        public static readonly string id = "id";
-        public static readonly string ip = "ip";
-        public static readonly string key = "key";
-        public static readonly string keywords = "keywords";
-        public static readonly string lastDigits = "lastDigits";
-        public static readonly string lastName = "lastName";
-        public static readonly string lastUpdate = "lastUpdate";
-        public static readonly string link = "link";
-        public static readonly string links = "links";
-        public static readonly string locale = "locale";
-        public static readonly string masterCardAssignedId = "masterCardAssignedId";
-        public static readonly string masterPass = "masterPass";
-        public static readonly string merchantCustomerId = "merchantCustomerId";
-        public static readonly string merchantDescriptor = "merchantDescriptor";
-        public static readonly string merchantNotificationEmail = "merchantNotificationEmail";
-        public static readonly string merchantRefNum = "merchantRefNum";
-        public static readonly string message = "message";
-        public static readonly string mid = "mid";
-        public static readonly string middleName = "middleName";
-        public static readonly string mode = "mode";
-        public static readonly string month = "month";
-        public static readonly string nationality = "nationality";
-        public static readonly string nickName = "nickName";
-        public static readonly string orderId = "orderId";
-        public static readonly string originalMerchantRefNum = "originalMerchantRefNum";
-        public static readonly string paymentMethod = "paymentMethod";
-        public static readonly string paymentToken = "paymentToken";
-        public static readonly string paymentType = "paymentType";
-        public static readonly string payPassWalletIndicator = "payPassWalletIndicator";
-        public static readonly string phone = "phone";
-        public static readonly string plan = "plan";
-        public static readonly string profile = "profile";
-        public static readonly string profileId = "profileId";
-        public static readonly string quantity = "quantity";
-        public static readonly string recipientAccountNumber = "recipientAccountNumber";
-        public static readonly string recipientDateOfBirth = "recipientDateOfBirth";
-        public static readonly string recipientLastName = "recipientLastName";
-        public static readonly string recipientName = "recipientName";
-        public static readonly string recipientZip = "recipientZip";
-        public static readonly string recurring = "recurring";
-        public static readonly string redirect = "redirect";
-        public static readonly string reference = "reference";
-        public static readonly string referenceNbr = "referenceNbr";
-        public static readonly string refunded = "refunded";
-        public static readonly string rel = "rel";
-        public static readonly string requestId = "requestId";
-        public static readonly string responseCode = "responseCode";
-        public static readonly string responseId = "responseId";
-        public static readonly string responseReasonCode = "responseReasonCode";
-        public static readonly string retries = "retries";
-        public static readonly string returnKeys = "returnKeys";
-        public static readonly string reversed = "reversed";
-        public static readonly string riskReasonCode = "riskReasonCode";
-        public static readonly string seqNumber = "seqNumber";
-        public static readonly string settled = "settled";
-        public static readonly string settlementId = "settlementId";
-        public static readonly string settlements = "settlements";
-        public static readonly string settleWithAuth = "settleWithAuth";
-        public static readonly string shipMethod = "shipMethod";
-        public static readonly string shippingDetails = "shippingDetails";
-        public static readonly string shoppingCart = "shoppingCart";
-        public static readonly string signatureStatus = "signatureStatus";
-        public static readonly string sku = "sku";
-        public static readonly string state = "state";
-        public static readonly string status = "status";
-        public static readonly string street = "street";
-        public static readonly string street2 = "street2";
-        public static readonly string synchronous = "synchronous";
-        public static readonly string term = "term";
-        public static readonly string terminalId = "terminalId";
-        public static readonly string threeDEnrollment = "threeDEnrollment";
-        public static readonly string threeDEnrolment = "threeDEnrolment";
-        public static readonly string threeDResult = "threeDResult";
-        public static readonly string totalAmount = "totalAmount";
-        public static readonly string track1 = "track1";
-        public static readonly string track2 = "track2";
-        public static readonly string transaction = "transaction";
-        public static readonly string txnDateTime = "txnDateTime";
-        public static readonly string txnTime = "txnTime";
-        public static readonly string type = "type";
-        public static readonly string uri = "uri";
-        public static readonly string useAsShippingAddress = "useAsShippingAddress";
-        public static readonly string value = "value";
-        public static readonly string visaAdditionalAuthData = "visaAdditionalAuthData";
-        public static readonly string xid = "xid";
-        public static readonly string year = "year";
-        public static readonly string zip = "zip";
-        public static readonly string zipVerification = "zipVerification";
-        public static readonly string accountNumber = "accountNumber";
-        public static readonly string accountHolderName = "accountHolderName";
-        public static readonly string routingNumber = "routingNumber";
-        public static readonly string accountType = "accountType"; 
-        public static readonly string sortCode = "sortCode";
-        public static readonly string mandates = "mandates";
-        public static readonly string mandateReference = "mandateReference";
-        public static readonly string ach = "ach";
-        public static readonly string sepa = "sepa";
-        public static readonly string bacs = "bacs";
-        public static readonly string eft = "eft";
-        public static readonly string payMethod = "payMethod";
-        public static readonly string WEB = "WEB";
-        public static readonly string TEL = "TEL";
-        public static readonly string PPD = "PPD";
-        public static readonly string CCD = "CCD";
-        public static readonly string paymentDescriptor = "paymentDescriptor";
-        public static readonly string iban = "iban";
-        public static readonly string bic = "bic";
-        public static readonly string transitNumber = "transitNumber";
-        public static readonly string institutionId = "institutionId";
-        public static readonly string bankAccountId = "bankAccountId";
-        public static readonly string accountTypeChecking = "CHECKING";
-        public static readonly string accountTypeLoan = "LOAN";
-        public static readonly string accountTypeSavings = "SAVINGS";
+        public static readonly string AccordD = "accordD";
+        public static readonly string AcquirerResponse = "acquirerResponse";
+        public static readonly string AddendumData = "addendumData";
+        public static readonly string Addresses = "addresses";
+        public static readonly string Amount = "amount";
+        public static readonly string AncillaryFees = "ancillaryFees";
+        public static readonly string AssociatedTransactions = "associatedTransactions";
+        public static readonly string AuthCode = "authCode";
+        public static readonly string Authentication = "authentication";
+        public static readonly string AuthenticationMethod = "authenticationMethod";
+        public static readonly string AuthorizationId = "authorizationId";
+        public static readonly string AuthType = "authType";
+        public static readonly string AvailableToRefund = "availableToRefund";
+        public static readonly string AvailableToSettle = "availableToSettle";
+        public static readonly string AvsCode = "avsCode";
+        public static readonly string AvsResponse = "avsResponse";
+        public static readonly string BalanceResponse = "balanceResponse";
+        public static readonly string BatchNumber = "batchNumber";
+        public static readonly string BillingAddressId = "billingAddressId";
+        public static readonly string BillingDetails = "billingDetails";
+        public static readonly string Brand = "brand";
+        public static readonly string Callback = "callback";
+        public static readonly string Card = "card";
+        public static readonly string CardBin = "cardBin";
+        public static readonly string CardEnrollementMethod = "cardEnrollementMethod";
+        public static readonly string CardExpiry = "cardExpiry";
+        public static readonly string CardNum = "cardNum";
+        public static readonly string Cards = "cards";
+        public static readonly string CardType = "cardType";
+        public static readonly string Carrier = "carrier";
+        public static readonly string Cavv = "cavv";
+        public static readonly string CellPhone = "cellPhone";
+        public static readonly string ChildAccountNum = "childAccountNum";
+        public static readonly string City = "city";
+        public static readonly string Code = "code";
+        public static readonly string ConfirmationNumber = "confirmationNumber";
+        public static readonly string Country = "country";
+        public static readonly string CurrencyCode = "currencyCode";
+        public static readonly string CustomerIp = "customerIp";
+        public static readonly string CustomerNotificationEmail = "customerNotificationEmail";
+        public static readonly string CvdVerification = "cvdVerification";
+        public static readonly string Cvv = "cvv";
+        public static readonly string Cvv2Result = "cvv2Result";
+        public static readonly string CvvVerification = "cvvVerification";
+        public static readonly string DateOfBirth = "dateOfBirth";
+        public static readonly string DateTime = "dateTime";
+        public static readonly string Day = "day";
+        public static readonly string DefaultCardIndicator = "defaultCardIndicator";
+        public static readonly string DefaultShippingAddressIndicator = "defaultShippingAddressIndicator";
+        public static readonly string Delimiter = "delimiter";
+        public static readonly string Description = "description";
+        public static readonly string Details = "details";
+        public static readonly string DueDate = "dueDate";
+        public static readonly string DupCheck = "dupCheck";
+        public static readonly string DynamicDescriptor = "dynamicDescriptor";
+        public static readonly string Eci = "eci";
+        public static readonly string EffectiveDate = "effectiveDate";
+        public static readonly string Email = "email";
+        public static readonly string Error = "error";
+        public static readonly string ErrorCode = "errorCode";
+        public static readonly string ErrorMessage = "errorMessage";
+        public static readonly string Expiry = "expiry";
+        public static readonly string ExtendedOptions = "extendedOptions";
+        public static readonly string Field = "field";
+        public static readonly string FieldErrors = "fieldErrors";
+        public static readonly string FinancingType = "financingType";
+        public static readonly string FirstName = "firstName";
+        public static readonly string Format = "format";
+        public static readonly string Gender = "gender";
+        public static readonly string GracePeriod = "gracePeriod";
+        public static readonly string HolderName = "holderName";
+        public static readonly string HouseNumberVerification = "houseNumberVerification";
+        public static readonly string Href = "href";
+        public static readonly string Id = "id";
+        public static readonly string Ip = "ip";
+        public static readonly string Key = "key";
+        public static readonly string Keywords = "keywords";
+        public static readonly string LastDigits = "lastDigits";
+        public static readonly string LastName = "lastName";
+        public static readonly string LastUpdate = "lastUpdate";
+        public static readonly string Link = "link";
+        public static readonly string Links = "links";
+        public static readonly string Locale = "locale";
+        public static readonly string MasterCardAssignedId = "masterCardAssignedId";
+        public static readonly string MasterPass = "masterPass";
+        public static readonly string MerchantCustomerId = "merchantCustomerId";
+        public static readonly string MerchantDescriptor = "merchantDescriptor";
+        public static readonly string MerchantNotificationEmail = "merchantNotificationEmail";
+        public static readonly string MerchantRefNum = "merchantRefNum";
+        public static readonly string Message = "message";
+        public static readonly string Mid = "mid";
+        public static readonly string MiddleName = "middleName";
+        public static readonly string Mode = "mode";
+        public static readonly string Month = "month";
+        public static readonly string Nationality = "nationality";
+        public static readonly string NickName = "nickName";
+        public static readonly string OrderId = "orderId";
+        public static readonly string OriginalMerchantRefNum = "originalMerchantRefNum";
+        public static readonly string PaymentMethod = "paymentMethod";
+        public static readonly string PaymentToken = "paymentToken";
+        public static readonly string PaymentType = "paymentType";
+        public static readonly string PayPassWalletIndicator = "payPassWalletIndicator";
+        public static readonly string Phone = "phone";
+        public static readonly string Plan = "plan";
+        public static readonly string Profile = "profile";
+        public static readonly string ProfileId = "profileId";
+        public static readonly string Quantity = "quantity";
+        public static readonly string RecipientAccountNumber = "recipientAccountNumber";
+        public static readonly string RecipientDateOfBirth = "recipientDateOfBirth";
+        public static readonly string RecipientLastName = "recipientLastName";
+        public static readonly string RecipientName = "recipientName";
+        public static readonly string RecipientZip = "recipientZip";
+        public static readonly string Recurring = "recurring";
+        public static readonly string Redirect = "redirect";
+        public static readonly string Reference = "reference";
+        public static readonly string ReferenceNbr = "referenceNbr";
+        public static readonly string Refunded = "refunded";
+        public static readonly string Rel = "rel";
+        public static readonly string RequestId = "requestId";
+        public static readonly string ResponseCode = "responseCode";
+        public static readonly string ResponseId = "responseId";
+        public static readonly string ResponseReasonCode = "responseReasonCode";
+        public static readonly string Retries = "retries";
+        public static readonly string ReturnKeys = "returnKeys";
+        public static readonly string Reversed = "reversed";
+        public static readonly string RiskReasonCode = "riskReasonCode";
+        public static readonly string SeqNumber = "seqNumber";
+        public static readonly string Settled = "settled";
+        public static readonly string SettlementId = "settlementId";
+        public static readonly string Settlements = "settlements";
+        public static readonly string SettleWithAuth = "settleWithAuth";
+        public static readonly string ShipMethod = "shipMethod";
+        public static readonly string ShippingDetails = "shippingDetails";
+        public static readonly string ShoppingCart = "shoppingCart";
+        public static readonly string SignatureStatus = "signatureStatus";
+        public static readonly string Sku = "sku";
+        public static readonly string State = "state";
+        public static readonly string Status = "status";
+        public static readonly string Street = "street";
+        public static readonly string Street2 = "street2";
+        public static readonly string Synchronous = "synchronous";
+        public static readonly string Term = "term";
+        public static readonly string TerminalId = "terminalId";
+        public static readonly string ThreeDEnrollment = "threeDEnrollment";
+        public static readonly string ThreeDEnrolment = "threeDEnrolment";
+        public static readonly string ThreeDResult = "threeDResult";
+        public static readonly string TotalAmount = "totalAmount";
+        public static readonly string Track1 = "track1";
+        public static readonly string Track2 = "track2";
+        public static readonly string Transaction = "transaction";
+        public static readonly string TxnDateTime = "txnDateTime";
+        public static readonly string TxnTime = "txnTime";
+        public static readonly string Type = "type";
+        public static readonly string Uri = "uri";
+        public static readonly string UseAsShippingAddress = "useAsShippingAddress";
+        public static readonly string Value = "value";
+        public static readonly string VisaAdditionalAuthData = "visaAdditionalAuthData";
+        public static readonly string Xid = "xid";
+        public static readonly string Year = "year";
+        public static readonly string Zip = "zip";
+        public static readonly string ZipVerification = "zipVerification";
+        public static readonly string AccountNumber = "accountNumber";
+        public static readonly string AccountHolderName = "accountHolderName";
+        public static readonly string RoutingNumber = "routingNumber";
+        public static readonly string AccountType = "accountType"; 
+        public static readonly string SortCode = "sortCode";
+        public static readonly string Mandates = "mandates";
+        public static readonly string MandateReference = "mandateReference";
+        public static readonly string Ach = "ach";
+        public static readonly string Sepa = "sepa";
+        public static readonly string Bacs = "bacs";
+        public static readonly string Eft = "eft";
+        public static readonly string PayMethod = "payMethod";
+        public static readonly string Web = "WEB";
+        public static readonly string Tel = "TEL";
+        public static readonly string Ppd = "PPD";
+        public static readonly string Ccd = "CCD";
+        public static readonly string PaymentDescriptor = "paymentDescriptor";
+        public static readonly string Iban = "iban";
+        public static readonly string Bic = "bic";
+        public static readonly string TransitNumber = "transitNumber";
+        public static readonly string InstitutionId = "institutionId";
+        public static readonly string BankAccountId = "bankAccountId";
+        public static readonly string AccountTypeChecking = "CHECKING";
+        public static readonly string AccountTypeLoan = "LOAN";
+        public static readonly string AccountTypeSavings = "SAVINGS";
 
         ///
 
-        public static readonly string achBankAccounts = "achBankAccounts";
-        public static readonly string bacsBankAccounts = "bacsBankAccounts";
-        public static readonly string sepaBankAccounts = "sepaBankAccounts";
-        public static readonly string eftBankAccounts = "eftBankAccounts";
-        public static readonly string billingAddress = "billingAddress";
-        public static readonly string enrollmentchecks = "enrollmentchecks";
+        public static readonly string AchBankAccounts = "achBankAccounts";
+        public static readonly string BacsBankAccounts = "bacsBankAccounts";
+        public static readonly string SepaBankAccounts = "sepaBankAccounts";
+        public static readonly string EftBankAccounts = "eftBankAccounts";
+        public static readonly string BillingAddress = "billingAddress";
+        public static readonly string Enrollmentchecks = "enrollmentchecks";
 
         //////////// RESPONSE VALIDATON STRINGS ////////////
-        public static readonly string authTypeAuth = "auth";
-        public static readonly string authTypePurchase = "purchase";
-        public static readonly string authTypeRefund = "refund";
-        public static readonly string authTypeSettlement = "settlement";
-        public static readonly string carrierAnpost = "APS";
-        public static readonly string carrierAPC = "APC";
-        public static readonly string carrierCanadaPost = "CAD";
-        public static readonly string carrierCityLink = "CLK";
-        public static readonly string carrierDHL = "DHL";
-        public static readonly string carrierEMS = "EMS";
-        public static readonly string carrierFedEx = "FEX";
-        public static readonly string carrierNexWorldWide = "NEX";
-        public static readonly string carrierOther = "OTHER";
-        public static readonly string carrierRoyalMail = "RML";
-        public static readonly string carrierUPS = "UPS";
-        public static readonly string carrierUSPS = "USPS";
-        public static readonly string financingDeferredPayment = "DEFERRED_PAYMENT";
-        public static readonly string financingEqualPayment = "EQUAL_PAYMENT";
-        public static readonly string formatFORM = "form-urlencoded";
-        public static readonly string formatGET = "get";
-        public static readonly string formatJSON = "json";
-        public static readonly string formatXML = "xml";
-        public static readonly string genderFemale = "F";
-        public static readonly string genderMale = "M";
-        public static readonly string localeEnGb = "en_GB";
-        public static readonly string localeEnUs = "en_US";
-        public static readonly string localeFrCa = "fr_CA";
-        public static readonly string relCancelUrl = "cancel_url";
-        public static readonly string relOnDecline = "on_decline";
-        public static readonly string relOnError = "on_error";
-        public static readonly string relOnHold = "on_hold";
-        public static readonly string relOnSuccess = "on_success";
-        public static readonly string relOnTimeout = "on_timeout";
-        public static readonly string relResendCallback = "resend_callback";
-        public static readonly string relReturnUrl = "return_url";
-        public static readonly string relSelf = "self";
-        public static readonly string shipMethodLowestCost = "C";
-        public static readonly string shipMethodNextDay = "N";
-        public static readonly string shipMethodOther = "O";
-        public static readonly string shipMethodTwoDay = "T";
-        public static readonly string statusActive = "ACTIVE";        
-        public static readonly string statusInvalid = "INVALID";
-        public static readonly string statusInactive = "INACTIVE";
-        public static readonly string statusDeclined = "DECLINED";
-        public static readonly string statusBatched = "BATCHED";
-        public static readonly string statusRejected = "REJECTED";
-        public static readonly string statusDisputed = "DISPUTED";
-        public static readonly string statusReason = "REASON";
-        public static readonly string statusChangeDate = "statusChangeDate";
-        public static readonly string statusReasonCode = "statusReasonCode";
-        public static readonly string statusCancelled = "CANCELLED";
-        public static readonly string statusCompleted = "COMPLETED";
-        public static readonly string statusFailed = "FAILED";
-        public static readonly string statusInitial = "INITIAL";
-        public static readonly string statusPending = "PENDING";
-        public static readonly string statusProcessing = "PROCESSING";
-        public static readonly string statusReceived = "RECEIVED";
-        public static readonly string recurringInitial = "INITIAL";
-        public static readonly string recurringRecurring = "RECURRING";
-        public static readonly string validationHeld = "HELD";
-        public static readonly string validationMatch = "MATCH";
-        public static readonly string validationMatchAddressOnly = "MATCH_ADDRESS_ONLY";
-        public static readonly string validationMatchZipOnly = "MATCH_ZIP_ONLY";
-        public static readonly string validationNoMatch = "NO_MATCH";
-        public static readonly string validationNotProcessed = "NOT_PROCESSED";
-        public static readonly string validationUnknown = "UNKNOWN";
-        public static readonly string singleUseToken = "singleUseToken";
-        public static readonly string currency = "currency";
-        public static readonly string userAgent = "userAgent";
-        public static readonly string acceptHeader = "acceptHeader";
-        public static readonly string merchantUrl = "merchantUrl";
-        public static readonly string acsURL = "acsURL";
-        public static readonly string paReq = "paReq";
-        public static readonly string threeDEnrolled = "Y";
-        public static readonly string threeDNotEnrolled = "N";
-        public static readonly string threeDEnrollmentUnavailable = "U";
-        public static readonly string paResp = "paRes";
-        public static readonly string authenticated = "Y";
-        public static readonly string authenticationAttempted = "A";
-        public static readonly string authenticationFailed = "N";
-        public static readonly string authenticationUnavailable = "U";
-        public static readonly string authenticationError = "E";
-        public static readonly string signatureSatisfied = "Y";
-        public static readonly string signatureNotSatisfied = "N";
-        public static readonly string enrollmentId = "enrollmentId";
+        public static readonly string AuthTypeAuth = "auth";
+        public static readonly string AuthTypePurchase = "purchase";
+        public static readonly string AuthTypeRefund = "refund";
+        public static readonly string AuthTypeSettlement = "settlement";
+        public static readonly string CarrierAnpost = "APS";
+        public static readonly string CarrierApc = "APC";
+        public static readonly string CarrierCanadaPost = "CAD";
+        public static readonly string CarrierCityLink = "CLK";
+        public static readonly string CarrierDhl = "DHL";
+        public static readonly string CarrierEms = "EMS";
+        public static readonly string CarrierFedEx = "FEX";
+        public static readonly string CarrierNexWorldWide = "NEX";
+        public static readonly string CarrierOther = "OTHER";
+        public static readonly string CarrierRoyalMail = "RML";
+        public static readonly string CarrierUps = "UPS";
+        public static readonly string CarrierUsps = "USPS";
+        public static readonly string FinancingDeferredPayment = "DEFERRED_PAYMENT";
+        public static readonly string FinancingEqualPayment = "EQUAL_PAYMENT";
+        public static readonly string FormatForm = "form-urlencoded";
+        public static readonly string FormatGet = "get";
+        public static readonly string FormatJson = "json";
+        public static readonly string FormatXml = "xml";
+        public static readonly string GenderFemale = "F";
+        public static readonly string GenderMale = "M";
+        public static readonly string LocaleEnGb = "en_GB";
+        public static readonly string LocaleEnUs = "en_US";
+        public static readonly string LocaleFrCa = "fr_CA";
+        public static readonly string RelCancelUrl = "cancel_url";
+        public static readonly string RelOnDecline = "on_decline";
+        public static readonly string RelOnError = "on_error";
+        public static readonly string RelOnHold = "on_hold";
+        public static readonly string RelOnSuccess = "on_success";
+        public static readonly string RelOnTimeout = "on_timeout";
+        public static readonly string RelResendCallback = "resend_callback";
+        public static readonly string RelReturnUrl = "return_url";
+        public static readonly string RelSelf = "self";
+        public static readonly string ShipMethodLowestCost = "C";
+        public static readonly string ShipMethodNextDay = "N";
+        public static readonly string ShipMethodOther = "O";
+        public static readonly string ShipMethodTwoDay = "T";
+        public static readonly string StatusActive = "ACTIVE";        
+        public static readonly string StatusInvalid = "INVALID";
+        public static readonly string StatusInactive = "INACTIVE";
+        public static readonly string StatusDeclined = "DECLINED";
+        public static readonly string StatusBatched = "BATCHED";
+        public static readonly string StatusRejected = "REJECTED";
+        public static readonly string StatusDisputed = "DISPUTED";
+        public static readonly string StatusReason = "REASON";
+        public static readonly string StatusChangeDate = "statusChangeDate";
+        public static readonly string StatusReasonCode = "statusReasonCode";
+        public static readonly string StatusCancelled = "CANCELLED";
+        public static readonly string StatusCompleted = "COMPLETED";
+        public static readonly string StatusFailed = "FAILED";
+        public static readonly string StatusInitial = "INITIAL";
+        public static readonly string StatusPending = "PENDING";
+        public static readonly string StatusProcessing = "PROCESSING";
+        public static readonly string StatusReceived = "RECEIVED";
+        public static readonly string RecurringInitial = "INITIAL";
+        public static readonly string RecurringRecurring = "RECURRING";
+        public static readonly string ValidationHeld = "HELD";
+        public static readonly string ValidationMatch = "MATCH";
+        public static readonly string ValidationMatchAddressOnly = "MATCH_ADDRESS_ONLY";
+        public static readonly string ValidationMatchZipOnly = "MATCH_ZIP_ONLY";
+        public static readonly string ValidationNoMatch = "NO_MATCH";
+        public static readonly string ValidationNotProcessed = "NOT_PROCESSED";
+        public static readonly string ValidationUnknown = "UNKNOWN";
+        public static readonly string SingleUseToken = "singleUseToken";
+        public static readonly string Currency = "currency";
+        public static readonly string UserAgent = "userAgent";
+        public static readonly string AcceptHeader = "acceptHeader";
+        public static readonly string MerchantUrl = "merchantUrl";
+        public static readonly string AcsUrl = "acsURL";
+        public static readonly string PaReq = "paReq";
+        public static readonly string ThreeDEnrolled = "Y";
+        public static readonly string ThreeDNotEnrolled = "N";
+        public static readonly string ThreeDEnrollmentUnavailable = "U";
+        public static readonly string PaResp = "paRes";
+        public static readonly string Authenticated = "Y";
+        public static readonly string AuthenticationAttempted = "A";
+        public static readonly string AuthenticationFailed = "N";
+        public static readonly string AuthenticationUnavailable = "U";
+        public static readonly string AuthenticationError = "E";
+        public static readonly string SignatureSatisfied = "Y";
+        public static readonly string SignatureNotSatisfied = "N";
+        public static readonly string EnrollmentId = "enrollmentId";
         
-        public static readonly string AM = "AM";
-        public static readonly string DC = "DC";
-        public static readonly string DI = "DI";
-        public static readonly string JC = "JC";
-        public static readonly string MC = "MC";
-        public static readonly string MD = "MD";
-        public static readonly string SF = "SF";
-        public static readonly string SO = "SO";
-        public static readonly string VI = "VI";
-        public static readonly string VD = "VD";
-        public static readonly string VE = "VE";
+        public static readonly string Am = "AM";
+        public static readonly string Dc = "DC";
+        public static readonly string Di = "DI";
+        public static readonly string Jc = "JC";
+        public static readonly string Mc = "MC";
+        public static readonly string Md = "MD";
+        public static readonly string Sf = "SF";
+        public static readonly string So = "SO";
+        public static readonly string Vi = "VI";
+        public static readonly string Vd = "VD";
+        public static readonly string Ve = "VE";
         
-        public static readonly List<string> enumCarrier = new List<string>{
-            carrierAPC,
-            carrierAnpost,
-            carrierCanadaPost,
-            carrierDHL,
-            carrierFedEx,
-            carrierRoyalMail,
-            carrierUPS,
-            carrierUSPS,
-            carrierCityLink,
-            carrierEMS,
-            carrierNexWorldWide,
-            carrierOther
+        /// <summary>
+        /// Carriers
+        /// </summary>
+        public static readonly List<string> EnumCarrier = new List<string>{
+            CarrierApc,
+            CarrierAnpost,
+            CarrierCanadaPost,
+            CarrierDhl,
+            CarrierFedEx,
+            CarrierRoyalMail,
+            CarrierUps,
+            CarrierUsps,
+            CarrierCityLink,
+            CarrierEms,
+            CarrierNexWorldWide,
+            CarrierOther
         };
-        public static readonly List<string> enumGender = new List<string>() {
-            genderMale,
-            genderFemale
+
+
+        /// <summary>
+        /// Genders
+        /// </summary>
+        public static readonly List<string> EnumGender = new List<string>() {
+            GenderMale,
+            GenderFemale
         };
-        public static readonly List<string> enumLocale = new List<string>() {
-            localeEnUs,
-            localeFrCa,
-            localeEnGb
+
+        /// <summary>
+        /// Locales
+        /// </summary>
+        public static readonly List<string> EnumLocale = new List<string>() {
+            LocaleEnUs,
+            LocaleFrCa,
+            LocaleEnGb
         };
-        public static readonly List<string> enumShipMethod = new List<string>() {
-            shipMethodNextDay,
-            shipMethodTwoDay,
-            shipMethodLowestCost,
-            shipMethodOther
+
+        /// <summary>
+        /// Shipping Methods
+        /// </summary>
+        public static readonly List<string> EnumShipMethod = new List<string>() {
+            ShipMethodNextDay,
+            ShipMethodTwoDay,
+            ShipMethodLowestCost,
+            ShipMethodOther
         };
     }
 }

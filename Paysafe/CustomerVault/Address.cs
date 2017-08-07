@@ -17,10 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CustomerVault
@@ -32,164 +29,164 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Address(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>(addressFieldTypes)
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>(AddressFieldTypes)
         {
-            {CustomerVaultConstants.id, STRING_TYPE},
-            {CustomerVaultConstants.nickName, STRING_TYPE},
-            {CustomerVaultConstants.status, CustomerVaultConstants.enumStatus},
-            {CustomerVaultConstants.recipientName, STRING_TYPE},
-            {CustomerVaultConstants.defaultShippingAddressIndicator, BOOL_TYPE},
-            {CustomerVaultConstants.error, typeof(OptError)},
-            {CustomerVaultConstants.links, typeof(List<Link>)},
-            {CustomerVaultConstants.profileId, STRING_TYPE}
+            {GlobalConstants.Id, StringType},
+            {GlobalConstants.NickName, StringType},
+            {GlobalConstants.Status, CustomerVaultConstants.EnumStatus},
+            {GlobalConstants.RecipientName, StringType},
+            {GlobalConstants.DefaultShippingAddressIndicator, BoolType},
+            {GlobalConstants.Error, typeof(OptError)},
+            {GlobalConstants.Links, typeof(List<Link>)},
+            {GlobalConstants.ProfileId, StringType}
         };
 
         /// <summary>
         /// Get the id
         /// </summary>
         /// <returns>string</returns>
-        public string id()
+        public string Id()
         {
-            return this.getProperty(CustomerVaultConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(string data)
+        public void Id(string data)
         {
-            this.setProperty(CustomerVaultConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the nickName
         /// </summary>
         /// <returns>string</returns>
-        public string nickName()
+        public string NickName()
         {
-            return this.getProperty(CustomerVaultConstants.nickName);
+            return GetProperty(GlobalConstants.NickName);
         }
 
         /// <summary>
         /// Set the nickName
         /// </summary>
         /// <returns>void</returns>
-        public void nickName(string data)
+        public void NickName(string data)
         {
-            this.setProperty(CustomerVaultConstants.nickName, data);
+            SetProperty(GlobalConstants.NickName, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>string</returns>
-        public string status()
+        public string Status()
         {
-            return this.getProperty(CustomerVaultConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>void</returns>
-        public void status(string data)
+        public void Status(string data)
         {
-            this.setProperty(CustomerVaultConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the recipientName
         /// </summary>
         /// <returns>string</returns>
-        public string recipientName()
+        public string RecipientName()
         {
-            return this.getProperty(CustomerVaultConstants.recipientName);
+            return GetProperty(GlobalConstants.RecipientName);
         }
 
         /// <summary>
         /// Set the recipientName
         /// </summary>
         /// <returns>void</returns>
-        public void recipientName(string data)
+        public void RecipientName(string data)
         {
-            this.setProperty(CustomerVaultConstants.recipientName, data);
+            SetProperty(GlobalConstants.RecipientName, data);
         }
 
         /// <summary>
         /// Get the defaultShippingAddressIndicator
         /// </summary>
         /// <returns>bool</returns>
-        public string defaultShippingAddressIndicator()
+        public string DefaultShippingAddressIndicator()
         {
-            return this.getProperty(CustomerVaultConstants.defaultShippingAddressIndicator);
+            return GetProperty(GlobalConstants.DefaultShippingAddressIndicator);
         }
 
         /// <summary>
         /// Set the defaultShippingAddressIndicator
         /// </summary>
         /// <returns>bool</returns>
-        public void defaultShippingAddressIndicator(bool data)
+        public void DefaultShippingAddressIndicator(bool data)
         {
-            this.setProperty(CustomerVaultConstants.defaultShippingAddressIndicator, data);
+            SetProperty(GlobalConstants.DefaultShippingAddressIndicator, data);
         }
 
         /// <summary>
         /// Get the error
         /// </summary>
         /// <returns>OptError</returns>
-        public OptError error()
+        public OptError Error()
         {
-            return this.getProperty(CustomerVaultConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
         /// Set the error
         /// </summary>
         /// <returns>void</returns>
-        public void error(OptError data)
+        public void Error(OptError data)
         {
-            this.setProperty(CustomerVaultConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
 
         /// <summary>
         /// Get the links
         /// </summary>
         /// <returns>List<Paysafe.Common.Link></returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(CustomerVaultConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(CustomerVaultConstants.links, data);
+            SetProperty(GlobalConstants.Links, data);
         }
 
         /// <summary>
         /// Get the profileId
         /// </summary>
         /// <returns>string</returns>
-        public string profileId()
+        public string ProfileId()
         {
-            return this.getProperty(CustomerVaultConstants.profileId);
+            return GetProperty(GlobalConstants.ProfileId);
         }
 
         /// <summary>
         /// Set the profileId
         /// </summary>
         /// <returns>void</returns>
-        public void profileId(string data)
+        public void ProfileId(string data)
         {
-            this.setProperty(CustomerVaultConstants.profileId, data);
+            SetProperty(GlobalConstants.ProfileId, data);
         }
 
         public static AddressBuilder Builder()
@@ -202,16 +199,16 @@ namespace Paysafe.CustomerVault
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated Address object
         /// </summary>
-        public class AddressBuilder : BaseJSONBuilder<Address>
+        public class AddressBuilder : BaseJsonBuilder<Address>
         {
             /// <summary>
             /// Set the profileId parameter
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder id(string data)
+            public AddressBuilder Id(string data)
             {
-                this.properties[CustomerVaultConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -220,9 +217,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder profileId(string data)
+            public AddressBuilder ProfileId(string data)
             {
-                this.properties[CustomerVaultConstants.profileId] = data;
+                Properties[GlobalConstants.ProfileId] = data;
                 return this;
             }
 
@@ -231,9 +228,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder country(string data)
+            public AddressBuilder Country(string data)
             {
-                this.properties[CustomerVaultConstants.country] = data;
+                Properties[GlobalConstants.Country] = data;
                 return this;
             }
 
@@ -242,9 +239,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder nickName(string data)
+            public AddressBuilder NickName(string data)
             {
-                this.properties[CustomerVaultConstants.nickName] = data;
+                Properties[GlobalConstants.NickName] = data;
                 return this;
             }
 
@@ -253,9 +250,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder street(string data)
+            public AddressBuilder Street(string data)
             {
-                this.properties[CustomerVaultConstants.street] = data;
+                Properties[GlobalConstants.Street] = data;
                 return this;
             }
 
@@ -264,9 +261,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder street2(string data)
+            public AddressBuilder Street2(string data)
             {
-                this.properties[CustomerVaultConstants.street2] = data;
+                Properties[GlobalConstants.Street2] = data;
                 return this;
             }
 
@@ -275,9 +272,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder city(string data)
+            public AddressBuilder City(string data)
             {
-                this.properties[CustomerVaultConstants.city] = data;
+                Properties[GlobalConstants.City] = data;
                 return this;
             }
 
@@ -286,9 +283,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder state(string data)
+            public AddressBuilder State(string data)
             {
-                this.properties[CustomerVaultConstants.state] = data;
+                Properties[GlobalConstants.State] = data;
                 return this;
             }
 
@@ -297,9 +294,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder zip(string data)
+            public AddressBuilder Zip(string data)
             {
-                this.properties[CustomerVaultConstants.zip] = data;
+                Properties[GlobalConstants.Zip] = data;
                 return this;
             }
 
@@ -308,9 +305,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder recipientName(string data)
+            public AddressBuilder RecipientName(string data)
             {
-                this.properties[CustomerVaultConstants.recipientName] = data;
+                Properties[GlobalConstants.RecipientName] = data;
                 return this;
             }
 
@@ -319,9 +316,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AddressBuilder</returns>
-            public AddressBuilder phone(string data)
+            public AddressBuilder Phone(string data)
             {
-                this.properties[CustomerVaultConstants.phone] = data;
+                Properties[GlobalConstants.Phone] = data;
                 return this;
             }
         }

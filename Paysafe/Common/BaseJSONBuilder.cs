@@ -18,23 +18,20 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public abstract class BaseJSONBuilder<TRTN> : GenericJSONBuilder
-        where TRTN : JSONObject
+    public abstract class BaseJsonBuilder<TRtn> : GenericJsonBuilder
+        where TRtn : JsonObject
     {
         /// <summary>
         /// Build the final object of type RTN
         /// </summary>
         /// <returns>RTN</returns>
-        public TRTN Build()
+        public TRtn Build()
         {
-            Object[] args = { this.properties };
-            return Activator.CreateInstance(typeof(TRTN), args) as TRTN;
+            object[] args = { Properties };
+            return Activator.CreateInstance(typeof(TRtn), args) as TRtn;
         }
     }
 }

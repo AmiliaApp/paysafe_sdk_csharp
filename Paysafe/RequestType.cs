@@ -27,9 +27,9 @@ namespace Paysafe
 {
     public enum RequestType
     {
-        GET,
-        POST,
-        PUT,
-        DELETE
+        Get,
+        Post,
+        Put,
+        Delete
     }
 }

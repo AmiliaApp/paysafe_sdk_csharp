@@ -19,10 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
-using PaysafeApiClient = Paysafe.PaysafeApiClient;
 
 namespace Paysafe.DirectDebit
 {
@@ -32,12 +29,12 @@ namespace Paysafe.DirectDebit
          /// <summary>
         /// The api client, performs all http requests
         /// </summary>
-        private PaysafeApiClient client;
+        private PaysafeApiClient _client;
 
         /// <summary>
         /// The direct debit api base uri 
         /// </summary>
-        private string uri = "directdebit/v1/accounts/";
+        private string _uri = "directdebit/v1/accounts/";
 
         /// <summary>
         /// Initialize the direct debit service with an client object
@@ -45,19 +42,19 @@ namespace Paysafe.DirectDebit
         /// <param name="client">PaysafeApiClient</param>
         public DirectDebitService(PaysafeApiClient client)
         {
-            this.client = client;
+            _client = client;
         }
 
         /// <summary>
         /// Check if the service is available
         /// </summary>
         /// <returns>true if successful</returns>
-        public Boolean monitor()
+        public Boolean Monitor()
         {
             Request request = new Request(uri: "directdebit/monitor");
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return ("READY".Equals((string)(response[DirectDebitConstants.status])));
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
         /// <summary>
@@ -65,29 +62,29 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="submit">submit</param>
         /// <returns>Purchases</returns>
-        public Purchases submit(Purchases purchases)
+        public Purchases Submit(Purchases purchases)
         {
-            purchases.setRequiredFields(new List<string> {
-                DirectDebitConstants.merchantRefNum,
-                DirectDebitConstants.amount,                
+            purchases.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,                
             });
-            purchases.checkRequiredFields();
-            purchases.setOptionalFields(new List<string> {
-                DirectDebitConstants.customerIp,
-                DirectDebitConstants.dupCheck, 
-                DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft,
-                DirectDebitConstants.sepa,
-                DirectDebitConstants.billingDetails,
-                DirectDebitConstants.profile
+            purchases.CheckRequiredFields();
+            purchases.SetOptionalFields(new List<string> {
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck, 
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,
+                GlobalConstants.Sepa,
+                GlobalConstants.BillingDetails,
+                GlobalConstants.Profile
             });
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI(client.account() + "/purchases"),
+                method: RequestType.Post,
+                uri: PrepareUri(_client.Account() + "/purchases"),
                 body: purchases
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Purchases(response);
         }
@@ -97,28 +94,28 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="submit">submit</param>
         /// <returns>StandaloneCredits</returns>
-        public StandaloneCredits submit(StandaloneCredits standalonecredits)
+        public StandaloneCredits Submit(StandaloneCredits standalonecredits)
         {
-            standalonecredits.setRequiredFields(new List<string> {
-                DirectDebitConstants.merchantRefNum,
-                DirectDebitConstants.amount,               
+            standalonecredits.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,               
             });
-            standalonecredits.checkRequiredFields();
-            standalonecredits.setOptionalFields(new List<string> {
-                DirectDebitConstants.customerIp,
-                DirectDebitConstants.dupCheck,
-                DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft, 
-                DirectDebitConstants.billingDetails,
-                DirectDebitConstants.profile,
+            standalonecredits.CheckRequiredFields();
+            standalonecredits.SetOptionalFields(new List<string> {
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck,
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft, 
+                GlobalConstants.BillingDetails,
+                GlobalConstants.Profile,
             });
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI(client.account() + "/standalonecredits"),
+                method: RequestType.Post,
+                uri: PrepareUri(_client.Account() + "/standalonecredits"),
                 body: standalonecredits
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new StandaloneCredits(response);
         }
@@ -128,28 +125,28 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="cancel">cancel</param>
         /// <returns>Purchases</returns>
-        public Purchases cancel(Purchases purchases)
+        public Purchases Cancel(Purchases purchases)
         {
-            purchases.setRequiredFields(new List<string> {
-                DirectDebitConstants.status,  
-                DirectDebitConstants.id
+            purchases.SetRequiredFields(new List<string> {
+                GlobalConstants.Status,
+                GlobalConstants.Id
             });
-            purchases.checkRequiredFields();
-            purchases.setOptionalFields(new List<string>{
-                 DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft,
-                DirectDebitConstants.sepa,
+            purchases.CheckRequiredFields();
+            purchases.SetOptionalFields(new List<string>{
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,
+                GlobalConstants.Sepa,
             });
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI(client.account() + "/purchases/" + purchases.id()),
+                method: RequestType.Put,
+                uri: PrepareUri(_client.Account() + "/purchases/" + purchases.Id()),
                 body: purchases
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Purchases returnVal = new Purchases(response);
-            returnVal.id(purchases.id());
+            returnVal.Id(purchases.Id());
             return returnVal;
         }
 
@@ -158,28 +155,28 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="cancel">cancel</param>
         /// <returns>StandaloneCredits</returns>
-        public StandaloneCredits cancel(StandaloneCredits standalonecredits)
+        public StandaloneCredits Cancel(StandaloneCredits standalonecredits)
         {
-            standalonecredits.setRequiredFields(new List<string> {
-                DirectDebitConstants.status,  
-                DirectDebitConstants.id
+            standalonecredits.SetRequiredFields(new List<string> {
+                GlobalConstants.Status,
+                GlobalConstants.Id
             });
-            standalonecredits.checkRequiredFields();
-            standalonecredits.setOptionalFields(new List<string>{
-                 DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft,               
+            standalonecredits.CheckRequiredFields();
+            standalonecredits.SetOptionalFields(new List<string>{
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,               
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI(client.account() + "/standalonecredits/" + standalonecredits.id()),
+                method: RequestType.Put,
+                uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonecredits.Id()),
                 body: standalonecredits
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             StandaloneCredits returnVal = new StandaloneCredits(response);
-            returnVal.id(standalonecredits.id());
+            returnVal.Id(standalonecredits.Id());
             return returnVal;
         }
 
@@ -188,25 +185,25 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="get">get</param>
         /// <returns>Purchases</returns>
-        public Purchases get(Purchases purchase)
+        public Purchases Get(Purchases purchase)
         {
-            purchase.setRequiredFields(new List<string> {               
-                DirectDebitConstants.id,               
+            purchase.SetRequiredFields(new List<string> {
+                GlobalConstants.Id,               
             });
-            purchase.checkRequiredFields();
-            purchase.setOptionalFields(new List<string>{
-                 DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft,  
-                DirectDebitConstants.sepa,
+            purchase.CheckRequiredFields();
+            purchase.SetOptionalFields(new List<string>{
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,
+                GlobalConstants.Sepa,
             });
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI(client.account() + "/purchases/" + purchase.id()),
+                method: RequestType.Get,
+                uri: PrepareUri(_client.Account() + "/purchases/" + purchase.Id()),
                 body: purchase
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Purchases(response);
         }
@@ -217,42 +214,42 @@ namespace Paysafe.DirectDebit
         /// <param name="purchases"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<Purchases> getPurchase(Purchases purchases = null, Filter filter = null)
+        public Pagerator<Purchases> GetPurchase(Purchases purchases = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (purchases != null && !String.IsNullOrWhiteSpace(purchases.merchantRefNum()))
+            if (purchases != null && !String.IsNullOrWhiteSpace(purchases.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", purchases.merchantRefNum());
+                queryStr.Add("merchantRefNum", purchases.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI(client.account() + "/purchases"),
+                    method: RequestType.Get,
+                    uri: PrepareUri(_client.Account() + "/purchases"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<Purchases>(this.client, typeof(Purchases), response);
+            return new Pagerator<Purchases>(_client, typeof(Purchases), response);
         }
 
         /// <summary>
@@ -260,23 +257,23 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="get">get</param>
         /// <returns>StandaloneCredits</returns>
-        public StandaloneCredits get(StandaloneCredits standalonescredits)
+        public StandaloneCredits Get(StandaloneCredits standalonescredits)
         {
-            standalonescredits.setRequiredFields(new List<string> {               
-                DirectDebitConstants.id,                
+            standalonescredits.SetRequiredFields(new List<string> {
+                GlobalConstants.Id,                
             });
-            standalonescredits.checkRequiredFields();
-            standalonescredits.setOptionalFields(new List<string>{
-                 DirectDebitConstants.ach,
-                DirectDebitConstants.bacs,
-                DirectDebitConstants.eft,                  
+            standalonescredits.CheckRequiredFields();
+            standalonescredits.SetOptionalFields(new List<string>{
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,                  
             });
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI(client.account() + "/standalonecredits/" + standalonescredits.id()),
+                method: RequestType.Get,
+                uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonescredits.Id()),
                 body: standalonescredits
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new StandaloneCredits(response);
         }
@@ -287,47 +284,47 @@ namespace Paysafe.DirectDebit
         /// <param name="standalonescredits"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<StandaloneCredits> getStandaloneCredits(StandaloneCredits standalonescredits = null, Filter filter = null)
+        public Pagerator<StandaloneCredits> GetStandaloneCredits(StandaloneCredits standalonescredits = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (standalonescredits != null && !String.IsNullOrWhiteSpace(standalonescredits.merchantRefNum()))
+            if (standalonescredits != null && !String.IsNullOrWhiteSpace(standalonescredits.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", standalonescredits.merchantRefNum());
+                queryStr.Add("merchantRefNum", standalonescredits.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI(client.account() + "/standalonecredits"),
+                    method: RequestType.Get,
+                    uri: PrepareUri(_client.Account() + "/standalonecredits"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<StandaloneCredits>(this.client, typeof(StandaloneCredits), response);
+            return new Pagerator<StandaloneCredits>(_client, typeof(StandaloneCredits), response);
         }
 
-        private string prepareURI(string path)
+        private string PrepareUri(string path)
         {
-            return this.uri + path;
+            return _uri + path;
         }
     }
 }

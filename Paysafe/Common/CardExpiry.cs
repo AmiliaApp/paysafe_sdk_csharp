@@ -17,103 +17,100 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public class CardExpiry : Paysafe.Common.JSONObject
+    public class CardExpiry : JsonObject
     {
         /// <summary>
         /// Initialize the CardExpiry object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public CardExpiry(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static readonly Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CommonConstants.month, INT_TYPE},
-            {CommonConstants.year, INT_TYPE}
+            {GlobalConstants.Month, IntType},
+            {GlobalConstants.Year, IntType}
         };
 
         /// <summary>
         /// Get the month
         /// </summary>
         /// <returns>int</returns>
-        public int month()
+        public int Month()
         {
-            return this.getProperty(CommonConstants.month);
+            return GetProperty(GlobalConstants.Month);
         }
 
         /// <summary>
         /// Set the month
         /// </summary>
         /// <returns>void</returns>
-        public void month(int data)
+        public void Month(int data)
         {
-            this.setProperty(CommonConstants.month, data);
+            SetProperty(GlobalConstants.Month, data);
         }
 
         /// <summary>
         /// Get the year
         /// </summary>
         /// <returns>int</returns>
-        public int year()
+        public int Year()
         {
-            return this.getProperty(CommonConstants.year);
+            return GetProperty(GlobalConstants.Year);
         }
 
         /// <summary>
         /// Set the year
         /// </summary>
         /// <returns>void</returns>
-        public void year(int data)
+        public void Year(int data)
         {
-            this.setProperty(CommonConstants.year, data);
+            SetProperty(GlobalConstants.Year, data);
         }
 
         /// <summary>
-        /// CardExpiryBuilder<typeparam name="TBLDR"></typeparam> will allow a CardExpiry to be initialized
+        /// CardExpiryBuilder<typeparam name="TBldr"></typeparam> will allow a CardExpiry to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class CardExpiryBuilder<TBLDR> : NestedJSONBuilder<CardExpiry, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class CardExpiryBuilder<TBldr> : NestedJsonBuilder<CardExpiry, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the CardExpiry builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public CardExpiryBuilder(TBLDR parent)
+            public CardExpiryBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
-            /// Set the month
+            /// Sets the month
             /// </summary>
-            /// <param name=data>int</param>
-            /// <returns>CardExpiryBuilder<TBLDR></returns>
-            public CardExpiryBuilder<TBLDR> month(int data)
+            /// <param name="data"></param>
+            /// <returns></returns>
+            public CardExpiryBuilder<TBldr> Month(int data)
             {
-                this.properties[CommonConstants.month] = data;
+                Properties[GlobalConstants.Month] = data;
                 return this;
             }
 
             /// <summary>
             /// Set the year
             /// </summary>
-            /// <param name=data>int</param>
-            /// <returns>CardExpiryBuilder<TBLDR></returns>
-            public CardExpiryBuilder<TBLDR> year(int data)
+            /// <param name="data"></param>
+            /// <returns></returns>
+            public CardExpiryBuilder<TBldr> Year(int data)
             {
-                this.properties[CommonConstants.year] = data;
+                Properties[GlobalConstants.Year] = data;
                 return this;
             }
         }

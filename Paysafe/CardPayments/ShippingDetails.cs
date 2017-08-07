@@ -17,10 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
@@ -32,87 +29,87 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public ShippingDetails(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>(addressFieldTypes)
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>(AddressFieldTypes)
         {
-            {CardPaymentsConstants.recipientName, STRING_TYPE},
-            {CardPaymentsConstants.carrier, CardPaymentsConstants.enumCarrier},
-            {CardPaymentsConstants.shipMethod, CardPaymentsConstants.enumShipMethod}
+            {GlobalConstants.RecipientName, StringType},
+            {GlobalConstants.Carrier, GlobalConstants.EnumCarrier},
+            {GlobalConstants.ShipMethod, GlobalConstants.EnumShipMethod}
         };
 
         /// <summary>
         /// Get the recipientName
         /// </summary>
         /// <returns>string</returns>
-        public string recipientName()
+        public string RecipientName()
         {
-            return this.getProperty(CardPaymentsConstants.recipientName);
+            return GetProperty(GlobalConstants.RecipientName);
         }
 
         /// <summary>
         /// Set the recipientName
         /// </summary>
         /// <returns>void</returns>
-        public void recipientName(string data)
+        public void RecipientName(string data)
         {
-            this.setProperty(CardPaymentsConstants.recipientName, data);
+            SetProperty(GlobalConstants.RecipientName, data);
         }
 
         /// <summary>
         /// Get the carrier
         /// </summary>
         /// <returns>List</returns>
-        public List<string> carrier()
+        public List<string> Carrier()
         {
-            return this.getProperty(CardPaymentsConstants.carrier);
+            return GetProperty(GlobalConstants.Carrier);
         }
 
         /// <summary>
         /// Set the carrier
         /// </summary>
         /// <returns>void</returns>
-        public void carrier(string data)
+        public void Carrier(string data)
         {
-            this.setProperty(CardPaymentsConstants.carrier, data);
+            SetProperty(GlobalConstants.Carrier, data);
         }
 
         /// <summary>
         /// Get the shipMethod
         /// </summary>
         /// <returns>string</returns>
-        public string shipMethod()
+        public string ShipMethod()
         {
-            return this.getProperty(CardPaymentsConstants.shipMethod);
+            return GetProperty(GlobalConstants.ShipMethod);
         }
 
         /// <summary>
         /// Set the shipMethod
         /// </summary>
         /// <returns>void</returns>
-        public void shipMethod(string data)
+        public void ShipMethod(string data)
         {
-            this.setProperty(CardPaymentsConstants.shipMethod, data);
+            SetProperty(GlobalConstants.ShipMethod, data);
         }
 
         /// <summary>
-        /// ShippingDetailsBuilder<typeparam name="TBLDR"></typeparam> will allow a ShippingDetails to be initialized
+        /// ShippingDetailsBuilder<typeparam name="TBldr"></typeparam> will allow a ShippingDetails to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class ShippingDetailsBuilder<TBLDR> : NestedJSONBuilder<ShippingDetails, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class ShippingDetailsBuilder<TBldr> : NestedJsonBuilder<ShippingDetails, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the ShippingDetails builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public ShippingDetailsBuilder(TBLDR parent)
+            public ShippingDetailsBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -120,9 +117,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> recipientName(string data)
+            public ShippingDetailsBuilder<TBldr> RecipientName(string data)
             {
-                this.properties[CardPaymentsConstants.recipientName] = data;
+                Properties[GlobalConstants.RecipientName] = data;
                 return this;
             }
 
@@ -131,9 +128,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> street(string data)
+            public ShippingDetailsBuilder<TBldr> Street(string data)
             {
-                this.properties[CardPaymentsConstants.street] = data;
+                Properties[GlobalConstants.Street] = data;
                 return this;
             }
 
@@ -142,9 +139,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> street2(string data)
+            public ShippingDetailsBuilder<TBldr> Street2(string data)
             {
-                this.properties[CardPaymentsConstants.street2] = data;
+                Properties[GlobalConstants.Street2] = data;
                 return this;
             }
 
@@ -153,9 +150,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> city(string data)
+            public ShippingDetailsBuilder<TBldr> City(string data)
             {
-                this.properties[CardPaymentsConstants.city] = data;
+                Properties[GlobalConstants.City] = data;
                 return this;
             }
 
@@ -164,9 +161,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> state(string data)
+            public ShippingDetailsBuilder<TBldr> State(string data)
             {
-                this.properties[CardPaymentsConstants.state] = data;
+                Properties[GlobalConstants.State] = data;
                 return this;
             }
 
@@ -175,9 +172,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> country(string data)
+            public ShippingDetailsBuilder<TBldr> Country(string data)
             {
-                this.properties[CardPaymentsConstants.country] = data;
+                Properties[GlobalConstants.Country] = data;
                 return this;
             }
 
@@ -186,9 +183,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> zip(string data)
+            public ShippingDetailsBuilder<TBldr> Zip(string data)
             {
-                this.properties[CardPaymentsConstants.zip] = data;
+                Properties[GlobalConstants.Zip] = data;
                 return this;
             }
 
@@ -197,9 +194,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> phone(string data)
+            public ShippingDetailsBuilder<TBldr> Phone(string data)
             {
-                this.properties[CardPaymentsConstants.phone] = data;
+                Properties[GlobalConstants.Phone] = data;
                 return this;
             }
 
@@ -208,9 +205,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> carrier(string data)
+            public ShippingDetailsBuilder<TBldr> Carrier(string data)
             {
-                this.properties[CardPaymentsConstants.carrier] = data;
+                Properties[GlobalConstants.Carrier] = data;
                 return this;
             }
 
@@ -219,9 +216,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ShippingDetailsBuilder<TBLDR></returns>
-            public ShippingDetailsBuilder<TBLDR> shipMethod(string data)
+            public ShippingDetailsBuilder<TBldr> ShipMethod(string data)
             {
-                this.properties[CardPaymentsConstants.shipMethod] = data;
+                Properties[GlobalConstants.ShipMethod] = data;
                 return this;
             }
         }

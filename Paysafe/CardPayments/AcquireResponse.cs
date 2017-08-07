@@ -17,427 +17,424 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
 
-    public class AcquirerResponse : JSONObject
+    public class AcquirerResponse : JsonObject
     {
         /// <summary>
         /// Initialize the AcquirerResponse object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public AcquirerResponse(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CardPaymentsConstants.code, STRING_TYPE},
-             {CardPaymentsConstants.responseCode, STRING_TYPE},
-             {CardPaymentsConstants.avsCode, STRING_TYPE},
-             {CardPaymentsConstants.balanceResponse, STRING_TYPE},
-             {CardPaymentsConstants.batchNumber, STRING_TYPE},
-             {CardPaymentsConstants.effectiveDate, STRING_TYPE},
-             {CardPaymentsConstants.financingType, STRING_TYPE},
-             {CardPaymentsConstants.gracePeriod, STRING_TYPE},
-             {CardPaymentsConstants.plan, STRING_TYPE},
-             {CardPaymentsConstants.seqNumber, STRING_TYPE},
-             {CardPaymentsConstants.term, STRING_TYPE},
-             {CardPaymentsConstants.terminalId, STRING_TYPE},
-             {CardPaymentsConstants.responseId, STRING_TYPE},
-             {CardPaymentsConstants.requestId, STRING_TYPE},
-             {CardPaymentsConstants.description, STRING_TYPE},
-             {CardPaymentsConstants.authCode, STRING_TYPE},
-             {CardPaymentsConstants.txnDateTime, STRING_TYPE},
-             {CardPaymentsConstants.referenceNbr, STRING_TYPE},
-             {CardPaymentsConstants.responseReasonCode, STRING_TYPE},
-             {CardPaymentsConstants.cvv2Result, STRING_TYPE},
-             {CardPaymentsConstants.mid, STRING_TYPE}
+             {GlobalConstants.Code, StringType},
+             {GlobalConstants.ResponseCode, StringType},
+             {GlobalConstants.AvsCode, StringType},
+             {GlobalConstants.BalanceResponse, StringType},
+             {GlobalConstants.BatchNumber, StringType},
+             {GlobalConstants.EffectiveDate, StringType},
+             {GlobalConstants.FinancingType, StringType},
+             {GlobalConstants.GracePeriod, StringType},
+             {GlobalConstants.Plan, StringType},
+             {GlobalConstants.SeqNumber, StringType},
+             {GlobalConstants.Term, StringType},
+             {GlobalConstants.TerminalId, StringType},
+             {GlobalConstants.ResponseId, StringType},
+             {GlobalConstants.RequestId, StringType},
+             {GlobalConstants.Description, StringType},
+             {GlobalConstants.AuthCode, StringType},
+             {GlobalConstants.TxnDateTime, StringType},
+             {GlobalConstants.ReferenceNbr, StringType},
+             {GlobalConstants.ResponseReasonCode, StringType},
+             {GlobalConstants.Cvv2Result, StringType},
+             {GlobalConstants.Mid, StringType}
          };
 
         /// <summary>
         /// Get the code
         /// </summary>
         /// <returns>string</returns>
-        public string code()
+        public string Code()
         {
-            return this.getProperty(CardPaymentsConstants.code);
+            return GetProperty(GlobalConstants.Code);
         }
 
         /// <summary>
         /// Set the  code
         /// </summary>
         /// <returns>void</returns>
-        public void code(string data)
+        public void Code(string data)
         {
-            this.setProperty(CardPaymentsConstants.code, data);
+            SetProperty(GlobalConstants.Code, data);
         }
 
         /// <summary>
         /// Get the responseCode
         /// </summary>
         /// <returns>string</returns>
-        public string responseCode()
+        public string ResponseCode()
         {
-            return this.getProperty(CardPaymentsConstants.responseCode);
+            return GetProperty(GlobalConstants.ResponseCode);
         }
 
         /// <summary>
         /// Set the responseCode
         /// </summary>
         /// <returns>void</returns>
-        public void responseCode(string data)
+        public void ResponseCode(string data)
         {
-            this.setProperty(CardPaymentsConstants.responseCode, data);
+            SetProperty(GlobalConstants.ResponseCode, data);
         }
 
         /// <summary>
         /// Get the avsCode
         /// </summary>
         /// <returns>string</returns>
-        public string avsCode()
+        public string AvsCode()
         {
-            return this.getProperty(CardPaymentsConstants.avsCode);
+            return GetProperty(GlobalConstants.AvsCode);
         }
 
         /// <summary>
         /// Set the avsCode
         /// </summary>
         /// <returns>void</returns>
-        public void avsCode(string data)
+        public void AvsCode(string data)
         {
-            this.setProperty(CardPaymentsConstants.avsCode, data);
+            SetProperty(GlobalConstants.AvsCode, data);
         }
 
         /// <summary>
         /// Get the balanceResponse
         /// </summary>
         /// <returns>string</returns>
-        public string balanceResponse()
+        public string BalanceResponse()
         {
-            return this.getProperty(CardPaymentsConstants.balanceResponse);
+            return GetProperty(GlobalConstants.BalanceResponse);
         }
 
         /// <summary>
         /// Set the balanceResponse
         /// </summary>
         /// <returns>void</returns>
-        public void balanceResponse(string data)
+        public void BalanceResponse(string data)
         {
-            this.setProperty(CardPaymentsConstants.balanceResponse, data);
+            SetProperty(GlobalConstants.BalanceResponse, data);
         }
 
         /// <summary>
         /// Get the batchNumber
         /// </summary>
         /// <returns>string</returns>
-        public string batchNumber()
+        public string BatchNumber()
         {
-            return this.getProperty(CardPaymentsConstants.batchNumber);
+            return GetProperty(GlobalConstants.BatchNumber);
         }
 
         /// <summary>
         /// Set the batchNumber
         /// </summary>
         /// <returns>void</returns>
-        public void batchNumber(string data)
+        public void BatchNumber(string data)
         {
-            this.setProperty(CardPaymentsConstants.batchNumber, data);
+            SetProperty(GlobalConstants.BatchNumber, data);
         }
 
         /// <summary>
         /// Get the effectiveDate
         /// </summary>
         /// <returns>string</returns>
-        public string effectiveDate()
+        public string EffectiveDate()
         {
-            return this.getProperty(CardPaymentsConstants.effectiveDate);
+            return GetProperty(GlobalConstants.EffectiveDate);
         }
 
         /// <summary>
         /// Set the effectiveDate
         /// </summary>
         /// <returns>void</returns>
-        public void effectiveDate(string data)
+        public void EffectiveDate(string data)
         {
-            this.setProperty(CardPaymentsConstants.effectiveDate, data);
+            SetProperty(GlobalConstants.EffectiveDate, data);
         }
 
         /// <summary>
         /// Get the financingType
         /// </summary>
         /// <returns>string</returns>
-        public string financingType()
+        public string FinancingType()
         {
-            return this.getProperty(CardPaymentsConstants.financingType);
+            return GetProperty(GlobalConstants.FinancingType);
         }
 
         /// <summary>
         /// Set the financingType
         /// </summary>
         /// <returns>void</returns>
-        public void financingType(string data)
+        public void FinancingType(string data)
         {
-            this.setProperty(CardPaymentsConstants.financingType, data);
+            SetProperty(GlobalConstants.FinancingType, data);
         }
 
         /// <summary>
         /// Get the gracePeriod
         /// </summary>
         /// <returns>int</returns>
-        public int gracePeriod()
+        public int GracePeriod()
         {
-            return this.getProperty(CardPaymentsConstants.gracePeriod);
+            return GetProperty(GlobalConstants.GracePeriod);
         }
 
         /// <summary>
         /// Set the gracePeriod
         /// </summary>
         /// <returns>void</returns>
-        public void gracePeriod(int data)
+        public void GracePeriod(int data)
         {
-            this.setProperty(CardPaymentsConstants.gracePeriod, data);
+            SetProperty(GlobalConstants.GracePeriod, data);
         }
 
         /// <summary>
         /// Get the plan
         /// </summary>
         /// <returns>string</returns>
-        public string plan()
+        public string Plan()
         {
-            return this.getProperty(CardPaymentsConstants.plan);
+            return GetProperty(GlobalConstants.Plan);
         }
 
         /// <summary>
         /// Set the plan
         /// </summary>
         /// <returns>void</returns>
-        public void plan(string data)
+        public void Plan(string data)
         {
-            this.setProperty(CardPaymentsConstants.plan, data);
+            SetProperty(GlobalConstants.Plan, data);
         }
 
         /// <summary>
         /// Get the seqNumber
         /// </summary>
         /// <returns>string</returns>
-        public string seqNumber()
+        public string SeqNumber()
         {
-            return this.getProperty(CardPaymentsConstants.seqNumber);
+            return GetProperty(GlobalConstants.SeqNumber);
         }
 
         /// <summary>
         /// Set the seqNumber
         /// </summary>
         /// <returns>void</returns>
-        public void seqNumber(string data)
+        public void SeqNumber(string data)
         {
-            this.setProperty(CardPaymentsConstants.seqNumber, data);
+            SetProperty(GlobalConstants.SeqNumber, data);
         }
 
         /// <summary>
         /// Get the term
         /// </summary>
         /// <returns>string</returns>
-        public string term()
+        public string Term()
         {
-            return this.getProperty(CardPaymentsConstants.term);
+            return GetProperty(GlobalConstants.Term);
         }
 
         /// <summary>
         /// Set the term
         /// </summary>
         /// <returns>void</returns>
-        public void term(int data)
+        public void Term(int data)
         {
-            this.setProperty(CardPaymentsConstants.term, data);
+            SetProperty(GlobalConstants.Term, data);
         }
 
         /// <summary>
         /// Get the terminalId
         /// </summary>
         /// <returns>string</returns>
-        public string terminalId()
+        public string TerminalId()
         {
-            return this.getProperty(CardPaymentsConstants.terminalId);
+            return GetProperty(GlobalConstants.TerminalId);
         }
 
         /// <summary>
         /// Set the terminalId
         /// </summary>
         /// <returns>void</returns>
-        public void terminalId(int data)
+        public void TerminalId(int data)
         {
-            this.setProperty(CardPaymentsConstants.terminalId, data);
+            SetProperty(GlobalConstants.TerminalId, data);
         }
 
         /// <summary>
         /// Get the requestId
         /// </summary>
         /// <returns>string</returns>
-        public string requestId()
+        public string RequestId()
         {
-            return this.getProperty(CardPaymentsConstants.requestId);
+            return GetProperty(GlobalConstants.RequestId);
         }
 
         /// <summary>
         /// Set the requestId
         /// </summary>
         /// <returns>void</returns>
-        public void requestId(int data)
+        public void RequestId(int data)
         {
-            this.setProperty(CardPaymentsConstants.requestId, data);
+            SetProperty(GlobalConstants.RequestId, data);
         }
 
         /// <summary>
         /// Get the responseId
         /// </summary>
         /// <returns>string</returns>
-        public string responseId()
+        public string ResponseId()
         {
-            return this.getProperty(CardPaymentsConstants.responseId);
+            return GetProperty(GlobalConstants.ResponseId);
         }
 
         /// <summary>
         /// Set the responseId
         /// </summary>
         /// <returns>void</returns>
-        public void responseId(int data)
+        public void ResponseId(int data)
         {
-            this.setProperty(CardPaymentsConstants.terminalId, data);
+            SetProperty(GlobalConstants.TerminalId, data);
         }
 
         /// <summary>
         /// Get the description
         /// </summary>
         /// <returns>string</returns>
-        public string description()
+        public string Description()
         {
-            return this.getProperty(CardPaymentsConstants.description);
+            return GetProperty(GlobalConstants.Description);
         }
 
         /// <summary>
         /// Set the description
         /// </summary>
         /// <returns>void</returns>
-        public void description(string data)
+        public void Description(string data)
         {
-            this.setProperty(CardPaymentsConstants.description, data);
+            SetProperty(GlobalConstants.Description, data);
         }
 
         /// <summary>
         /// Get the authCode
         /// </summary>
         /// <returns>string</returns>
-        public string authCode()
+        public string AuthCode()
         {
-            return this.getProperty(CardPaymentsConstants.authCode);
+            return GetProperty(GlobalConstants.AuthCode);
         }
 
         /// <summary>
         /// Set the authCode
         /// </summary>
         /// <returns>void</returns>
-        public void authCode(string data)
+        public void AuthCode(string data)
         {
-            this.setProperty(CardPaymentsConstants.authCode, data);
+            SetProperty(GlobalConstants.AuthCode, data);
         }
 
         /// <summary>
         /// Get the txnDateTime
         /// </summary>
         /// <returns>string</returns>
-        public string txnDateTime()
+        public string TxnDateTime()
         {
-            return this.getProperty(CardPaymentsConstants.txnDateTime);
+            return GetProperty(GlobalConstants.TxnDateTime);
         }
 
         /// <summary>
         /// Set the txnDateTime
         /// </summary>
         /// <returns>void</returns>
-        public void txnDateTime(string data)
+        public void TxnDateTime(string data)
         {
-            this.setProperty(CardPaymentsConstants.txnDateTime, data);
+            SetProperty(GlobalConstants.TxnDateTime, data);
         }
 
         /// <summary>
         /// Get the referenceNbr
         /// </summary>
         /// <returns>string</returns>
-        public string referenceNbr()
+        public string ReferenceNbr()
         {
-            return this.getProperty(CardPaymentsConstants.referenceNbr);
+            return GetProperty(GlobalConstants.ReferenceNbr);
         }
 
         /// <summary>
         /// Set the referenceNbr
         /// </summary>
         /// <returns>void</returns>
-        public void referenceNbr(string data)
+        public void ReferenceNbr(string data)
         {
-            this.setProperty(CardPaymentsConstants.referenceNbr, data);
+            SetProperty(GlobalConstants.ReferenceNbr, data);
         }
 
         /// <summary>
         /// Get the responseReasonCode
         /// </summary>
         /// <returns>string</returns>
-        public string responseReasonCode()
+        public string ResponseReasonCode()
         {
-            return this.getProperty(CardPaymentsConstants.responseReasonCode);
+            return GetProperty(GlobalConstants.ResponseReasonCode);
         }
 
         /// <summary>
         /// Set the responseReasonCode
         /// </summary>
         /// <returns>void</returns>
-        public void responseReasonCode(string data)
+        public void ResponseReasonCode(string data)
         {
-            this.setProperty(CardPaymentsConstants.responseReasonCode, data);
+            SetProperty(GlobalConstants.ResponseReasonCode, data);
         }
 
         /// <summary>
         /// Get the cvv2Result
         /// </summary>
         /// <returns>string</returns>
-        public string cvv2Result()
+        public string Cvv2Result()
         {
-            return this.getProperty(CardPaymentsConstants.cvv2Result);
+            return GetProperty(GlobalConstants.Cvv2Result);
         }
 
         /// <summary>
         /// Set the cvv2Result
         /// </summary>
         /// <returns>void</returns>
-        public void cvv2Result(string data)
+        public void Cvv2Result(string data)
         {
-            this.setProperty(CardPaymentsConstants.cvv2Result, data);
+            SetProperty(GlobalConstants.Cvv2Result, data);
         }
 
         /// <summary>
         /// Get the mid
         /// </summary>
         /// <returns>string</returns>
-        public string mid()
+        public string Mid()
         {
-            return this.getProperty(CardPaymentsConstants.mid);
+            return GetProperty(GlobalConstants.Mid);
         }
 
         /// <summary>
         /// Set the mid
         /// </summary>
         /// <returns>void</returns>
-        public void mid(string data)
+        public void Mid(string data)
         {
-            this.setProperty(CardPaymentsConstants.mid, data);
+            SetProperty(GlobalConstants.Mid, data);
         }
 
     }

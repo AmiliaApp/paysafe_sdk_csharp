@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 //Modified by Manjiri.Bankar on 02.08.2016. This is Pagerator class.
 namespace Paysafe.Common
@@ -32,54 +31,59 @@ namespace Paysafe.Common
         /// <summary>
         /// The result set so far retrieved
         /// </summary>
-        protected List<T> results = new List<T>();
+        protected List<T> Results = new List<T>();
 
         /// <summary>
         /// The key in the returned array to be added to the resutl set
         /// </summary>
-        protected string arrayKey = null;
+        protected string ArrayKey;
 
         /// <summary>
         /// The type to instantiate
         /// </summary>
-        protected Type classType;
+        protected Type ClassType;
 
         /// <summary>
         /// The url to the next page, if we haven't yet retrieved all results
         /// </summary>
-        protected String nextPage = null;
+        protected String NextPage = null;
 
         /// <summary>
         /// The url to the self page
         /// </summary>
-        protected String selfPage = null;
+        protected String SelfPage = null;
 
         /// <summary>
         /// The url to the previous page
         /// </summary>
-        protected String previousPage = null;
+        protected String PreviousPage = null;
 
         /// <summary>
         /// The client
         /// </summary>
-        protected PaysafeApiClient client = null;
+        protected PaysafeApiClient Client;
 
 
-        public AbstractPagerator(PaysafeApiClient apiClient, Type pagingClassType)
+        /// <summary>
+        /// Get arrays by page
+        /// </summary>
+        /// <param name="apiClient"></param>
+        /// <param name="pagingClassType"></param>
+        protected AbstractPagerator(PaysafeApiClient apiClient, Type pagingClassType)
         {
-            this.arrayKey = pagingClassType.GetMethod("getPageableArrayKey").Invoke(null, null) as string;
+            ArrayKey = pagingClassType.GetMethod("getPageableArrayKey").Invoke(null, null) as string;
 
-            this.client = apiClient;
-            this.classType = pagingClassType;
+            Client = apiClient;
+            ClassType = pagingClassType;
         }
 
         /// <summary>
         /// Get the current set of elements
         /// </summary>
         /// <returns>List<T></returns>
-        public List<T> getResults()
+        public List<T> GetResults()
         {
-            return this.results;
+            return Results;
         }
 
         /// <summary>
@@ -87,9 +91,9 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        protected T get(int index)
+        protected T Get(int index)
         {
-            return this.results.ElementAt(index);
+            return Results.ElementAt(index);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -103,54 +107,57 @@ namespace Paysafe.Common
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            return new PageratorEnumerator(this.classType, this);
+            return new PageratorEnumerator(ClassType, this);
         }
 
 
-        protected abstract void parseResponse(Dictionary<string, object> data);
+        /// <summary>
+        /// To parse the response
+        /// </summary>
+        /// <param name="data"></param>
+        protected abstract void ParseResponse(Dictionary<string, object> data);
 
+        /// <summary>
+        /// Enumerator
+        /// </summary>
         public class PageratorEnumerator : IEnumerator
         {
-            AbstractPagerator<T> parent = null;
+            readonly AbstractPagerator<T> _parent;
 
-            private int position = -1;
+            private int _position = -1;
 
+            /// <summary>
+            /// Pagerator Enumerator
+            /// </summary>
+            /// <param name="classType"></param>
+            /// <param name="parent"></param>
             public PageratorEnumerator(Type classType, AbstractPagerator<T> parent)
             {
-                this.parent = parent;
+                _parent = parent;
             }
 
-            public bool MoveNext()
+            bool IEnumerator.MoveNext()
             {
-                this.position++;
-                if (this.parent.results.Count >= this.position && !String.IsNullOrWhiteSpace(this.parent.nextPage))
+                _position++;
+                if (_parent.Results.Count >= _position && !String.IsNullOrWhiteSpace(_parent.NextPage))
                 {
-                    Request request = new Request(url: this.parent.nextPage);
-                    this.parent.parseResponse(this.parent.client.processRequest(request));
+                    Request request = new Request(url: _parent.NextPage);
+                    _parent.ParseResponse(_parent.Client.ProcessRequest(request));
                 }
-                return this.position < this.parent.results.Count;
+                return _position < _parent.Results.Count;
             }
 
-            public void Reset()
+            void IEnumerator.Reset()
             {
-                position = -1;
+                _position = -1;
             }
 
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return Current;
-                }
-            }
+            object IEnumerator.Current => Current;
 
-            public T Current
-            {
-                get
-                {
-                    return this.parent.get(position);
-                }
-            }
+            /// <summary>
+            /// Current Element
+            /// </summary>
+            public T Current => _parent.Get(_position);
         }
     }
 }

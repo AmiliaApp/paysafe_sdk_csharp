@@ -17,84 +17,81 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
 
-    public class MerchantDescriptor : JSONObject
+    public class MerchantDescriptor : JsonObject
     {
         /// <summary>
         /// Initialize the MerchantDescriptor object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public MerchantDescriptor(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CardPaymentsConstants.dynamicDescriptor, STRING_TYPE},
-             {CardPaymentsConstants.phone, STRING_TYPE}
+             {GlobalConstants.DynamicDescriptor, StringType},
+             {GlobalConstants.Phone, StringType}
          };
 
         /// <summary>
         /// Get the dynamicDescriptor
         /// </summary>
         /// <returns>string</returns>
-        public string dynamicDescriptor()
+        public string DynamicDescriptor()
         {
-            return this.getProperty(CardPaymentsConstants.dynamicDescriptor);
+            return GetProperty(GlobalConstants.DynamicDescriptor);
         }
 
         /// <summary>
         /// Set the dynamicDescriptor
         /// </summary>
         /// <returns>void</returns>
-        public void dynamicDescriptor(string data)
+        public void DynamicDescriptor(string data)
         {
-            this.setProperty(CardPaymentsConstants.dynamicDescriptor, data);
+            SetProperty(GlobalConstants.DynamicDescriptor, data);
         }
 
         /// <summary>
         /// Get the street
         /// </summary>
         /// <returns>string</returns>
-        public string street()
+        public string Street()
         {
-            return this.getProperty(CardPaymentsConstants.phone);
+            return GetProperty(GlobalConstants.Phone);
         }
 
         /// <summary>
         /// Set the zip
         /// </summary>
         /// <returns>void</returns>
-        public void zip(string data)
+        public void Zip(string data)
         {
-            this.setProperty(CardPaymentsConstants.phone, data);
+            SetProperty(GlobalConstants.Phone, data);
         }
 
         /// <summary>
-        /// MerchantDescriptorBuilder<typeparam name="TBLDR"></typeparam> will allow a MerchantDescriptor to be initialized
+        /// MerchantDescriptorBuilder<typeparam name="TBldr"></typeparam> will allow a MerchantDescriptor to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class MerchantDescriptorBuilder<TBLDR> : NestedJSONBuilder<MerchantDescriptor, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class MerchantDescriptorBuilder<TBldr> : NestedJsonBuilder<MerchantDescriptor, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the MerchantDescriptor builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public MerchantDescriptorBuilder(TBLDR parent)
+            public MerchantDescriptorBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -102,9 +99,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=CardPayments.dynamicDescriptor>string</param>
             /// <returns>MerchantDescriptorBuilder<TBLDR></returns>
-            public MerchantDescriptorBuilder<TBLDR> dynamicDescriptor(string data)
+            public MerchantDescriptorBuilder<TBldr> DynamicDescriptor(string data)
             {
-                this.properties[CardPaymentsConstants.dynamicDescriptor] = data;
+                Properties[GlobalConstants.DynamicDescriptor] = data;
                 return this;
             }
 
@@ -114,9 +111,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=CardPayments.phone>string</param>
             /// <returns>MerchantDescriptorBuilder<TBLDR></returns>
-            public MerchantDescriptorBuilder<TBLDR> phone(string data)
+            public MerchantDescriptorBuilder<TBldr> Phone(string data)
             {
-                this.properties[CardPaymentsConstants.phone] = data;
+                Properties[GlobalConstants.Phone] = data;
                 return this;
             }
         }

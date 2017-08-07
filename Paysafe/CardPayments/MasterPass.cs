@@ -17,104 +17,101 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
 
-    public class MasterPass : JSONObject
+    public class MasterPass : JsonObject
     {
         /// <summary>
         /// Initialize the MasterPass object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public MasterPass(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-            {CardPaymentsConstants.payPassWalletIndicator, STRING_TYPE},
-            {CardPaymentsConstants.authenticationMethod, STRING_TYPE},
-            {CardPaymentsConstants.cardEnrollementMethod, STRING_TYPE},
-            {CardPaymentsConstants.masterCardAssignedId, STRING_TYPE}
+            {GlobalConstants.PayPassWalletIndicator, StringType},
+            {GlobalConstants.AuthenticationMethod, StringType},
+            {GlobalConstants.CardEnrollementMethod, StringType},
+            {GlobalConstants.MasterCardAssignedId, StringType}
          };
 
         /// <summary>
         /// Get the payPassWalletIndicator
         /// </summary>
         /// <returns>string</returns>
-        public string payPassWalletIndicator()
+        public string PayPassWalletIndicator()
         {
-            return this.getProperty(CardPaymentsConstants.payPassWalletIndicator);
+            return GetProperty(GlobalConstants.PayPassWalletIndicator);
         }
 
         /// <summary>
         /// Set the payPassWalletIndicator
         /// </summary>
         /// <returns>void</returns>
-        public void payPassWalletIndicator(string data)
+        public void PayPassWalletIndicator(string data)
         {
-            this.setProperty(CardPaymentsConstants.payPassWalletIndicator, data);
+            SetProperty(GlobalConstants.PayPassWalletIndicator, data);
         }
 
         /// <summary>
         /// Get the authenticationMethod
         /// </summary>
         /// <returns>string</returns>
-        public string authenticationMethod()
+        public string AuthenticationMethod()
         {
-            return this.getProperty(CardPaymentsConstants.authenticationMethod);
+            return GetProperty(GlobalConstants.AuthenticationMethod);
         }
 
         /// <summary>
         /// Set the authenticationMethod
         /// </summary>
         /// <returns>void</returns>
-        public void authenticationMethod(string data)
+        public void AuthenticationMethod(string data)
         {
-            this.setProperty(CardPaymentsConstants.authenticationMethod, data);
+            SetProperty(GlobalConstants.AuthenticationMethod, data);
         }
 
         /// <summary>
         /// Get the cardEnrollementMethod
         /// </summary>
         /// <returns>string</returns>
-        public string cardEnrollementMethod()
+        public string CardEnrollementMethod()
         {
-            return this.getProperty(CardPaymentsConstants.cardEnrollementMethod);
+            return GetProperty(GlobalConstants.CardEnrollementMethod);
         }
 
         /// <summary>
         /// Set the cardEnrollementMethod
         /// </summary>
         /// <returns>void</returns>
-        public void cardEnrollementMethod(string data)
+        public void CardEnrollementMethod(string data)
         {
-            this.setProperty(CardPaymentsConstants.cardEnrollementMethod, data);
+            SetProperty(GlobalConstants.CardEnrollementMethod, data);
         }
 
         /// <summary>
         /// Get the masterCardAssignedId
         /// </summary>
         /// <returns>string</returns>
-        public string masterCardAssignedIdr()
+        public string MasterCardAssignedIdr()
         {
-            return this.getProperty(CardPaymentsConstants.masterCardAssignedId);
+            return GetProperty(GlobalConstants.MasterCardAssignedId);
         }
 
         /// <summary>
         /// Set the masterCardAssignedId
         /// </summary>
         /// <returns>void</returns>
-        public void masterCardAssignedId(string data)
+        public void MasterCardAssignedId(string data)
         {
-            this.setProperty(CardPaymentsConstants.masterCardAssignedId, data);
+            SetProperty(GlobalConstants.MasterCardAssignedId, data);
         }
 
     }

@@ -17,37 +17,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public class FieldError: JSONObject
+    /// <summary>
+    /// Used to get field error messages
+    /// </summary>
+    public class FieldError: JsonObject
     {
         /// <summary>
         /// Initialize the FieldError object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public FieldError(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CommonConstants.field, STRING_TYPE},
-             {CommonConstants.error, STRING_TYPE}
+             {GlobalConstants.Field, StringType},
+             {GlobalConstants.Error, StringType}
          };
 
         /// <summary>
         /// Get the field
         /// </summary>
         /// <returns>string</returns>
-        public string field()
+        public string Field()
         {
-            return this.getProperty(CommonConstants.field);
+            return GetProperty(GlobalConstants.Field);
         }
 
         /// <summary>
@@ -55,18 +55,18 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name=data>string</param>
         /// <returns>void</returns>
-        public void field(string data)
+        public void Field(string data)
         {
-            this.setProperty(CommonConstants.field, data);
+            SetProperty(GlobalConstants.Field, data);
         }
 
         /// <summary>
         /// Get the expiry error
         /// </summary>
         /// <returns>string</returns>
-        public string error()
+        public string Error()
         {
-            return this.getProperty(CommonConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
@@ -74,9 +74,9 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name=data>string</param>
         /// <returns>void</returns>
-        public void error(string data)
+        public void Error(string data)
         {
-            this.setProperty(CommonConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
     }
 }

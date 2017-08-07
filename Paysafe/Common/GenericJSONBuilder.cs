@@ -17,18 +17,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
     /// <summary>
     /// A non generic object to help JSONBuilder easily identify builder objects
     /// </summary>
-    public abstract class GenericJSONBuilder
+    public abstract class GenericJsonBuilder
     {
-        protected Dictionary<string, object> properties = new Dictionary<string, object>();
+        protected Dictionary<string, object> Properties = new Dictionary<string, object>();
     }
 }

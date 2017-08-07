@@ -5,7 +5,6 @@ namespace Paysafe.Common
     public class PermissionException : PaysafeException
     {
         public PermissionException()
-            : base()
         {
 
         }

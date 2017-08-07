@@ -17,10 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
@@ -29,30 +26,30 @@ namespace Paysafe.DirectDebit
     public class BillingDetails : AddressDetails
     {
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>(addressFieldTypes);
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>(AddressFieldTypes);
 
         public BillingDetails(Dictionary<string, object> properties)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
 
         /// <summary>
-        /// BillingDetailsBuilder<typeparam name="TBLDR"></typeparam> will allow a BillingDetails to be initialized
+        /// BillingDetailsBuilder<typeparam name="TBldr"></typeparam> will allow a BillingDetails to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class BillingDetailsBuilder<TBLDR> : NestedJSONBuilder<BillingDetails, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class BillingDetailsBuilder<TBldr> : NestedJsonBuilder<BillingDetails, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the BillingDetails builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public BillingDetailsBuilder(TBLDR parent)
+            public BillingDetailsBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -60,9 +57,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> street(string data)
+            public BillingDetailsBuilder<TBldr> Street(string data)
             {
-                this.properties[DirectDebitConstants.street] = data;
+                Properties[GlobalConstants.Street] = data;
                 return this;
             }
 
@@ -71,9 +68,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> street2(string data)
+            public BillingDetailsBuilder<TBldr> Street2(string data)
             {
-                this.properties[DirectDebitConstants.street2] = data;
+                Properties[GlobalConstants.Street2] = data;
                 return this;
             }
 
@@ -82,9 +79,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> city(string data)
+            public BillingDetailsBuilder<TBldr> City(string data)
             {
-                this.properties[DirectDebitConstants.city] = data;
+                Properties[GlobalConstants.City] = data;
                 return this;
             }
 
@@ -93,9 +90,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> state(string data)
+            public BillingDetailsBuilder<TBldr> State(string data)
             {
-                this.properties[DirectDebitConstants.state] = data;
+                Properties[GlobalConstants.State] = data;
                 return this;
             }
 
@@ -104,9 +101,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> country(string data)
+            public BillingDetailsBuilder<TBldr> Country(string data)
             {
-                this.properties[DirectDebitConstants.country] = data;
+                Properties[GlobalConstants.Country] = data;
                 return this;
             }
 
@@ -115,9 +112,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> zip(string data)
+            public BillingDetailsBuilder<TBldr> Zip(string data)
             {
-                this.properties[DirectDebitConstants.zip] = data;
+                Properties[GlobalConstants.Zip] = data;
                 return this;
             }
 
@@ -126,9 +123,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingDetailsBuilder<TBLDR></returns>
-            public BillingDetailsBuilder<TBLDR> phone(string data)
+            public BillingDetailsBuilder<TBldr> Phone(string data)
             {
-                this.properties[DirectDebitConstants.phone] = data;
+                Properties[GlobalConstants.Phone] = data;
                 return this;
             }
         }
