@@ -1,0 +1,26 @@
+## ignore visual studio and user specific tools
+.vs/
+*.suo
+*.user
+*.Tmp
+*.orig
+packages
+
+# Build results
+
+[Dd]ebug*/
+[Rr]elease/
+
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+_Upgrade*
+
+*.[Rr]e[Ss]harper
+
+# Others
+[Bb]in
+[Oo]bj
+
+
+copyOfPaysafe/
