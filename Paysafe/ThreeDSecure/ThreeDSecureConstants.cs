@@ -17,49 +17,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.ThreeDSecure
 {
     //Created by Tushar.Sukhiya on 03.05.2016. This is ThreeDSecureConstants class.
-    class ThreeDSecureConstants: GlobalConstants
+    class ThreeDSecureConstants : GlobalConstants
     {
-        public static readonly List<string> enumStatus = new List<string>() {
-            statusCompleted,
-            statusFailed
+        public static readonly List<string> EnumStatus = new List<string>() {
+            StatusCompleted,
+            StatusFailed
         };
-        public static readonly List<string> enumThreeDEnrollment = new List<string>() {
-            threeDEnrolled,             //Cardholder authentication available 
-            threeDNotEnrolled,          // Cardholder not enrolled in authentication
-            threeDEnrollmentUnavailable //Cardholder authentication unavailable
+        public static readonly List<string> EnumThreeDEnrollment = new List<string>() {
+            ThreeDEnrolled,             //Cardholder authentication available 
+            ThreeDNotEnrolled,          // Cardholder not enrolled in authentication
+            ThreeDEnrollmentUnavailable //Cardholder authentication unavailable
         };
-        public static readonly List<string> enumThreeDResult = new List<string>() {
-            authenticated,              //Cardholder authentication available 
-            authenticationAttempted,    //Cardholder authentication attempted
-            authenticationFailed,       //Cardholder authentication Failed
-            authenticationUnavailable,  //Cardholder authentication Unavailable
-            authenticationError         //Cardholder authentication Error
+        public static readonly List<string> EnumThreeDResult = new List<string>() {
+            Authenticated,              //Cardholder authentication available 
+            AuthenticationAttempted,    //Cardholder authentication attempted
+            AuthenticationFailed,       //Cardholder authentication Failed
+            AuthenticationUnavailable,  //Cardholder authentication Unavailable
+            AuthenticationError         //Cardholder authentication Error
         };
-        public static readonly List<string> enumSignatureStatus = new List<string>() {
-            signatureSatisfied,          //All transaction and signature checks satisfied
-            signatureNotSatisfied,       //At least one transaction or signature check failed
+        public static readonly List<string> EnumSignatureStatus = new List<string>() {
+            SignatureSatisfied,          //All transaction and signature checks satisfied
+            SignatureNotSatisfied,       //At least one transaction or signature check failed
         };
-        public static readonly List<string> enumType = new List<string>() {
-            AM ,// American Express
-            DC ,// Diners Club
-            DI ,//Discover
-            JC ,// JCB
-            MC ,//MasterCard
-            MD ,// Maestro
-            SF ,// Swiff
-            SO ,// Solo
-            VI ,// Visa
-            VD ,// Visa Debit
-            VE // Visa Electron
+        public static readonly List<string> EnumType = new List<string>() {
+            Am ,// American Express
+            Dc ,// Diners Club
+            Di ,//Discover
+            Jc ,// JCB
+            Mc ,//MasterCard
+            Md ,// Maestro
+            Sf ,// Swiff
+            So ,// Solo
+            Vi ,// Visa
+            Vd ,// Visa Debit
+            Ve // Visa Electron
         };
     }
 }

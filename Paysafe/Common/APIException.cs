@@ -18,27 +18,23 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public class APIException : PaysafeException
+    public class ApiException : PaysafeException
     {
-        public APIException()
-            : base()
+        public ApiException()
         {
 
         }
 
-        public APIException(string message)
+        public ApiException(string message)
             : base(message)
         {
 
         }
 
-        public APIException(string message, Exception innerException)
+        public ApiException(string message, Exception innerException)
             : base(message, innerException)
         {
 

@@ -19,10 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
-using PaysafeApiClient = Paysafe.PaysafeApiClient;
 
 namespace Paysafe.CardPayments
 {
@@ -32,12 +29,12 @@ namespace Paysafe.CardPayments
         /// <summary>
         /// The api client, performs all http requests
         /// </summary>
-        private PaysafeApiClient client;
+        private PaysafeApiClient _client;
 
         /// <summary>
         /// The card payments api base uri 
         /// </summary>
-        private string uri = "cardpayments/v1";
+        private string _uri = "cardpayments/v1";
 
         /// <summary>
         /// Initialize the card payments service with an client object
@@ -45,18 +42,18 @@ namespace Paysafe.CardPayments
         /// <param name="client">PaysafeApiClient</param>
         public CardPaymentService(PaysafeApiClient client)
         {
-            this.client = client;
+            _client = client;
         }
 
         /// <summary>
         /// Check if the service is available
         /// </summary>
         /// <returns>true if successful</returns>
-        public Boolean monitor() {
+        public Boolean Monitor() {
             Request request = new Request(uri:"cardpayments/monitor");
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return ("READY".Equals((string)(response[CardPaymentsConstants.status])));
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
         /// <summary>
@@ -64,32 +61,32 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="auth">Authorization</param>
         /// <returns>Authorization</returns>
-        public Authorization authorize(Authorization auth)
+        public Authorization Authorize(Authorization auth)
         {
-            auth.setRequiredFields(new List<string> {
-                CardPaymentsConstants.merchantRefNum,
-                CardPaymentsConstants.amount,
-                CardPaymentsConstants.card
+            auth.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,
+                GlobalConstants.Card
             });
-            auth.setOptionalFields(new List<string> {
-                CardPaymentsConstants.settleWithAuth,
-                CardPaymentsConstants.customerIp, 
-                CardPaymentsConstants.dupCheck, 
-                CardPaymentsConstants.description,
-                CardPaymentsConstants.authentication,
-                CardPaymentsConstants.billingDetails,
-                CardPaymentsConstants.shippingDetails,
-                CardPaymentsConstants.recurring,
-                CardPaymentsConstants.merchantDescriptor,
-                CardPaymentsConstants.accordD
+            auth.SetOptionalFields(new List<string> {
+                GlobalConstants.SettleWithAuth,
+                GlobalConstants.CustomerIp, 
+                GlobalConstants.DupCheck, 
+                GlobalConstants.Description,
+                GlobalConstants.Authentication,
+                GlobalConstants.BillingDetails,
+                GlobalConstants.ShippingDetails,
+                GlobalConstants.Recurring,
+                GlobalConstants.MerchantDescriptor,
+                GlobalConstants.AccordD
             });
 		
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/auths"),
+                method: RequestType.Post,
+                uri: PrepareUri("/auths"),
                 body: auth
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authorization(response);
         }
@@ -99,21 +96,21 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="auth">Authorization</param>
         /// <returns>Authorization</returns>
-        public Authorization cancelHeldAuth(Authorization auth)
+        public Authorization CancelHeldAuth(Authorization auth)
         {
-            auth.setRequiredFields(new List<string> {CardPaymentsConstants.id});
-            auth.checkRequiredFields();
+            auth.SetRequiredFields(new List<string> {GlobalConstants.Id});
+            auth.CheckRequiredFields();
 
             Authorization tmpAuth = new Authorization();
-            tmpAuth.status("CANCELLED");
+            tmpAuth.Status("CANCELLED");
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/auths/" + auth.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/auths/" + auth.Id()),
                 body: tmpAuth
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authorization(response);
         }
@@ -123,22 +120,22 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="auth">Authorization</param>
         /// <returns>Authorization</returns>
-        public Authorization approveHeldAuth(Authorization auth)
+        public Authorization ApproveHeldAuth(Authorization auth)
         {
-            auth.setRequiredFields(new List<string> {CardPaymentsConstants.id});
+            auth.SetRequiredFields(new List<string> {GlobalConstants.Id});
 
-            auth.checkRequiredFields();
+            auth.CheckRequiredFields();
 
             Authorization tmpAuth = new Authorization();
-            tmpAuth.status("COMPLETED");
+            tmpAuth.Status("COMPLETED");
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/auths/" + auth.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/auths/" + auth.Id()),
                 body: tmpAuth
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authorization(response);
         }
@@ -148,23 +145,23 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="authReversal">AuthorizationReversal</param>
         /// <returns>AuthorizationReversal</returns>
-        public AuthorizationReversal reverseAuth(AuthorizationReversal authReversal)
+        public AuthorizationReversal ReverseAuth(AuthorizationReversal authReversal)
         {
-            authReversal.setRequiredFields(new List<string> {CardPaymentsConstants.authorizationId});
-            authReversal.checkRequiredFields();
-            authReversal.setRequiredFields(new List<string> {CardPaymentsConstants.merchantRefNum});
-            authReversal.setOptionalFields(new List<string> {
-                CardPaymentsConstants.amount,
-                CardPaymentsConstants.dupCheck
+            authReversal.SetRequiredFields(new List<string> {GlobalConstants.AuthorizationId});
+            authReversal.CheckRequiredFields();
+            authReversal.SetRequiredFields(new List<string> {GlobalConstants.MerchantRefNum});
+            authReversal.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/auths/" + authReversal.authorizationId() + "/voidauths"),
+                method: RequestType.Post,
+                uri: PrepareUri("/auths/" + authReversal.AuthorizationId() + "/voidauths"),
                 body: authReversal
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new AuthorizationReversal(response);
         }
@@ -174,23 +171,23 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="settlement">Settlement</param>
         /// <returns>Settlement</returns>
-        public Settlement settlement(Settlement settle)
+        public Settlement Settlement(Settlement settle)
         {
-            settle.setRequiredFields(new List<string> { CardPaymentsConstants.authorizationId });
-            settle.checkRequiredFields();
-            settle.setRequiredFields(new List<string> { CardPaymentsConstants.merchantRefNum });
-            settle.setOptionalFields(new List<string> {
-                CardPaymentsConstants.amount,
-                CardPaymentsConstants.dupCheck
+            settle.SetRequiredFields(new List<string> { GlobalConstants.AuthorizationId });
+            settle.CheckRequiredFields();
+            settle.SetRequiredFields(new List<string> { GlobalConstants.MerchantRefNum });
+            settle.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/auths/" + settle.authorizationId() + "/settlements"),
+                method: RequestType.Post,
+                uri: PrepareUri("/auths/" + settle.AuthorizationId() + "/settlements"),
                 body: settle
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Settlement(response);
         }
@@ -200,21 +197,21 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="settlement">Settlement</param>
         /// <returns>Settlement</returns>
-        public Settlement cancelSettlement(Settlement settle)
+        public Settlement CancelSettlement(Settlement settle)
         {
-            settle.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            settle.checkRequiredFields();
+            settle.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            settle.CheckRequiredFields();
 
             Settlement tmpSettlement = new Settlement();
-            tmpSettlement.status("CANCELLED");
+            tmpSettlement.Status("CANCELLED");
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/settlements/" + settle.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/settlements/" + settle.Id()),
                 body: tmpSettlement
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Settlement(response);
         }
@@ -224,23 +221,23 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="refund">Refund</param>
         /// <returns>Refund</returns>
-        public Refund refund(Refund newRefund)
+        public Refund Refund(Refund newRefund)
         {
-            newRefund.setRequiredFields(new List<string> { CardPaymentsConstants.settlementId });
-            newRefund.checkRequiredFields();
-            newRefund.setRequiredFields(new List<string> { CardPaymentsConstants.merchantRefNum });
-            newRefund.setOptionalFields(new List<string> {
-                CardPaymentsConstants.amount,
-                CardPaymentsConstants.dupCheck
+            newRefund.SetRequiredFields(new List<string> { GlobalConstants.SettlementId });
+            newRefund.CheckRequiredFields();
+            newRefund.SetRequiredFields(new List<string> { GlobalConstants.MerchantRefNum });
+            newRefund.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/settlements/" + newRefund.settlementId() + "/refunds"),
+                method: RequestType.Post,
+                uri: PrepareUri("/settlements/" + newRefund.SettlementId() + "/refunds"),
                 body: newRefund
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Refund(response);
         }
@@ -250,21 +247,21 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="refund">Refund</param>
         /// <returns>Refund</returns>
-        public Refund cancelRefund(Refund refund)
+        public Refund CancelRefund(Refund refund)
         {
-            refund.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            refund.checkRequiredFields();
+            refund.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            refund.CheckRequiredFields();
 
             Refund tmpRefund = new Refund();
-            tmpRefund.status("CANCELLED");
+            tmpRefund.Status("CANCELLED");
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/refunds/" + refund.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/refunds/" + refund.Id()),
                 body: tmpRefund
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Refund(response);
         }
@@ -274,28 +271,28 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="verify">Verification</param>
         /// <returns>Verificationd</returns>
-        public Verification verify(Verification verification)
+        public Verification Verify(Verification verification)
         {
-            verification.setRequiredFields(new List<string> { 
-                CardPaymentsConstants.merchantRefNum,
-                CardPaymentsConstants.card
+            verification.SetRequiredFields(new List<string> { 
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Card
             });
 
-            verification.setOptionalFields(new List<string> {
-                CardPaymentsConstants.profile,
-                CardPaymentsConstants.customerIp,
-                CardPaymentsConstants.dupCheck,
-                CardPaymentsConstants.description,
-                CardPaymentsConstants.billingDetails
+            verification.SetOptionalFields(new List<string> {
+                GlobalConstants.Profile,
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck,
+                GlobalConstants.Description,
+                GlobalConstants.BillingDetails
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/verifications"),
+                method: RequestType.Post,
+                uri: PrepareUri("/verifications"),
                 body: verification
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Verification(response);
         }
@@ -305,17 +302,17 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="auth">Authorization</param>
         /// <returns>Authorization</returns>
-        public Authorization get(Authorization auth)
+        public Authorization Get(Authorization auth)
         {
-            auth.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            auth.checkRequiredFields();
+            auth.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            auth.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/auths/" + auth.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/auths/" + auth.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Authorization(response);
         }
@@ -325,17 +322,17 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="authReversal">AuthorizationReversal</param>
         /// <returns>AuthorizationReversal</returns>
-        public AuthorizationReversal get(AuthorizationReversal authReversal)
+        public AuthorizationReversal Get(AuthorizationReversal authReversal)
         {
-            authReversal.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            authReversal.checkRequiredFields();
+            authReversal.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            authReversal.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/voidauths/" + authReversal.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/voidauths/" + authReversal.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new AuthorizationReversal(response);
         }
@@ -345,17 +342,17 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="settlement">Settlement</param>
         /// <returns>Settlement</returns>
-        public Settlement get(Settlement settlement)
+        public Settlement Get(Settlement settlement)
         {
-            settlement.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            settlement.checkRequiredFields();
+            settlement.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            settlement.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/settlements/" + settlement.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/settlements/" + settlement.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Settlement(response);
         }
@@ -365,17 +362,17 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="refund">Refund</param>
         /// <returns>Refund</returns>
-        public Refund get(Refund refund)
+        public Refund Get(Refund refund)
         {
-            refund.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            refund.checkRequiredFields();
+            refund.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            refund.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/refunds/" + refund.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/refunds/" + refund.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Refund(response);
         }
@@ -385,17 +382,17 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="verification">Verification</param>
         /// <returns>Verification</returns>
-        public Verification get(Verification verify)
+        public Verification Get(Verification verify)
         {
-            verify.setRequiredFields(new List<string> { CardPaymentsConstants.id });
-            verify.checkRequiredFields();
+            verify.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            verify.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/verifications/" + verify.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/verifications/" + verify.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Verification(response);
         }
@@ -406,41 +403,41 @@ namespace Paysafe.CardPayments
         /// <param name="auth"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<Authorization> getAuths(Authorization auth = null, Filter filter = null)
+        public Pagerator<Authorization> GetAuths(Authorization auth = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (auth != null && !String.IsNullOrWhiteSpace(auth.merchantRefNum())) {
-              queryStr.Add("merchantRefNum", auth.merchantRefNum());
+            if (auth != null && !String.IsNullOrWhiteSpace(auth.MerchantRefNum())) {
+              queryStr.Add("merchantRefNum", auth.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI("/auths"),
+                    method: RequestType.Get,
+                    uri: PrepareUri("/auths"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<Authorization>(this.client, typeof(Authorization), response);
+            return new Pagerator<Authorization>(_client, typeof(Authorization), response);
         }
 
         /// <summary>
@@ -449,42 +446,42 @@ namespace Paysafe.CardPayments
         /// <param name="authReversal"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<AuthorizationReversal> getAuthReversals(AuthorizationReversal authReversal = null, Filter filter = null)
+        public Pagerator<AuthorizationReversal> GetAuthReversals(AuthorizationReversal authReversal = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (authReversal != null && !String.IsNullOrWhiteSpace(authReversal.merchantRefNum()))
+            if (authReversal != null && !String.IsNullOrWhiteSpace(authReversal.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", authReversal.merchantRefNum());
+                queryStr.Add("merchantRefNum", authReversal.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI("/voidauths"),
+                    method: RequestType.Get,
+                    uri: PrepareUri("/voidauths"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<AuthorizationReversal>(this.client, typeof(AuthorizationReversal), response);
+            return new Pagerator<AuthorizationReversal>(_client, typeof(AuthorizationReversal), response);
         }
 
         /// <summary>
@@ -493,42 +490,42 @@ namespace Paysafe.CardPayments
         /// <param name="settlement"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<Settlement> getSettlements(Settlement settlement = null, Filter filter = null)
+        public Pagerator<Settlement> GetSettlements(Settlement settlement = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (settlement != null && !String.IsNullOrWhiteSpace(settlement.merchantRefNum()))
+            if (settlement != null && !String.IsNullOrWhiteSpace(settlement.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", settlement.merchantRefNum());
+                queryStr.Add("merchantRefNum", settlement.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI("/settlements"),
+                    method: RequestType.Get,
+                    uri: PrepareUri("/settlements"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<Settlement>(this.client, typeof(Settlement), response);
+            return new Pagerator<Settlement>(_client, typeof(Settlement), response);
         }
 
         /// <summary>
@@ -537,42 +534,42 @@ namespace Paysafe.CardPayments
         /// <param name="refund"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<Refund> getRefunds(Refund refund = null, Filter filter = null)
+        public Pagerator<Refund> GetRefunds(Refund refund = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (refund != null && !String.IsNullOrWhiteSpace(refund.merchantRefNum()))
+            if (refund != null && !String.IsNullOrWhiteSpace(refund.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", refund.merchantRefNum());
+                queryStr.Add("merchantRefNum", refund.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI("/refunds"),
+                    method: RequestType.Get,
+                    uri: PrepareUri("/refunds"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<Refund>(this.client, typeof(Refund), response);
+            return new Pagerator<Refund>(_client, typeof(Refund), response);
         }
 
         /// <summary>
@@ -581,51 +578,51 @@ namespace Paysafe.CardPayments
         /// <param name="verify"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Pagerator<Verification> getVerifications(Verification verify = null, Filter filter = null)
+        public Pagerator<Verification> GetVerifications(Verification verify = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (verify != null && !String.IsNullOrWhiteSpace(verify.merchantRefNum()))
+            if (verify != null && !String.IsNullOrWhiteSpace(verify.MerchantRefNum()))
             {
-                queryStr.Add("merchantRefNum", verify.merchantRefNum());
+                queryStr.Add("merchantRefNum", verify.MerchantRefNum());
             }
             if (filter != null)
             {
-                if (filter.limit != null)
+                if (filter.Limit != null)
                 {
-                    queryStr.Add("limit", filter.limit.ToString());
+                    queryStr.Add("limit", filter.Limit.ToString());
                 }
-                if (filter.offset != null)
+                if (filter.Offset != null)
                 {
-                    queryStr.Add("offset", filter.offset.ToString());
+                    queryStr.Add("offset", filter.Offset.ToString());
                 }
-                if (!String.IsNullOrWhiteSpace(filter.startDate))
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
                 {
-                    queryStr.Add("startDate", filter.startDate);
+                    queryStr.Add("startDate", filter.StartDate);
                 }
-                if (!String.IsNullOrWhiteSpace(filter.endDate))
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
                 {
-                    queryStr.Add("endDate", filter.endDate);
+                    queryStr.Add("endDate", filter.EndDate);
                 }
             }
 
             Request request = new Request(
-                    method: RequestType.GET,
-                    uri: this.prepareURI("/verifications"),
+                    method: RequestType.Get,
+                    uri: PrepareUri("/verifications"),
                     queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return new Pagerator<Verification>(this.client, typeof(Verification), response);
+            return new Pagerator<Verification>(_client, typeof(Verification), response);
         }
 
-        private string prepareURI(string path)
+        private string PrepareUri(string path)
         {
-            if (String.IsNullOrWhiteSpace(this.client.account()))
+            if (String.IsNullOrWhiteSpace(_client.Account()))
             {
                 throw new PaysafeException("Missing or invalid account");
             }
-            return this.uri + "/accounts/" + this.client.account() + path;
+            return _uri + "/accounts/" + _client.Account() + path;
         }
     }
 }

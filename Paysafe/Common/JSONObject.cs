@@ -19,10 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
 using Newtonsoft.Json;
 
 namespace Paysafe.Common
@@ -31,36 +27,59 @@ namespace Paysafe.Common
     /// This is the base class for all objects within the sdk.
     /// It is used to allow generic assignment of fields and properties.
     /// </summary>
-    public abstract class JSONObject
+    public abstract class JsonObject
     {
         /// <summary>
         /// fieldTypes must be passed into the constructor in order to allow generic validation
         /// </summary>
-        protected Dictionary<string, object> fieldTypes;
+        protected Dictionary<string, object> FieldTypes;
 
         /// <summary>
         /// this dictionary will store all set properties within the final object
         /// </summary>
-        private Dictionary<string, object> properties = new Dictionary<string,object>();
+        private readonly Dictionary<string, object> _properties = new Dictionary<string,object>();
 
         /// <summary>
         /// optionalFields will be used by the api client to determine which of the set fields
         /// should be sent to the api
         /// </summary>
-        private List<string> optionalFields;
+        private List<string> _optionalFields;
 
         /// <summary>
         /// requiredFields will be used by the api client to determine which of the fields must
         /// be set before sending a request to the api
         /// </summary>
-        private List<string> requiredFields;
+        private List<string> _requiredFields;
 
-        protected static Type STRING_TYPE = typeof(string);
-        protected static Type INT_TYPE = typeof(int);
-        protected static Type BOOL_TYPE = typeof(bool);
-        protected static Type URL_TYPE = typeof(Url);
-        protected static Type EMAIL_TYPE = typeof(Email);
-        protected static Type FLOAT_TYPE = typeof(float);
+        /// <summary>
+        /// String
+        /// </summary>
+        public static Type StringType = typeof(string);
+
+        /// <summary>
+        /// Int
+        /// </summary>
+        public static Type IntType = typeof(int);
+
+        /// <summary>
+        /// Boolean
+        /// </summary>
+        public static Type BoolType = typeof(bool);
+
+        /// <summary>
+        /// Url
+        /// </summary>
+        public static Type UrlType = typeof(Url);
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public static Type EmailType = typeof(Email);
+
+        /// <summary>
+        /// Float
+        /// </summary>
+        public static Type FloatType = typeof(float);
 
         /// <summary>
         /// The object will be json serialized using only the optional and required properties
@@ -68,7 +87,7 @@ namespace Paysafe.Common
         /// <returns>string</returns>
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this.jsonSerialize());
+            return JsonConvert.SerializeObject(JsonSerialize());
         }
 
         /// <summary>
@@ -77,53 +96,53 @@ namespace Paysafe.Common
         /// all properties will be returned
         /// </summary>
         /// <returns></returns>
-        private Dictionary<string, object> jsonSerialize()
+        private Dictionary<string, object> JsonSerialize()
         {
-            this.checkRequiredFields();
-            Dictionary<string, object> toJSON;
-            if ((null == this.optionalFields || 0 == this.optionalFields.Count) && 
-                (null == this.requiredFields || 0 == this.requiredFields.Count))
+            CheckRequiredFields();
+            Dictionary<string, object> toJson;
+            if ((null == _optionalFields || 0 == _optionalFields.Count) && 
+                (null == _requiredFields || 0 == _requiredFields.Count))
             {
-                toJSON = this.properties;
+                toJson = _properties;
             }
             else
             {
-                toJSON = new Dictionary<string, object>();
-                if (requiredFields != null)
+                toJson = new Dictionary<string, object>();
+                if (_requiredFields != null)
                 {
-                    foreach (string key in requiredFields)
+                    foreach (string key in _requiredFields)
                     {
-                        if (properties.ContainsKey(key))
+                        if (_properties.ContainsKey(key))
                         {
-                            toJSON.Add(key, properties[key]);
+                            toJson.Add(key, _properties[key]);
                         }
                     }
                 }
-                if (optionalFields != null)
+                if (_optionalFields != null)
                 {
-                    foreach (string key in optionalFields)
+                    foreach (string key in _optionalFields)
                     {
-                        if (properties.ContainsKey(key))
+                        if (_properties.ContainsKey(key))
                         {
-                            toJSON.Add(key, properties[key]);
+                            toJson.Add(key, _properties[key]);
                         }
                     }
                 }
             }
-            return this.filterJSON(toJSON) as Dictionary<string, object>;
+            return FilterJson(toJson) as Dictionary<string, object>;
         }
 
         /// <summary>
         /// Throws an exception if any required fields have not been set
         /// </summary>
-        public void checkRequiredFields()
+        public void CheckRequiredFields()
         {
-            if (requiredFields != null)
+            if (_requiredFields != null)
             {
                 List<string> missingFields = new List<string>();
-                foreach (string key in requiredFields)
+                foreach (string key in _requiredFields)
                 {
-                    if (!properties.ContainsKey(key))
+                    if (!_properties.ContainsKey(key))
                     {
                         missingFields.Add(key);
                     }
@@ -135,55 +154,50 @@ namespace Paysafe.Common
             }
         }
 
-        /// <summary>
-        /// This method is used by jsonSerialize, and will filter all non required/optional
-        /// from any nested objects
-        /// </summary>
-        /// <param name="result">Dictioanry<string,object></param>
-        /// <returns>Dictionary<string,object></returns>
-        private dynamic filterJSON(dynamic result)
+        private dynamic FilterJson(dynamic result)
         {
             if (result is Dictionary<string, object>)
             {
                 Dictionary<string, object> @return = new Dictionary<string, object>();
                 foreach (string key in ((Dictionary<string, object>)result).Keys)
                 {
-                    @return[key] = this.filterJSON(result[key]);
+                    @return[key] = FilterJson(result[key]);
                 }
                 return @return;
             }
             else if (((object)result).GetType().IsGenericType
                 && ((object)result).GetType().GetGenericTypeDefinition() == typeof(List<>))
             {
-                return this.filterList(result);
+                return FilterList(result);
             }
-            else if (result is JSONObject)
+            else if (result is JsonObject)
             {
-                return ((JSONObject)result).jsonSerialize();
+                return ((JsonObject)result).JsonSerialize();
             }
             return result;
         }
 
-        private List<object> filterList<T>(List<T> list)
+        private List<object> FilterList<T>(List<T> list)
         {
-            List<object> @return = new List<object>();
+            List<object> retList = new List<object>();
             foreach (T item in list)
             {
-                @return.Add(this.filterJSON(item));
+                retList.Add(FilterJson(item));
             }
-            return @return; ;
+            return retList;
         }
 
         /// <summary>
         /// Set the optional fields to be consumed by the api client
         /// </summary>
-        /// <param name="fields">List<String></param>
-        public void setOptionalFields(List<string> fields)
+        /// <param name="fields"></param>
+        /// <exception cref="PaysafeException"></exception>
+        public void SetOptionalFields(List<string> fields)
         {
             List<string> invalidKeys = new List<string>();
             foreach (string key in fields)
             {
-                if (!this.fieldTypes.ContainsKey(key))
+                if (!FieldTypes.ContainsKey(key))
                 {
                     invalidKeys.Add(key);
                 }
@@ -192,19 +206,20 @@ namespace Paysafe.Common
             {
                 throw new PaysafeException("Invalid optional fields. Unknown fields: " + string.Join(", ", invalidKeys));
             }
-            this.optionalFields = fields;
+            _optionalFields = fields;
         }
 
         /// <summary>
         /// Set the required fields to be consumed by the api client
         /// </summary>
         /// <param name="fields"></param>
-        public void setRequiredFields(List<string> fields)
+        /// <exception cref="PaysafeException"></exception>
+        public void SetRequiredFields(List<string> fields)
         {
             List<string> invalidKeys = new List<string>();
             foreach (string key in fields)
             {
-                if (!this.fieldTypes.ContainsKey(key))
+                if (!FieldTypes.ContainsKey(key))
                 {
                     invalidKeys.Add(key);
                 }
@@ -213,26 +228,27 @@ namespace Paysafe.Common
             {
                 throw new PaysafeException("Invalid required fields. Unknown fields: " + string.Join(", ", invalidKeys));
             }
-            this.requiredFields = fields;
+            _requiredFields = fields;
         }
+
 
         /// <summary>
         /// Initialize the Object, setting the internetal properties from parameters based on the types
         /// </summary>
-        /// <param name="types">Dictioanry<string,string></param>
-        /// <param name="parameters">Dictionary<string,object></param>
-        public JSONObject(Dictionary<string, object> types, Dictionary<string, object> parameters = null)
+        /// <param name="types"></param>
+        /// <param name="parameters"></param>
+        protected JsonObject(Dictionary<string, object> types, Dictionary<string, object> parameters = null)
         {
-            this.fieldTypes = types;
-            if (!Object.ReferenceEquals(parameters, null))
+            FieldTypes = types;
+            if (!ReferenceEquals(parameters, null))
             {
                 foreach (string key in parameters.Keys)
                 {
-                    var tmp = getFieldInfo(key);
-                    if (!Object.ReferenceEquals(tmp, null))
+                    var tmp = GetFieldInfo(key);
+                    if (!ReferenceEquals(tmp, null))
                     {
                         KeyValuePair<string, object> info = (KeyValuePair<string, object>)tmp;
-                        this.setProperty(info.Key, parameters[key]);
+                        SetProperty(info.Key, parameters[key]);
                     }
                 }
             }
@@ -243,21 +259,21 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="name">string</param>
         /// <param name="value">dynamic</param>
-        protected void setProperty(string name, dynamic value) {
-            var tmp = getFieldInfo(name);
-            if (Object.ReferenceEquals(tmp, null))
+        protected void SetProperty(string name, dynamic value) {
+            var tmp = GetFieldInfo(name);
+            if (ReferenceEquals(tmp, null))
             {
-                throw new PaysafeException("Invalid property " + name + " for class " + this.GetType().ToString());
+                throw new PaysafeException("Invalid property " + name + " for class " + GetType());
             }
             KeyValuePair<string, object> info = (KeyValuePair<string, object>)tmp;
 
-            if (Object.ReferenceEquals(value, null))
+            if (ReferenceEquals(value, null))
             {
-                this.properties.Remove(info.Key);
+                _properties.Remove(info.Key);
             }
             else
             {
-                this.properties[info.Key] = this.cast(info.Key, value, info.Value);
+                _properties[info.Key] = Cast(info.Key, value, info.Value);
             }
             
         }
@@ -267,17 +283,17 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="name">string</param>
         /// <returns></returns>
-        protected dynamic getProperty(string name)
+        protected dynamic GetProperty(string name)
         {
-            var tmp = getFieldInfo(name);
-            if (Object.ReferenceEquals(tmp, null))
+            var tmp = GetFieldInfo(name);
+            if (ReferenceEquals(tmp, null))
             {
-                throw new PaysafeException("Invalid property " + name + " for class " + this.GetType().ToString());
+                throw new PaysafeException("Invalid property " + name + " for class " + GetType());
             }
             KeyValuePair<string, object> info = (KeyValuePair<string, object>)tmp;
-            if (this.properties.ContainsKey(info.Key))
+            if (_properties.ContainsKey(info.Key))
             {
-                return this.properties[info.Key];
+                return _properties[info.Key];
             }
             return null;
         }
@@ -287,15 +303,15 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="name">string</param>
         /// <returns></returns>
-        public bool hasProperty(string name)
+        public bool HasProperty(string name)
         {
-            var tmp = getFieldInfo(name);
+            var tmp = GetFieldInfo(name);
             if (null == tmp)
             {
                 return false;
             }
             KeyValuePair<string, object> info = (KeyValuePair<string, object>)tmp;
-            return this.properties.ContainsKey(info.Key);
+            return _properties.ContainsKey(info.Key);
         }
 
         /// <summary>
@@ -303,22 +319,22 @@ namespace Paysafe.Common
         /// </summary>
         /// <param name="name">string</param>
         /// <returns>KeyValuePair<string, string> or null</returns>
-        private dynamic getFieldInfo(string name)
+        private dynamic GetFieldInfo(string name)
         {
-            if (null == this.fieldTypes)
+            if (null == FieldTypes)
             {
                 throw new PaysafeException("field types must be initialized");
             }
-            if (this.fieldTypes.ContainsKey(name))
+            if (FieldTypes.ContainsKey(name))
             {
-                return new KeyValuePair<string, object>(name, this.fieldTypes[name]);
+                return new KeyValuePair<string, object>(name, FieldTypes[name]);
             }
             name = name.ToLower();
-            foreach (string key in this.fieldTypes.Keys)
+            foreach (string key in FieldTypes.Keys)
             {
                 if (key.ToLower() == name)
                 {
-                    return new KeyValuePair<string, object>(key, this.fieldTypes[key]);
+                    return new KeyValuePair<string, object>(key, FieldTypes[key]);
                 }
             }
             return null;
@@ -331,7 +347,7 @@ namespace Paysafe.Common
         /// <param name="value">dynamic</param>
         /// <param name="validation">string</param>
         /// <returns></returns>
-        public dynamic cast(string name, dynamic value, dynamic validation)
+        public dynamic Cast(string name, dynamic value, dynamic validation)
         {
             string valueString = null;
             if (value is string)
@@ -343,39 +359,39 @@ namespace Paysafe.Common
                 List<string> validationList = (List<string>)validation;
                 if (null == valueString  || !validationList.Contains(valueString))
                 {
-                    throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". Expected one of: " + string.Join(", ", validationList) + ".");
+                    throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". Expected one of: " + string.Join(", ", validationList) + ".");
                 }
                 return value;
             }
             else if (validation is Type)
             {
                 Type validationType = validation as Type;
-                if (validationType.Equals(STRING_TYPE))
+                if (validationType == StringType)
                 {
                     if (null == valueString)
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". String expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". String expected.");
                     }
                     return value;
                 }
-                else if (validationType.Equals(EMAIL_TYPE))
+                else if (validationType == EmailType)
                 {
                     if (null == valueString|| valueString.IndexOf("@", StringComparison.CurrentCulture) <= 0)
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". Email expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". Email expected.");
                     }
                     return value;
                 }
-                else if (validationType.Equals(URL_TYPE))
+                else if (validationType == UrlType)
                 {
-                    System.Uri uriResult;
+                    Uri uriResult;
                     if (null == valueString || (Uri.TryCreate(valueString, UriKind.Absolute, out uriResult) && null == uriResult))
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". URL expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". URL expected.");
                     }
                     return value;
                 }
-                else if (validationType.Equals(INT_TYPE))
+                else if (validationType == IntType)
                 {
                     try
                     {
@@ -384,10 +400,10 @@ namespace Paysafe.Common
                     catch (Exception)
                     {
                         //format exception or overflow exception
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". Integer expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". Integer expected.");
                     }
                 }
-                else if (validationType.Equals(FLOAT_TYPE))
+                else if (validationType == FloatType)
                 {
                     decimal decVal;
                     if (value is decimal)
@@ -396,11 +412,11 @@ namespace Paysafe.Common
                     }
                     else if (valueString != null || !decimal.TryParse(((string)value), out decVal))
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". Decimal expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". Decimal expected.");
                     }
                     return decVal;
                 }
-                else if (validationType.Equals(BOOL_TYPE))
+                else if (validationType == BoolType)
                 {
                     bool boolVal;
                     if (value is bool)
@@ -409,7 +425,7 @@ namespace Paysafe.Common
                     }
                     else if (null == valueString || !bool.TryParse(valueString, out boolVal))
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". Boolean expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". Boolean expected.");
                     }
                     return boolVal;
                 }
@@ -419,12 +435,12 @@ namespace Paysafe.Common
                     Type subType = validationType.GetGenericArguments()[0];
                     if (!(value is System.Collections.IList))
                     {
-                        throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString() + ". List expected.");
+                        throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString() + ". List expected.");
                     }
                     Type T = null;
                     for (int i = 0; i < ((System.Collections.IList)value).Count; i++)
                     {
-                        value[i] = this.cast(name, value[i], subType);
+                        value[i] = Cast(name, value[i], subType);
                         T = ((object)((System.Collections.IList)value)[i]).GetType();
                     }
                     if (T != null && value is List<object>)
@@ -447,14 +463,14 @@ namespace Paysafe.Common
                     Type valueType = value.GetType();
                     if ((value is Dictionary<string, object>))
                     {
-                        Object[] args = { value };
+                        object[] args = { value };
                         return Activator.CreateInstance(validationType, args);
                     }
                     else if (valueType == validationType)
                     {
                         return value;
                     }
-                    else if (valueType.GetMethod("Build") != null && valueType.IsSubclassOf(typeof(GenericJSONBuilder)))
+                    else if (valueType.GetMethod("Build") != null && valueType.IsSubclassOf(typeof(GenericJsonBuilder)))
                     {
                         dynamic returnValue = value.Build();
                         if (returnValue.GetType() as Type == validationType)
@@ -462,10 +478,10 @@ namespace Paysafe.Common
                             return returnValue;
                         }
                     }
-                    throw new PaysafeException("Invalid value for property " + name + " for class " + this.GetType().ToString());
+                    throw new PaysafeException("Invalid value for property " + name + " for class " + GetType().ToString());
                 }
             }
-            throw new PaysafeException("Invalid validation rule for property " + name + " for class " + this.GetType().ToString());
+            throw new PaysafeException("Invalid validation rule for property " + name + " for class " + GetType().ToString());
         }
     }
 }

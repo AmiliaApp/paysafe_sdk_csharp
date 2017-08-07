@@ -19,20 +19,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
 {
-    public class Settlement : JSONObject
+    public class Settlement : JsonObject
     {
         /// <summary>
         /// Initialize the Settlement object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Settlement(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
@@ -41,35 +39,35 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="id"></param>
         public Settlement(String id)
-            : base(fieldTypes)
+            : base(_fieldTypes)
         {
-            this.id(id);
+            Id(id);
         }
 
         /// <summary>
         /// Gets the array key to access the array of settlements
         /// </summary>
         /// <returns>The key to be checked in the returning JSON</returns>
-        public static string getPageableArrayKey()
+        public static string GetPageableArrayKey()
         {
-            return CardPaymentsConstants.settlements;
+            return GlobalConstants.Settlements;
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-            {CardPaymentsConstants.id, STRING_TYPE},
-            {CardPaymentsConstants.merchantRefNum, STRING_TYPE},
-            {CardPaymentsConstants.amount, INT_TYPE},
-            {CardPaymentsConstants.availableToRefund, INT_TYPE},
-            {CardPaymentsConstants.childAccountNum, STRING_TYPE},
-            {CardPaymentsConstants.txnTime, typeof(System.DateTime)},
-            {CardPaymentsConstants.dupCheck, BOOL_TYPE},
-            {CardPaymentsConstants.status, CardPaymentsConstants.enumStatus},
-            {CardPaymentsConstants.riskReasonCode, typeof(List<int>)},
-            {CardPaymentsConstants.acquirerResponse, typeof(AcquirerResponse)},
-            {CardPaymentsConstants.error, typeof(OptError)},
-            {CardPaymentsConstants.links, typeof(List<Link>)},
-            {CardPaymentsConstants.authorizationId, STRING_TYPE}
+            {GlobalConstants.Id, StringType},
+            {GlobalConstants.MerchantRefNum, StringType},
+            {GlobalConstants.Amount, IntType},
+            {GlobalConstants.AvailableToRefund, IntType},
+            {GlobalConstants.ChildAccountNum, StringType},
+            {GlobalConstants.TxnTime, typeof(DateTime)},
+            {GlobalConstants.DupCheck, BoolType},
+            {GlobalConstants.Status, CardPaymentsConstants.EnumStatus},
+            {GlobalConstants.RiskReasonCode, typeof(List<int>)},
+            {GlobalConstants.AcquirerResponse, typeof(AcquirerResponse)},
+            {GlobalConstants.Error, typeof(OptError)},
+            {GlobalConstants.Links, typeof(List<Link>)},
+            {GlobalConstants.AuthorizationId, StringType}
          };
 
 
@@ -77,234 +75,234 @@ namespace Paysafe.CardPayments
         /// Get the id
         /// </summary>
         /// <returns>string</returns>
-        public string id()
+        public string Id()
         {
-            return this.getProperty(CardPaymentsConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(string data)
+        public void Id(string data)
         {
-            this.setProperty(CardPaymentsConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the merchantRefNum
         /// </summary>
         /// <returns>string</returns>
-        public string merchantRefNum()
+        public string MerchantRefNum()
         {
-            return this.getProperty(CardPaymentsConstants.merchantRefNum);
+            return GetProperty(GlobalConstants.MerchantRefNum);
         }
 
         /// <summary>
         /// Set the merchantRefNum
         /// </summary>
         /// <returns>void</returns>
-        public void merchantRefNum(string data)
+        public void MerchantRefNum(string data)
         {
-            this.setProperty(CardPaymentsConstants.merchantRefNum, data);
+            SetProperty(GlobalConstants.MerchantRefNum, data);
         }
 
         /// <summary>
         /// Get the amount
         /// </summary>
         /// <returns>int</returns>
-        public int amount()
+        public int Amount()
         {
-            return this.getProperty(CardPaymentsConstants.amount);
+            return GetProperty(GlobalConstants.Amount);
         }
 
         /// <summary>
         /// Set the amount
         /// </summary>
         /// <returns>void</returns>
-        public void amount(int data)
+        public void Amount(int data)
         {
-            this.setProperty(CardPaymentsConstants.amount, data);
+            SetProperty(GlobalConstants.Amount, data);
         }
 
         /// <summary>
         /// Get the availableToRefund
         /// </summary>
         /// <returns>int</returns>
-        public int availableToRefund()
+        public int AvailableToRefund()
         {
-            return this.getProperty(CardPaymentsConstants.availableToRefund);
+            return GetProperty(GlobalConstants.AvailableToRefund);
         }
 
         /// <summary>
         /// Set the availableToRefund
         /// </summary>
         /// <returns>void</returns>
-        public void availableToRefund(int data)
+        public void AvailableToRefund(int data)
         {
-            this.setProperty(CardPaymentsConstants.availableToRefund, data);
+            SetProperty(GlobalConstants.AvailableToRefund, data);
         }
 
         /// <summary>
         /// Get the childAccountNum
         /// </summary>
         /// <returns>string</returns>
-        public string childAccountNum()
+        public string ChildAccountNum()
         {
-            return this.getProperty(CardPaymentsConstants.childAccountNum);
+            return GetProperty(GlobalConstants.ChildAccountNum);
         }
 
         /// <summary>
         /// Set the childAccountNum
         /// </summary>
         /// <returns>void</returns>
-        public void childAccountNum(string data)
+        public void ChildAccountNum(string data)
         {
-            this.setProperty(CardPaymentsConstants.childAccountNum, data);
+            SetProperty(GlobalConstants.ChildAccountNum, data);
         }
 
         /// <summary>
         /// Get the txnTime
         /// </summary>
         /// <returns>System.DateTime</returns>
-        public System.DateTime txnTime()
+        public DateTime TxnTime()
         {
-            return this.getProperty(CardPaymentsConstants.txnTime);
+            return GetProperty(GlobalConstants.TxnTime);
         }
 
         /// <summary>
         /// Set the txnTime
         /// </summary>
         /// <returns>void</returns>
-        public void txnTime(System.DateTime data)
+        public void TxnTime(DateTime data)
         {
-            this.setProperty(CardPaymentsConstants.txnTime, data);
+            SetProperty(GlobalConstants.TxnTime, data);
         }
 
         /// <summary>
         /// Get the dupCheck
         /// </summary>
         /// <returns>bool</returns>
-        public bool dupCheck()
+        public bool DupCheck()
         {
-            return this.getProperty(CardPaymentsConstants.dupCheck);
+            return GetProperty(GlobalConstants.DupCheck);
         }
 
         /// <summary>
         /// Set the dupCheck
         /// </summary>
         /// <returns>void</returns>
-        public void dupCheck(bool data)
+        public void DupCheck(bool data)
         {
-            this.setProperty(CardPaymentsConstants.dupCheck, data);
+            SetProperty(GlobalConstants.DupCheck, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>List</returns>
-        public string status()
+        public string Status()
         {
-            return this.getProperty(CardPaymentsConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>void</returns>
-        public void status(string data)
+        public void Status(string data)
         {
-            this.setProperty(CardPaymentsConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the riskReasonCode
         /// </summary>
         /// <returns>List<int></returns>
-        public List<int> riskReasonCode()
+        public List<int> RiskReasonCode()
         {
-            return this.getProperty(CardPaymentsConstants.riskReasonCode);
+            return GetProperty(GlobalConstants.RiskReasonCode);
         }
 
         /// <summary>
         /// Set the riskReasonCode
         /// </summary>
         /// <returns>void</returns>
-        public void riskReasonCode(List<int> data)
+        public void RiskReasonCode(List<int> data)
         {
-            this.setProperty(CardPaymentsConstants.riskReasonCode, data);
+            SetProperty(GlobalConstants.RiskReasonCode, data);
         }
 
         /// <summary>
         /// Get the acquireResponse
         /// </summary>
         /// <returns>AcquirerResponse</returns>
-        public AcquirerResponse acquireResponse()
+        public AcquirerResponse AcquireResponse()
         {
-            return this.getProperty(CardPaymentsConstants.acquirerResponse);
+            return GetProperty(GlobalConstants.AcquirerResponse);
         }
 
         /// <summary>
         /// Set the acquireResponse
         /// </summary>
         /// <returns>void</returns>
-        public void acquireResponse(AcquirerResponse data)
+        public void AcquireResponse(AcquirerResponse data)
         {
-            this.setProperty(CardPaymentsConstants.acquirerResponse, data);
+            SetProperty(GlobalConstants.AcquirerResponse, data);
         }
 
         /// <summary>
         /// Get the error
         /// </summary>
         /// <returns>OptError</returns>
-        public OptError error()
+        public OptError Error()
         {
-            return this.getProperty(CardPaymentsConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
         /// Set the error
         /// </summary>
         /// <returns>void</returns>
-        public void error(OptError data)
+        public void Error(OptError data)
         {
-            this.setProperty(CardPaymentsConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
 
         /// <summary>
         /// Get the links
         /// </summary>
         /// <returns>List<Link></returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(CardPaymentsConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(CardPaymentsConstants.links, data);
+            SetProperty(GlobalConstants.Links, data);
         }
 
         /// <summary>
         /// Get the authorizationId
         /// </summary>
         /// <returns>string</returns>
-        public string authorizationId()
+        public string AuthorizationId()
         {
-            return this.getProperty(CardPaymentsConstants.authorizationId);
+            return GetProperty(GlobalConstants.AuthorizationId);
         }
 
         /// <summary>
         /// Set the authorizationId
         /// </summary>
         /// <returns>void</returns>
-        public void authorizationId(string data)
+        public void AuthorizationId(string data)
         {
-            this.setProperty(CardPaymentsConstants.authorizationId, data);
+            SetProperty(GlobalConstants.AuthorizationId, data);
         }
 
         /// <summary>
@@ -321,16 +319,16 @@ namespace Paysafe.CardPayments
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated Authorization object
         /// </summary>
-        public class SettlementBuilder : BaseJSONBuilder<Settlement>
+        public class SettlementBuilder : BaseJsonBuilder<Settlement>
         {
             /// <summary>
             /// Set the id
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SettlementBuilder</returns>
-            public SettlementBuilder id(string data)
+            public SettlementBuilder Id(string data)
             {
-                this.properties[CardPaymentsConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -339,9 +337,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SettlementBuilder</returns>
-            public SettlementBuilder merchantRefNum(string data)
+            public SettlementBuilder MerchantRefNum(string data)
             {
-                this.properties[CardPaymentsConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -350,9 +348,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>SettlementBuilder</returns>
-            public SettlementBuilder amount(int data)
+            public SettlementBuilder Amount(int data)
             {
-                this.properties[CardPaymentsConstants.amount] = data;
+                Properties[GlobalConstants.Amount] = data;
                 return this;
             }
 
@@ -361,9 +359,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>bool</param>
             /// <returns>SettlementBuilder</returns>
-            public SettlementBuilder dupCheck(bool data)
+            public SettlementBuilder DupCheck(bool data)
             {
-                this.properties[CardPaymentsConstants.dupCheck] = data;
+                Properties[GlobalConstants.DupCheck] = data;
                 return this;
             }
 
@@ -372,9 +370,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SettlementBuilder</returns>
-            public SettlementBuilder authorizationId(string data)
+            public SettlementBuilder AuthorizationId(string data)
             {
-                this.properties[CardPaymentsConstants.authorizationId] = data;
+                Properties[GlobalConstants.AuthorizationId] = data;
                 return this;
             }
         }

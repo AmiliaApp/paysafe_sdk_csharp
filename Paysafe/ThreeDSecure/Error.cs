@@ -19,82 +19,80 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.ThreeDSecure
 {
     //Created by Tushar.Sukhiya on 03.05.2016. This is Error Class.
-    public class Error : JSONObject
+    public class Error : JsonObject
     {
         /// <summary>
         /// Initialize the Error object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Error(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {ThreeDSecureConstants.code, STRING_TYPE},
-            {ThreeDSecureConstants.message, STRING_TYPE}           
+            {GlobalConstants.Code, StringType},
+            {GlobalConstants.Message, StringType}           
         };
 
         /// <summary>
         /// Get the code
         /// </summary>
         /// <returns>String</returns>
-        public string code()
+        public string Code()
         {
-            return this.getProperty(ThreeDSecureConstants.code);
+            return GetProperty(GlobalConstants.Code);
         }
 
         /// <summary>
         /// Set the code
         /// </summary>
         /// <returns>void</returns>
-        public void code(String data)
+        public void Code(String data)
         {
-            this.setProperty(ThreeDSecureConstants.code, data);
+            SetProperty(GlobalConstants.Code, data);
         }
 
         /// <summary>
         /// Get the message
         /// </summary>
         /// <returns>String</returns>
-        public string message()
+        public string Message()
         {
-            return this.getProperty(ThreeDSecureConstants.message);
+            return GetProperty(GlobalConstants.Message);
         }
 
         /// <summary>
         /// Set the message
         /// </summary>
         /// <returns>void</returns>
-        public void message(String data)
+        public void Message(String data)
         {
-            this.setProperty(ThreeDSecureConstants.message, data);
+            SetProperty(GlobalConstants.Message, data);
         }
 
         /// <summary>
-        /// ErrorBuilder<typeparam name="TBLDR"></typeparam> will allow an Error to be initialized
+        /// ErrorBuilder<typeparam name="TBldr"></typeparam> will allow an Error to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back tot he parent builder
         /// </summary>
-        public class ErrorBuilder<TBLDR> : NestedJSONBuilder<Error, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class ErrorBuilder<TBldr> : NestedJsonBuilder<Error, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Error builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public ErrorBuilder(TBLDR parent)
+            public ErrorBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -102,9 +100,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ErrorBuilder<TBLDR></returns>
-            public ErrorBuilder<TBLDR> code(string data)
+            public ErrorBuilder<TBldr> Code(string data)
             {
-                this.properties[ThreeDSecureConstants.code] = data;
+                Properties[GlobalConstants.Code] = data;
                 return this;
             }
 
@@ -113,9 +111,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ErrorBuilder<TBLDR></returns>
-            public ErrorBuilder<TBLDR> message(string data)
+            public ErrorBuilder<TBldr> Message(string data)
             {
-                this.properties[ThreeDSecureConstants.message] = data;
+                Properties[GlobalConstants.Message] = data;
                 return this;
             }
         }

@@ -19,25 +19,35 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
+    /// <summary>
+    /// Exceptions raised
+    /// </summary>
     public class PaysafeException : Exception
     {
+        /// <summary>
+        /// </summary>
         public PaysafeException()
-            : base()
         {
 
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="message"></param>
         public PaysafeException(String message)
             : base(message)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="innerException"></param>
         public PaysafeException(string message, Exception innerException)
             : base(message, innerException)
         {
@@ -45,27 +55,42 @@ namespace Paysafe.Common
         }
 
         private Dictionary<string, object> _rawResponse = new Dictionary<string, object>();
-
         private int _code = -1;
 
-        public void rawResponse(Dictionary<string, object> data)
+        /// <summary>
+        /// Set the error data
+        /// </summary>
+        /// <param name="data"></param>
+        public void RawResponse(Dictionary<string, object> data)
         {
-            this._rawResponse = data;
+            _rawResponse = data;
         }
 
-        public Dictionary<string, object> rawResponse()
+        /// <summary>
+        /// Get the Error data
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, object> RawResponse()
         {
-            return this._rawResponse;
+            return _rawResponse;
         }
 
-        public void code(int data)
+        /// <summary>
+        /// Set the error code value
+        /// </summary>
+        /// <param name="data"></param>
+        public void Code(int data)
         {
-            this._code = data;
+            _code = data;
         }
 
-        public int cpde()
+        /// <summary>
+        /// Get the error code value
+        /// </summary>
+        /// <returns></returns>
+        public int Code()
         {
-            return this._code;
+            return _code;
         }
     }
 }

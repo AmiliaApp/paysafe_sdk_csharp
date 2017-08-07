@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Paysafe.Common
 {
-    public abstract class AddressDetails: JSONObject
+    /// <summary>
+    /// Address Details Json Object Representation
+    /// </summary>
+    public abstract class AddressDetails: JsonObject
     {
         /// <summary>
         /// Initialize the BillingDetails object with some set of properties
         /// </summary>
-        /// <param name="properties">Dictionary<string, object></param>
-        public AddressDetails(Dictionary<string, object> fieldTypes , Dictionary<string, object> properties = null) 
+        /// <param name="fieldTypes"></param>
+        /// <param name="properties"></param>
+        protected AddressDetails(Dictionary<string, object> fieldTypes , Dictionary<string, object> properties = null) 
             : base(fieldTypes, properties)
         {
 
@@ -20,141 +21,141 @@ namespace Paysafe.Common
         /// <summary>
         /// This object is used to validate any properties set within the object
         /// </summary>
-        protected static Dictionary<string, object> addressFieldTypes = new Dictionary<string, object>
+        protected static Dictionary<string, object> AddressFieldTypes = new Dictionary<string, object>
         {
-            {CommonConstants.street, STRING_TYPE},
-            {CommonConstants.street2, STRING_TYPE},
-            {CommonConstants.city, STRING_TYPE},
-            {CommonConstants.state, STRING_TYPE},
-            {CommonConstants.country, STRING_TYPE},
-            {CommonConstants.zip, STRING_TYPE},
-            {CommonConstants.phone, STRING_TYPE}
+            {GlobalConstants.Street, StringType},
+            {GlobalConstants.Street2, StringType},
+            {GlobalConstants.City, StringType},
+            {GlobalConstants.State, StringType},
+            {GlobalConstants.Country, StringType},
+            {GlobalConstants.Zip, StringType},
+            {GlobalConstants.Phone, StringType}
         };
 
         /// <summary>
         /// Get the street
         /// </summary>
         /// <returns>string</returns>
-        public string street()
+        public string Street()
         {
-            return this.getProperty(CommonConstants.street);
+            return GetProperty(GlobalConstants.Street);
         }
 
         /// <summary>
         /// Set the street
         /// </summary>
         /// <returns>void</returns>
-        public void street(string data)
+        public void Street(string data)
         {
-            this.setProperty(CommonConstants.street, data);
+            SetProperty(GlobalConstants.Street, data);
         }
 
         /// <summary>
         /// Get the street2
         /// </summary>
         /// <returns>string</returns>
-        public string street2()
+        public string Street2()
         {
-            return this.getProperty(CommonConstants.street2);
+            return GetProperty(GlobalConstants.Street2);
         }
 
         /// <summary>
         /// Set the street2
         /// </summary>
         /// <returns>void</returns>
-        public void street2(string data)
+        public void Street2(string data)
         {
-            this.setProperty(CommonConstants.street2, data);
+            SetProperty(GlobalConstants.Street2, data);
         }
 
         /// <summary>
         /// Get the city
         /// </summary>
         /// <returns>string</returns>
-        public string city()
+        public string City()
         {
-            return this.getProperty(CommonConstants.city);
+            return GetProperty(GlobalConstants.City);
         }
 
         /// <summary>
         /// Set the city
         /// </summary>
         /// <returns>void</returns>
-        public void city(string data)
+        public void City(string data)
         {
-            this.setProperty(CommonConstants.city, data);
+            SetProperty(GlobalConstants.City, data);
         }
 
         /// <summary>
         /// Get the state
         /// </summary>
         /// <returns>string</returns>
-        public string state()
+        public string State()
         {
-            return this.getProperty(CommonConstants.state);
+            return GetProperty(GlobalConstants.State);
         }
 
         /// <summary>
         /// Set the state
         /// </summary>
         /// <returns>void</returns>
-        public void state(string data)
+        public void State(string data)
         {
-            this.setProperty(CommonConstants.state, data);
+            SetProperty(GlobalConstants.State, data);
         }
 
         /// <summary>
         /// Get the country
         /// </summary>
         /// <returns>string</returns>
-        public string country()
+        public string Country()
         {
-            return this.getProperty(CommonConstants.country);
+            return GetProperty(GlobalConstants.Country);
         }
 
         /// <summary>
         /// Set the country
         /// </summary>
         /// <returns>void</returns>
-        public void country(string data)
+        public void Country(string data)
         {
-            this.setProperty(CommonConstants.country, data);
+            SetProperty(GlobalConstants.Country, data);
         }
 
         /// <summary>
         /// Get the zip
         /// </summary>
         /// <returns>string</returns>
-        public string zip()
+        public string Zip()
         {
-            return this.getProperty(CommonConstants.zip);
+            return GetProperty(GlobalConstants.Zip);
         }
 
         /// <summary>
         /// Set the zip
         /// </summary>
         /// <returns>void</returns>
-        public void zip(string data)
+        public void Zip(string data)
         {
-            this.setProperty(CommonConstants.zip, data);
+            SetProperty(GlobalConstants.Zip, data);
         }
 
         /// <summary>
         /// Get the phone
         /// </summary>
         /// <returns>string</returns>
-        public string phone()
+        public string Phone()
         {
-            return this.getProperty(CommonConstants.phone);
+            return GetProperty(GlobalConstants.Phone);
         }
 
         /// <summary>
         /// Set the phone
         /// </summary>
         /// <returns>void</returns>
-        public void phone(string data)
+        public void Phone(string data)
         {
-            this.setProperty(CommonConstants.phone, data);
+            SetProperty(GlobalConstants.Phone, data);
         }
     }
 }

@@ -17,36 +17,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is ACHBankAccounts class.
-    public class ACHBankAccounts : Paysafe.Common.JSONObject
+    public class AchBankAccounts : JsonObject
     {
         /// <summary>
         /// Initialize the ACHBankAccounts object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
-        public ACHBankAccounts(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+        public AchBankAccounts(Dictionary<string, object> properties = null)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {DirectDebitConstants.paymentToken,STRING_TYPE},            
-            {DirectDebitConstants.payMethod, DirectDebitConstants.enumPaymentType},
-            {DirectDebitConstants.paymentDescriptor, STRING_TYPE},
-            {DirectDebitConstants.accountHolderName, STRING_TYPE},
-            {DirectDebitConstants.accountType, STRING_TYPE},
-            {DirectDebitConstants.accountNumber, STRING_TYPE},
-            {DirectDebitConstants.routingNumber, STRING_TYPE},
-            {DirectDebitConstants.lastDigits, STRING_TYPE}
+            {GlobalConstants.PaymentToken,StringType},            
+            {GlobalConstants.PayMethod, DirectDebitConstants.EnumPaymentType},
+            {GlobalConstants.PaymentDescriptor, StringType},
+            {GlobalConstants.AccountHolderName, StringType},
+            {GlobalConstants.AccountType, StringType},
+            {GlobalConstants.AccountNumber, StringType},
+            {GlobalConstants.RoutingNumber, StringType},
+            {GlobalConstants.LastDigits, StringType}
         
         };
 
@@ -54,142 +51,142 @@ namespace Paysafe.DirectDebit
         /// Get the paymentToken
         /// </summary>
         /// <returns>string</returns>
-        public string paymentToken()
+        public string PaymentToken()
         {
-            return this.getProperty(DirectDebitConstants.paymentToken);
+            return GetProperty(GlobalConstants.PaymentToken);
         }
 
         /// <summary>
         /// Set the paymentToken
         /// </summary>
         /// <returns>void</returns>
-        public void paymentToken(string data)
+        public void PaymentToken(string data)
         {
-            this.setProperty(DirectDebitConstants.paymentToken, data);
+            SetProperty(GlobalConstants.PaymentToken, data);
         }
 
         /// <summary>
         /// Get the payMethod
         /// </summary>
         /// <returns>string</returns>
-        public string payMethod()
+        public string PayMethod()
         {
-            return this.getProperty(DirectDebitConstants.payMethod);
+            return GetProperty(GlobalConstants.PayMethod);
         }
 
         /// <summary>
         /// Set the payMethod
         /// </summary>
         /// <returns>void</returns>
-        public void payMethod(string data)
+        public void PayMethod(string data)
         {
-            this.setProperty(DirectDebitConstants.payMethod, data);
+            SetProperty(GlobalConstants.PayMethod, data);
         }
 
         /// <summary>
         /// Get the paymentDescriptor
         /// </summary>
         /// <returns>string</returns>
-        public string paymentDescriptor()
+        public string PaymentDescriptor()
         {
-            return this.getProperty(DirectDebitConstants.paymentDescriptor);
+            return GetProperty(GlobalConstants.PaymentDescriptor);
         }
 
         /// <summary>
         /// Set the paymentDescriptor
         /// </summary>
         /// <returns>void</returns>
-        public void paymentDescriptor(string data)
+        public void PaymentDescriptor(string data)
         {
-            this.setProperty(DirectDebitConstants.paymentDescriptor, data);
+            SetProperty(GlobalConstants.PaymentDescriptor, data);
         }
 
         /// <summary>
         /// Get the accountHolderName
         /// </summary>
         /// <returns>string</returns>
-        public string accountHolderName()
+        public string AccountHolderName()
         {
-            return this.getProperty(DirectDebitConstants.accountHolderName);
+            return GetProperty(GlobalConstants.AccountHolderName);
         }
 
         /// <summary>
         /// Set the accountHolderName
         /// </summary>
         /// <returns>void</returns>
-        public void accountHolderName(string data)
+        public void AccountHolderName(string data)
         {
-            this.setProperty(DirectDebitConstants.accountHolderName, data);
+            SetProperty(GlobalConstants.AccountHolderName, data);
         }
 
         /// <summary>
         /// Get the accountType
         /// </summary>
         /// <returns>string</returns>
-        public string accountType()
+        public string AccountType()
         {
-            return this.getProperty(DirectDebitConstants.accountType);
+            return GetProperty(GlobalConstants.AccountType);
         }
 
         /// <summary>
         /// Set the accountType
         /// </summary>
         /// <returns>void</returns>
-        public void accountType(string data)
+        public void AccountType(string data)
         {
-            this.setProperty(DirectDebitConstants.accountType, data);
+            SetProperty(GlobalConstants.AccountType, data);
         }
 
         /// <summary>
         /// Get the accountNumber
         /// </summary>
         /// <returns>string</returns>
-        public string accountNumber()
+        public string AccountNumber()
         {
-            return this.getProperty(DirectDebitConstants.accountNumber);
+            return GetProperty(GlobalConstants.AccountNumber);
         }
 
         /// <summary>
         /// Set the accountNumber
         /// </summary>
         /// <returns>void</returns>
-        public void accountNumber(string data)
+        public void AccountNumber(string data)
         {
-            this.setProperty(DirectDebitConstants.accountNumber, data);
+            SetProperty(GlobalConstants.AccountNumber, data);
         }
         /// <summary>
         /// Get the routingNumber
         /// </summary>
         /// <returns>string</returns>
-        public string routingNumber()
+        public string RoutingNumber()
         {
-            return this.getProperty(DirectDebitConstants.routingNumber);
+            return GetProperty(GlobalConstants.RoutingNumber);
         }
 
         /// <summary>
         /// Set the routingNumber
         /// </summary>
         /// <returns>void</returns>
-        public void routingNumber(string data)
+        public void RoutingNumber(string data)
         {
-            this.setProperty(DirectDebitConstants.routingNumber, data);
+            SetProperty(GlobalConstants.RoutingNumber, data);
         }
         /// <summary>
         /// Get the lastDigits
         /// </summary>
         /// <returns>string</returns>
-        public string lastDigits()
+        public string LastDigits()
         {
-            return this.getProperty(DirectDebitConstants.lastDigits);
+            return GetProperty(GlobalConstants.LastDigits);
         }
 
         /// <summary>
         /// Set the lastDigits
         /// </summary>
         /// <returns>void</returns>
-        public void lastDigits(string data)
+        public void LastDigits(string data)
         {
-            this.setProperty(DirectDebitConstants.lastDigits, data);
+            SetProperty(GlobalConstants.LastDigits, data);
         }
 
        
@@ -198,17 +195,17 @@ namespace Paysafe.DirectDebit
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated ACHAccoun object
         /// </summary>
-        public class ACHAccountBuilder<TBLDR> : NestedJSONBuilder<ACHBankAccounts, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class AchAccountBuilder<TBldr> : NestedJsonBuilder<AchBankAccounts, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the ACHAccountBuilder builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public ACHAccountBuilder(TBLDR parent)
+            public AchAccountBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -216,9 +213,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> paymentToken(string data)
+            public AchAccountBuilder<TBldr> PaymentToken(string data)
             {
-                this.properties[DirectDebitConstants.paymentToken] = data;
+                Properties[GlobalConstants.PaymentToken] = data;
                 return this;
             }
 
@@ -227,9 +224,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> payMethod(string data)
+            public AchAccountBuilder<TBldr> PayMethod(string data)
             {
-                this.properties[DirectDebitConstants.payMethod] = data;
+                Properties[GlobalConstants.PayMethod] = data;
                 return this;
             }
             /// <summary>
@@ -237,9 +234,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> paymentDescriptor(string data)
+            public AchAccountBuilder<TBldr> PaymentDescriptor(string data)
             {
-                this.properties[DirectDebitConstants.paymentDescriptor] = data;
+                Properties[GlobalConstants.PaymentDescriptor] = data;
                 return this;
             }
             /// <summary>
@@ -247,9 +244,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> accountHolderName(string data)
+            public AchAccountBuilder<TBldr> AccountHolderName(string data)
             {
-                this.properties[DirectDebitConstants.accountHolderName] = data;
+                Properties[GlobalConstants.AccountHolderName] = data;
                 return this;
             }
             /// <summary>
@@ -257,9 +254,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> accountType(string data)
+            public AchAccountBuilder<TBldr> AccountType(string data)
             {
-                this.properties[DirectDebitConstants.accountType] = data;
+                Properties[GlobalConstants.AccountType] = data;
                 return this;
             }
             /// <summary>
@@ -267,9 +264,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> accountNumber(string data)
+            public AchAccountBuilder<TBldr> AccountNumber(string data)
             {
-                this.properties[DirectDebitConstants.accountNumber] = data;
+                Properties[GlobalConstants.AccountNumber] = data;
                 return this;
             }
             /// <summary>
@@ -277,9 +274,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> routingNumber(string data)
+            public AchAccountBuilder<TBldr> RoutingNumber(string data)
             {
-                this.properties[DirectDebitConstants.routingNumber] = data;
+                Properties[GlobalConstants.RoutingNumber] = data;
                 return this;
             }
             /// <summary>
@@ -287,9 +284,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>ACHAccountBuilder<TBLDR></returns>
-            public ACHAccountBuilder<TBLDR> lastDigits(string data)
+            public AchAccountBuilder<TBldr> LastDigits(string data)
             {
-                this.properties[DirectDebitConstants.lastDigits] = data;
+                Properties[GlobalConstants.LastDigits] = data;
                 return this;
             }
            

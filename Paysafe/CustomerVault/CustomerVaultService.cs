@@ -19,10 +19,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Paysafe.Common;
-using PaysafeApiClient = Paysafe.PaysafeApiClient;
 
 namespace Paysafe.CustomerVault
 {
@@ -32,12 +30,12 @@ namespace Paysafe.CustomerVault
         /// <summary>
         /// The api client, performs all http requests
         /// </summary>
-        private PaysafeApiClient client;
+        private readonly PaysafeApiClient _client;
 
         /// <summary>
         /// The card payments api base uri 
         /// </summary>
-        private string uri = "customervault/v1";
+        private string _uri = "customervault/v1";
 
         /// <summary>
         /// Initialize the card payments service with an client object
@@ -45,19 +43,19 @@ namespace Paysafe.CustomerVault
         /// <param name="client">PaysafeApiClient</param>
         public CustomerVaultService(PaysafeApiClient client)
         {
-            this.client = client;
+            _client = client;
         }
 
         /// <summary>
         /// Check if the service is available
         /// </summary>
         /// <returns>true if successful</returns>
-        public Boolean monitor()
+        public Boolean Monitor()
         {
             Request request = new Request(uri: "customervault/monitor");
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            return ("READY".Equals((string)(response[CustomerVaultConstants.status])));
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
         /// <summary>
@@ -65,32 +63,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="profile">Profile</param>
         /// <returns>Profile</returns>
-        public Profile create(Profile profile)
+        public Profile Create(Profile profile)
         {
-            profile.setRequiredFields(new List<string> {
-                CustomerVaultConstants.merchantCustomerId,
-                CustomerVaultConstants.locale
+            profile.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantCustomerId,
+                GlobalConstants.Locale
             });
-            profile.setOptionalFields(new List<string> {
-                CustomerVaultConstants.firstName,
-                CustomerVaultConstants.middleName,
-                CustomerVaultConstants.lastName,
-                CustomerVaultConstants.dateOfBirth,
-                CustomerVaultConstants.ip,
-                CustomerVaultConstants.gender,
-                CustomerVaultConstants.nationality,
-                CustomerVaultConstants.email,
-                CustomerVaultConstants.phone,
-                CustomerVaultConstants.cellPhone,
-                CustomerVaultConstants.card
+            profile.SetOptionalFields(new List<string> {
+                GlobalConstants.FirstName,
+                GlobalConstants.MiddleName,
+                GlobalConstants.LastName,
+                GlobalConstants.DateOfBirth,
+                GlobalConstants.Ip,
+                GlobalConstants.Gender,
+                GlobalConstants.Nationality,
+                GlobalConstants.Email,
+                GlobalConstants.Phone,
+                GlobalConstants.CellPhone,
+                GlobalConstants.Card
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles"),
                 body: profile
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Profile(response);
         }
@@ -100,32 +98,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Address</returns>
-        public Address create(Address address)
+        public Address Create(Address address)
         {
-            address.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            address.checkRequiredFields();
-            address.setRequiredFields(new List<string> { CustomerVaultConstants.country });
-            address.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.street,
-                CustomerVaultConstants.street2,
-                CustomerVaultConstants.city,
-                CustomerVaultConstants.state,
-                CustomerVaultConstants.zip,
-                CustomerVaultConstants.recipientName,
-                CustomerVaultConstants.phone
+            address.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            address.CheckRequiredFields();
+            address.SetRequiredFields(new List<string> { GlobalConstants.Country });
+            address.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.Street,
+                GlobalConstants.Street2,
+                GlobalConstants.City,
+                GlobalConstants.State,
+                GlobalConstants.Zip,
+                GlobalConstants.RecipientName,
+                GlobalConstants.Phone
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + address.profileId() + "/addresses"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses"),
                 body: address
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Address returnVal = new Address(response);
-            returnVal.profileId(address.profileId());
+            returnVal.ProfileId(address.ProfileId());
             return returnVal;
         }
 
@@ -134,31 +132,31 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="card">Card</param>
         /// <returns>Card</returns>
-        public Card create(Card card)
+        public Card Create(Card card)
         {
-            card.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            card.checkRequiredFields();
-            card.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.cardNum,
-                CustomerVaultConstants.cardExpiry
+            card.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            card.CheckRequiredFields();
+            card.SetRequiredFields(new List<string> { 
+                GlobalConstants.CardNum,
+                GlobalConstants.CardExpiry
             });
-            card.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,
-                CustomerVaultConstants.holderName,
-                CustomerVaultConstants.billingAddressId
+            card.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.HolderName,
+                GlobalConstants.BillingAddressId
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + card.profileId() + "/cards"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards"),
                 body: card
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Card returnVal = new Card(response);
-            returnVal.profileId(card.profileId());
+            returnVal.ProfileId(card.ProfileId());
             return returnVal;
         }
 
@@ -167,32 +165,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="ACHBankAccount">ACHBankAccount</param>
         /// <returns>ACHBankAccount</returns>
-        public ACHBankAccounts create(ACHBankAccounts account)
+        public AchBankAccounts Create(AchBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {
-                CustomerVaultConstants.accountHolderName,
-                CustomerVaultConstants.accountNumber,
-                CustomerVaultConstants.routingNumber,
-                CustomerVaultConstants.billingAddressId,
-                CustomerVaultConstants.accountType,                  
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.AccountHolderName,
+                GlobalConstants.AccountNumber,
+                GlobalConstants.RoutingNumber,
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.AccountType,                  
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum
             });
             
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/achbankaccounts"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts"),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            ACHBankAccounts returnVal = new ACHBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;          
         }
 
@@ -201,32 +199,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="BACSBankAccount">BACSBankAccount</param>
         /// <returns>BACSBankAccount</returns>
-        public BACSBankAccounts create(BACSBankAccounts account)
+        public BacsBankAccounts Create(BacsBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {               
-                CustomerVaultConstants.accountNumber,
-                CustomerVaultConstants.sortCode,
-                 CustomerVaultConstants.accountHolderName,
-                CustomerVaultConstants.billingAddressId,                             
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {               
+                GlobalConstants.AccountNumber,
+                GlobalConstants.SortCode,
+                 GlobalConstants.AccountHolderName,
+                GlobalConstants.BillingAddressId,                             
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-                CustomerVaultConstants.mandates,
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,                
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.Mandates,
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,                
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/bacsbankaccounts"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/bacsbankaccounts"),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            BACSBankAccounts returnVal = new BACSBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            BacsBankAccounts returnVal = new BacsBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -235,32 +233,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="EFTBankAccount">EFTBankAccount</param>
         /// <returns>EFTBankAccount</returns>
-        public EFTBankAccounts create(EFTBankAccounts account)
+        public EftBankAccounts Create(EftBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {               
-                CustomerVaultConstants.accountNumber,
-                CustomerVaultConstants.transitNumber,
-                CustomerVaultConstants.institutionId,
-                 CustomerVaultConstants.accountHolderName,
-                CustomerVaultConstants.billingAddressId,                             
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {               
+                GlobalConstants.AccountNumber,
+                GlobalConstants.TransitNumber,
+                GlobalConstants.InstitutionId,
+                 GlobalConstants.AccountHolderName,
+                GlobalConstants.BillingAddressId,                             
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {                
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,                
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {                
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,                
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/eftbankaccounts"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts"),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            EFTBankAccounts returnVal = new EFTBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -270,32 +268,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="SEPABankAccount">SEPABankAccount</param>
         /// <returns>SEPABankAccount</returns>
-        public SEPABankAccounts create(SEPABankAccounts account)
+        public SepaBankAccounts Create(SepaBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {               
-                CustomerVaultConstants.iban,
-                CustomerVaultConstants.bic,           
-                 CustomerVaultConstants.accountHolderName,
-                CustomerVaultConstants.billingAddressId,                             
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {               
+                GlobalConstants.Iban,
+                GlobalConstants.Bic,           
+                 GlobalConstants.AccountHolderName,
+                GlobalConstants.BillingAddressId,                             
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {                
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,  
-                CustomerVaultConstants.mandates
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {                
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,  
+                GlobalConstants.Mandates
             });
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/sepabankaccounts"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/sepabankaccounts"),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            SEPABankAccounts returnVal = new SEPABankAccounts(response);
-            returnVal.profileId(account.profileId());
+            SepaBankAccounts returnVal = new SepaBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -304,15 +302,15 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="Mandates">Mandates</param>
         /// <returns>Mandates</returns>
-        public Mandates create(Mandates account, string accountName)
+        public Mandates Create(Mandates account, string accountName)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.reference,
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.bankAccountId
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.Reference,
+                GlobalConstants.ProfileId,
+                GlobalConstants.BankAccountId
             });
           
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
 
             if (accountName.Equals("SEPA"))
                 accountName = "/sepabankaccounts/";
@@ -320,14 +318,14 @@ namespace Paysafe.CustomerVault
                 accountName = "/bacsbankaccounts/";
 
             Request request = new Request(
-                method: RequestType.POST,
-                uri: this.prepareURI("/profiles/" + account.profileId() + accountName + account.bankAccountId() + "/mandates"),
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + accountName + account.BankAccountId() + "/mandates"),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Mandates returnVal = new Mandates(response);            
-            returnVal.profileId(account.profileId());
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -336,34 +334,34 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="profile">Profile</param>
         /// <returns>Profile</returns>
-        public Profile update(Profile profile)
+        public Profile Update(Profile profile)
         {
-            profile.setRequiredFields(new List<string> { CustomerVaultConstants.id });
-            profile.checkRequiredFields();
-            profile.setRequiredFields(new List<string> {
-                CustomerVaultConstants.merchantCustomerId,
-                CustomerVaultConstants.locale
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
+            profile.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantCustomerId,
+                GlobalConstants.Locale
             });
-            profile.setOptionalFields(new List<string> {
-                CustomerVaultConstants.firstName,
-                CustomerVaultConstants.middleName,
-                CustomerVaultConstants.lastName,
-                CustomerVaultConstants.dateOfBirth,
-                CustomerVaultConstants.ip,
-                CustomerVaultConstants.gender,
-                CustomerVaultConstants.nationality,
-                CustomerVaultConstants.email,
-                CustomerVaultConstants.phone,
-                CustomerVaultConstants.cellPhone
+            profile.SetOptionalFields(new List<string> {
+                GlobalConstants.FirstName,
+                GlobalConstants.MiddleName,
+                GlobalConstants.LastName,
+                GlobalConstants.DateOfBirth,
+                GlobalConstants.Ip,
+                GlobalConstants.Gender,
+                GlobalConstants.Nationality,
+                GlobalConstants.Email,
+                GlobalConstants.Phone,
+                GlobalConstants.CellPhone
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + profile.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + profile.Id()),
                 body: profile
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Profile(response);
         }
@@ -373,35 +371,35 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Address</returns>
-        public Address update(Address address)
+        public Address Update(Address address)
         {
-            address.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            address.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            address.checkRequiredFields();
-            address.setRequiredFields(new List<string> { CustomerVaultConstants.country });
-            address.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.street,
-                CustomerVaultConstants.street2,
-                CustomerVaultConstants.city,
-                CustomerVaultConstants.state,
-                CustomerVaultConstants.zip,
-                CustomerVaultConstants.recipientName,
-                CustomerVaultConstants.phone
+            address.CheckRequiredFields();
+            address.SetRequiredFields(new List<string> { GlobalConstants.Country });
+            address.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.Street,
+                GlobalConstants.Street2,
+                GlobalConstants.City,
+                GlobalConstants.State,
+                GlobalConstants.Zip,
+                GlobalConstants.RecipientName,
+                GlobalConstants.Phone
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + address.profileId() + "/addresses/" + address.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id()),
                 body: address
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Address returnVal = new Address(response);
-            returnVal.profileId(address.profileId());
+            returnVal.ProfileId(address.ProfileId());
             return returnVal;
         }
 
@@ -410,32 +408,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="card">Card</param>
         /// <returns>Card</returns>
-        public Card update(Card card)
+        public Card Update(Card card)
         {
-            card.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            card.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            card.checkRequiredFields();
-            card.setRequiredFields(new List<string> {});
-            card.setOptionalFields(new List<string> {
-                CustomerVaultConstants.cardExpiry,
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,
-                CustomerVaultConstants.holderName,
-                CustomerVaultConstants.billingAddressId
+            card.CheckRequiredFields();
+            card.SetRequiredFields(new List<string> {});
+            card.SetOptionalFields(new List<string> {
+                GlobalConstants.CardExpiry,
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.HolderName,
+                GlobalConstants.BillingAddressId
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + card.profileId() + "/cards/" + card.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id()),
                 body: card
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Card returnVal = new Card(response);
-            returnVal.profileId(card.profileId());
+            returnVal.ProfileId(card.ProfileId());
             return returnVal;
         }
 
@@ -444,32 +442,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="ACHBankAccount">ACHBankAccount</param>
         /// <returns>ACHBankAccount</returns>
-        public ACHBankAccounts update(ACHBankAccounts account)
+        public AchBankAccounts Update(AchBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {
-                CustomerVaultConstants.accountHolderName,                
-                CustomerVaultConstants.routingNumber,
-                CustomerVaultConstants.billingAddressId,
-                CustomerVaultConstants.accountType,                  
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.AccountHolderName,                
+                GlobalConstants.RoutingNumber,
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.AccountType,                  
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum,
-                CustomerVaultConstants.accountNumber
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.AccountNumber
             });
          
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/achbankaccounts/" + account.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id()),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            ACHBankAccounts returnVal = new ACHBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;           
         }
 
@@ -478,28 +476,28 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="BACSBankAccount">BACSBankAccount</param>
         /// <returns>BACSBankAccount</returns>
-        public BACSBankAccounts update(BACSBankAccounts account)
+        public BacsBankAccounts Update(BacsBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-            CustomerVaultConstants.nickName,
-            CustomerVaultConstants.merchantRefNum,  
-            CustomerVaultConstants.accountNumber,
-            CustomerVaultConstants.accountHolderName,               
-            CustomerVaultConstants.sortCode,
-            CustomerVaultConstants.billingAddressId,   
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+            GlobalConstants.NickName,
+            GlobalConstants.MerchantRefNum,  
+            GlobalConstants.AccountNumber,
+            GlobalConstants.AccountHolderName,               
+            GlobalConstants.SortCode,
+            GlobalConstants.BillingAddressId,   
             });
             
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/bacsbankaccounts/" + account.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/bacsbankaccounts/" + account.Id()),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            BACSBankAccounts returnVal = new BACSBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            BacsBankAccounts returnVal = new BacsBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -508,32 +506,32 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="EFTBankAccount">EFTBankAccount</param>
         /// <returns>EFTBankAccount</returns>
-        public EFTBankAccounts update(EFTBankAccounts account)
+        public EftBankAccounts Update(EftBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setRequiredFields(new List<string> {
-                 CustomerVaultConstants.transitNumber,
-                CustomerVaultConstants.institutionId,
-                CustomerVaultConstants.accountHolderName,               
-                CustomerVaultConstants.billingAddressId                                
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                 GlobalConstants.TransitNumber,
+                GlobalConstants.InstitutionId,
+                GlobalConstants.AccountHolderName,               
+                GlobalConstants.BillingAddressId                                
             });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-                CustomerVaultConstants.nickName,
-                CustomerVaultConstants.merchantRefNum, 
-                CustomerVaultConstants.accountNumber
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum, 
+                GlobalConstants.AccountNumber
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/eftbankaccounts/" + account.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id()),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            EFTBankAccounts returnVal = new EFTBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -542,28 +540,28 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="SEPABankAccount">SEPABankAccount</param>
         /// <returns>SEPABankAccount</returns>
-        public SEPABankAccounts update(SEPABankAccounts account)
+        public SepaBankAccounts Update(SepaBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.profileId });
-            account.checkRequiredFields();
-            account.setOptionalFields(new List<string> {
-            CustomerVaultConstants.nickName,
-            CustomerVaultConstants.merchantRefNum,  
-            CustomerVaultConstants.accountHolderName,
-            CustomerVaultConstants.iban,
-            CustomerVaultConstants.bic,
-            CustomerVaultConstants.billingAddressId,  
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+            GlobalConstants.NickName,
+            GlobalConstants.MerchantRefNum,  
+            GlobalConstants.AccountHolderName,
+            GlobalConstants.Iban,
+            GlobalConstants.Bic,
+            GlobalConstants.BillingAddressId,  
             });
 
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/sepabankaccounts/" + account.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/sepabankaccounts/" + account.Id()),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            SEPABankAccounts returnVal = new SEPABankAccounts(response);
-            returnVal.profileId(account.profileId());
+            SepaBankAccounts returnVal = new SepaBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -572,19 +570,19 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="Mandates">Mandates</param>
         /// <returns>Mandates</returns>
-        public Mandates update(Mandates account)
+        public Mandates Update(Mandates account)
         {
-            account.setRequiredFields(new List<string> { CustomerVaultConstants.status });
-            account.checkRequiredFields();            
+            account.SetRequiredFields(new List<string> { GlobalConstants.Status });
+            account.CheckRequiredFields();            
             Request request = new Request(
-                method: RequestType.PUT,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/mandates/" + account.id()),
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/mandates/" + account.Id()),
                 body: account
             );
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Mandates returnVal = new Mandates(response);
-            returnVal.profileId(account.profileId());
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -593,17 +591,17 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="profile">Profile</param>
         /// <returns>bool</returns>
-        public bool delete(Profile profile)
+        public bool Delete(Profile profile)
         {
-            profile.setRequiredFields(new List<string> { CustomerVaultConstants.id });
-            profile.checkRequiredFields();
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + profile.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + profile.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
 
             return true;
         }
@@ -613,20 +611,20 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>bool</returns>
-        public bool delete(Address address)
+        public bool Delete(Address address)
         {
-            address.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            address.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            address.checkRequiredFields();
+            address.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + address.profileId() + "/addresses/" + address.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -635,21 +633,21 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="card">Card</param>
         /// <returns>bool</returns>
-        public bool delete(Card card)
+        public bool Delete(Card card)
         {
-            card.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            card.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            card.checkRequiredFields();
+            card.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + card.profileId() + "/cards/" + card.id()),
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id()),
                 body: card
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
 
             return true;
         }
@@ -659,20 +657,20 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="ACHBankAccount">ACHBankAccount</param>
         /// <returns>bool</returns>
-        public bool delete(ACHBankAccounts account)
+        public bool Delete(AchBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-               CustomerVaultConstants.profileId,
-               CustomerVaultConstants.id              
+            account.SetRequiredFields(new List<string> { 
+               GlobalConstants.ProfileId,
+               GlobalConstants.Id              
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/achbankaccounts/" + account.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -681,20 +679,20 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="BACSBankAccount">BACSBankAccount</param>
         /// <returns>bool</returns>
-        public bool delete(BACSBankAccounts account)
+        public bool Delete(BacsBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/bacsbankaccounts/" + account.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/bacsbankaccounts/" + account.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -703,20 +701,20 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="EFTBankAccount">EFTBankAccount</param>
         /// <returns>bool</returns>
-        public bool delete(EFTBankAccounts account)
+        public bool Delete(EftBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/eftbankaccounts/" + account.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -726,20 +724,20 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="SEPABankAccount">SEPABankAccount</param>
         /// <returns>bool</returns>
-        public bool delete(SEPABankAccounts account)
+        public bool Delete(SepaBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.DELETE,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/sepabankaccounts/" + account.id())
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/sepabankaccounts/" + account.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -748,19 +746,19 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="Mandates">Mandates</param>
         /// <returns>bool</returns>
-        public bool delete(Mandates account)
+        public bool Delete(Mandates account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id,
-                CustomerVaultConstants.bankAccountId
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id,
+                GlobalConstants.BankAccountId
             });           
             Request request = new Request(
-                method: RequestType.DELETE,
-                 uri: this.prepareURI("/profiles/" + account.profileId() + "/mandates/" + account.id())
+                method: RequestType.Delete,
+                 uri: PrepareUri("/profiles/" + account.ProfileId() + "/mandates/" + account.Id())
             );
 
-            this.client.processRequest(request);
+            _client.ProcessRequest(request);
             return true;
         }
 
@@ -769,11 +767,11 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="profile">Profile</param>
         /// <returns>Profile</returns>
-        public Profile get(Profile profile, bool includeAddresses = false, bool includeCards = false, bool includeACHBankAccounts = false,
-            bool includeBACSBankAccounts = false, bool includeEFTBankAccounts = false, bool includeSEPABankAccounts = false)
+        public Profile Get(Profile profile, bool includeAddresses = false, bool includeCards = false, bool includeAchBankAccounts = false,
+            bool includeBacsBankAccounts = false, bool includeEftBankAccounts = false, bool includeSepaBankAccounts = false)
         {
-            profile.setRequiredFields(new List<string> { CustomerVaultConstants.id });
-            profile.checkRequiredFields();
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
 
             Dictionary<string, string> queryStr = new Dictionary<string, string>();                       
             StringBuilder toInclude = new StringBuilder();
@@ -789,7 +787,7 @@ namespace Paysafe.CustomerVault
                 }
                 toInclude.Append("cards");
             }
-            if (includeACHBankAccounts)
+            if (includeAchBankAccounts)
             {
                 if (toInclude.Length > 0)
                 {
@@ -797,7 +795,7 @@ namespace Paysafe.CustomerVault
                 }
                 toInclude.Append("achbankaccounts");
             }
-            if (includeBACSBankAccounts)
+            if (includeBacsBankAccounts)
             {
                 if (toInclude.Length > 0)
                 {
@@ -805,7 +803,7 @@ namespace Paysafe.CustomerVault
                 }
                 toInclude.Append("bacsbankaccounts");
             }
-            if (includeEFTBankAccounts)
+            if (includeEftBankAccounts)
             {
                 if (toInclude.Length > 0)
                 {
@@ -813,7 +811,7 @@ namespace Paysafe.CustomerVault
                 }
                 toInclude.Append("eftbankaccounts");
             }
-            if (includeSEPABankAccounts)
+            if (includeSepaBankAccounts)
             {
                 if (toInclude.Length > 0)
                 {
@@ -824,12 +822,12 @@ namespace Paysafe.CustomerVault
 
             queryStr.Add("fields", toInclude.ToString());                                          
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + profile.id()),
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + profile.Id()),
                 queryString: queryStr
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             return new Profile(response);
         }
@@ -839,24 +837,24 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Address</returns>
-        public Address get(Address address)
+        public Address Get(Address address)
         {
-            address.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            address.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            address.checkRequiredFields();
+            address.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + address.profileId() + "/addresses/" + address.id()),
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id()),
                 body: address
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Address returnVal = new Address(response);
-            returnVal.profileId(address.profileId());
+            returnVal.ProfileId(address.ProfileId());
             return returnVal;
         }
 
@@ -865,23 +863,23 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="card">Card</param>
         /// <returns>Card</returns>
-        public Card get(Card card)
+        public Card Get(Card card)
         {
-            card.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            card.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            card.checkRequiredFields();
+            card.CheckRequiredFields();
 
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + card.profileId() + "/cards/" + card.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Card returnVal = new Card(response);
-            returnVal.profileId(card.profileId());
+            returnVal.ProfileId(card.ProfileId());
             return returnVal;
         }
 
@@ -890,22 +888,22 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="ACHBankAccount">ACHBankAccount</param>
         /// <returns>ACHBankAccount</returns>
-        public ACHBankAccounts get(ACHBankAccounts account)
+        public AchBankAccounts Get(AchBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();           
+            account.CheckRequiredFields();           
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/achbankaccounts/" + account.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            ACHBankAccounts returnVal = new ACHBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -914,22 +912,22 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="BACSBankAccount">BACSBankAccount</param>
         /// <returns>BACSBankAccount</returns>
-        public BACSBankAccounts get(BACSBankAccounts account)
+        public BacsBankAccounts Get(BacsBankAccounts account)
         {
-            account.setRequiredFields(new List<string> { 
-                CustomerVaultConstants.profileId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> { 
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/bacsbankaccounts/" + account.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/bacsbankaccounts/" + account.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            BACSBankAccounts returnVal = new BACSBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            BacsBankAccounts returnVal = new BacsBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -938,22 +936,22 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="EFTBankAccount">EFTBankAccount</param>
         /// <returns>EFTBankAccount</returns>
-        public EFTBankAccounts get(EFTBankAccounts account)
+        public EftBankAccounts Get(EftBankAccounts account)
         {
-            account.setRequiredFields(new List<string> {                 
-                CustomerVaultConstants.billingAddressId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> {                 
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/eftbankaccounts/" + account.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            EFTBankAccounts returnVal = new EFTBankAccounts(response);
-            returnVal.profileId(account.profileId());
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -962,22 +960,22 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="SEPABankAccount">SEPABankAccount</param>
         /// <returns>SEPABankAccount</returns>
-        public SEPABankAccounts get(SEPABankAccounts account)
+        public SepaBankAccounts Get(SepaBankAccounts account)
         {
-            account.setRequiredFields(new List<string> {                 
-                CustomerVaultConstants.billingAddressId,
-                CustomerVaultConstants.id
+            account.SetRequiredFields(new List<string> {                 
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.Id
             });
-            account.checkRequiredFields();
+            account.CheckRequiredFields();
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/sepabankaccounts/" + account.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/sepabankaccounts/" + account.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
-            SEPABankAccounts returnVal = new SEPABankAccounts(response);
-            returnVal.profileId(account.profileId());
+            SepaBankAccounts returnVal = new SepaBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
@@ -986,28 +984,28 @@ namespace Paysafe.CustomerVault
         /// </summary>
         /// <param name="Mandates">Mandates</param>
         /// <returns>Mandates</returns>
-        public Mandates get(Mandates account)
+        public Mandates Get(Mandates account)
         {
-            account.setRequiredFields(new List<string> {                               
-                CustomerVaultConstants.id,
-                CustomerVaultConstants.profileId
+            account.SetRequiredFields(new List<string> {                               
+                GlobalConstants.Id,
+                GlobalConstants.ProfileId
             });            
-            account.checkRequiredFields();            
+            account.CheckRequiredFields();            
             Request request = new Request(
-                method: RequestType.GET,
-                uri: this.prepareURI("/profiles/" + account.profileId() + "/mandates/" + account.id())
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/mandates/" + account.Id())
             );
 
-            dynamic response = this.client.processRequest(request);
+            dynamic response = _client.ProcessRequest(request);
 
             Mandates returnVal = new Mandates(response);
-            returnVal.profileId(account.profileId());
+            returnVal.ProfileId(account.ProfileId());
             return returnVal;
         }
 
-        private string prepareURI(string path)
+        private string PrepareUri(string path)
         {
-            return this.uri + path;
+            return _uri + path;
         }
     }
 }

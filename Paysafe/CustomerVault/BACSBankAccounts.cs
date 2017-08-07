@@ -19,278 +19,276 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.CustomerVault
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is BACSBankAccounts class.
-    public class BACSBankAccounts : Paysafe.Common.JSONObject
+    public class BacsBankAccounts : JsonObject
     {
         /// <summary>
         /// Initialize the BACSBankAccounts object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
-        public BACSBankAccounts(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+        public BacsBankAccounts(Dictionary<string, object> properties = null)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CustomerVaultConstants.id,STRING_TYPE},            
-            {CustomerVaultConstants.nickName, STRING_TYPE},
-            {CustomerVaultConstants.merchantRefNum, STRING_TYPE},
-            {CustomerVaultConstants.status, CustomerVaultConstants.enumStatus},
-            {CustomerVaultConstants.statusReason, STRING_TYPE},
-            {CustomerVaultConstants.accountNumber, STRING_TYPE},
-            {CustomerVaultConstants.accountHolderName, STRING_TYPE},
-            {CustomerVaultConstants.sortCode, STRING_TYPE},            
-            {CustomerVaultConstants.lastDigits, STRING_TYPE},
-            {CustomerVaultConstants.billingAddressId, STRING_TYPE},
-            {CustomerVaultConstants.paymentToken,STRING_TYPE},
-            {CustomerVaultConstants.mandates,typeof(List<Mandates>)},
-            {CustomerVaultConstants.profileId, STRING_TYPE}
+            {GlobalConstants.Id,StringType},            
+            {GlobalConstants.NickName, StringType},
+            {GlobalConstants.MerchantRefNum, StringType},
+            {GlobalConstants.Status, CustomerVaultConstants.EnumStatus},
+            {GlobalConstants.StatusReason, StringType},
+            {GlobalConstants.AccountNumber, StringType},
+            {GlobalConstants.AccountHolderName, StringType},
+            {GlobalConstants.SortCode, StringType},            
+            {GlobalConstants.LastDigits, StringType},
+            {GlobalConstants.BillingAddressId, StringType},
+            {GlobalConstants.PaymentToken,StringType},
+            {GlobalConstants.Mandates,typeof(List<Mandates>)},
+            {GlobalConstants.ProfileId, StringType}
         };
 
         /// <summary>
         /// Get the id
         /// </summary>
         /// <returns>string</returns>
-        public string id()
+        public string Id()
         {
-            return this.getProperty(CustomerVaultConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(string data)
+        public void Id(string data)
         {
-            this.setProperty(CustomerVaultConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the nickName
         /// </summary>
         /// <returns>string</returns>
-        public string nickName()
+        public string NickName()
         {
-            return this.getProperty(CustomerVaultConstants.nickName);
+            return GetProperty(GlobalConstants.NickName);
         }
 
         /// <summary>
         /// Set the nickName
         /// </summary>
         /// <returns>void</returns>
-        public void nickName(string data)
+        public void NickName(string data)
         {
-            this.setProperty(CustomerVaultConstants.nickName, data);
+            SetProperty(GlobalConstants.NickName, data);
         }
 
         /// <summary>
         /// Get the merchantRefNum
         /// </summary>
         /// <returns>string</returns>
-        public string merchantRefNum()
+        public string MerchantRefNum()
         {
-            return this.getProperty(CustomerVaultConstants.merchantRefNum);
+            return GetProperty(GlobalConstants.MerchantRefNum);
         }
 
         /// <summary>
         /// Set the merchantRefNum
         /// </summary>
         /// <returns>void</returns>
-        public void merchantRefNum(string data)
+        public void MerchantRefNum(string data)
         {
-            this.setProperty(CustomerVaultConstants.merchantRefNum, data);
+            SetProperty(GlobalConstants.MerchantRefNum, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>string</returns>
-        public string status()
+        public string Status()
         {
-            return this.getProperty(CustomerVaultConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>void</returns>
-        public void status(string data)
+        public void Status(string data)
         {
-            this.setProperty(CustomerVaultConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the statusReason
         /// </summary>
         /// <returns>string</returns>
-        public string statusReason()
+        public string StatusReason()
         {
-            return this.getProperty(CustomerVaultConstants.statusReason);
+            return GetProperty(GlobalConstants.StatusReason);
         }
 
         /// <summary>
         /// Set the statusReason
         /// </summary>
         /// <returns>void</returns>
-        public void statusReason(string data)
+        public void StatusReason(string data)
         {
-            this.setProperty(CustomerVaultConstants.statusReason, data);
+            SetProperty(GlobalConstants.StatusReason, data);
         }
 
         /// <summary>
         /// Get the accountNumber
         /// </summary>
         /// <returns>string</returns>
-        public string accountNumber()
+        public string AccountNumber()
         {
-            return this.getProperty(CustomerVaultConstants.accountNumber);
+            return GetProperty(GlobalConstants.AccountNumber);
         }
 
         /// <summary>
         /// Set the accountNumber
         /// </summary>
         /// <returns>void</returns>
-        public void accountNumber(string data)
+        public void AccountNumber(string data)
         {
-            this.setProperty(CustomerVaultConstants.accountNumber, data);
+            SetProperty(GlobalConstants.AccountNumber, data);
         }
 
         /// <summary>
         /// Get the accountHolderName
         /// </summary>
         /// <returns>string</returns>
-        public string accountHolderName()
+        public string AccountHolderName()
         {
-            return this.getProperty(CustomerVaultConstants.accountHolderName);
+            return GetProperty(GlobalConstants.AccountHolderName);
         }
 
         /// <summary>
         /// Set the accountHolderName
         /// </summary>
         /// <returns>void</returns>
-        public void accountHolderName(string data)
+        public void AccountHolderName(string data)
         {
-            this.setProperty(CustomerVaultConstants.accountHolderName, data);
+            SetProperty(GlobalConstants.AccountHolderName, data);
         }
 
         /// <summary>
         /// Get the sortCode
         /// </summary>
         /// <returns>string</returns>
-        public string sortCode()
+        public string SortCode()
         {
-            return this.getProperty(CustomerVaultConstants.sortCode);
+            return GetProperty(GlobalConstants.SortCode);
         }
 
         /// <summary>
         /// Set the sortCode
         /// </summary>
         /// <returns>void</returns>
-        public void sortCode(string data)
+        public void SortCode(string data)
         {
-            this.setProperty(CustomerVaultConstants.sortCode, data);
+            SetProperty(GlobalConstants.SortCode, data);
         }
        
         /// <summary>
         /// Get the lastDigits
         /// </summary>
         /// <returns>string</returns>
-        public string lastDigits()
+        public string LastDigits()
         {
-            return this.getProperty(CustomerVaultConstants.lastDigits);
+            return GetProperty(GlobalConstants.LastDigits);
         }
 
         /// <summary>
         /// Set the lastDigits
         /// </summary>
         /// <returns>void</returns>
-        public void lastDigits(string data)
+        public void LastDigits(string data)
         {
-            this.setProperty(CustomerVaultConstants.lastDigits, data);
+            SetProperty(GlobalConstants.LastDigits, data);
         }
 
         /// <summary>
         /// Get the billingAddressId
         /// </summary>
         /// <returns>string</returns>
-        public string billingAddressId()
+        public string BillingAddressId()
         {
-            return this.getProperty(CustomerVaultConstants.billingAddressId);
+            return GetProperty(GlobalConstants.BillingAddressId);
         }
 
         /// <summary>
         /// Set the billingAddressId
         /// </summary>
         /// <returns>void</returns>
-        public void billingAddressId(string data)
+        public void BillingAddressId(string data)
         {
-            this.setProperty(CustomerVaultConstants.billingAddressId, data);
+            SetProperty(GlobalConstants.BillingAddressId, data);
         }
 
         /// <summary>
         /// Get the paymentToken
         /// </summary>
         /// <returns>string</returns>
-        public string paymentToken()
+        public string PaymentToken()
         {
-            return this.getProperty(CustomerVaultConstants.paymentToken);
+            return GetProperty(GlobalConstants.PaymentToken);
         }
 
         /// <summary>
         /// Set the paymentToken
         /// </summary>
         /// <returns>void</returns>
-        public void paymentToken(string data)
+        public void PaymentToken(string data)
         {
-            this.setProperty(CustomerVaultConstants.paymentToken, data);
+            SetProperty(GlobalConstants.PaymentToken, data);
         }        
 
         /// <summary>
         /// Get the mandates
         /// </summary>
         /// <returns>List</returns>
-        public List<Mandates> mandates()
+        public List<Mandates> Mandates()
         {
-            return this.getProperty(CustomerVaultConstants.mandates);
+            return GetProperty(GlobalConstants.Mandates);
         }
 
         /// <summary>
         /// Set the mandates
         /// </summary>
         /// <returns>void</returns>
-        public void mandates(List<Mandates> data)
+        public void Mandates(List<Mandates> data)
         {
-            this.setProperty(CustomerVaultConstants.mandates, data);
+            SetProperty(GlobalConstants.Mandates, data);
         }
 
         /// <summary>
         /// Get the profileId
         /// </summary>
         /// <returns>String</returns>
-        public string profileId()
+        public string ProfileId()
         {
-            return this.getProperty(CustomerVaultConstants.profileId);
+            return GetProperty(GlobalConstants.ProfileId);
         }
 
         /// <summary>
         /// Set the profileId
         /// </summary>
         /// <returns>void</returns>
-        public void profileId(String data)
+        public void ProfileId(String data)
         {
-            this.setProperty(CustomerVaultConstants.profileId, data);
+            SetProperty(GlobalConstants.ProfileId, data);
         }
 
-        public static BACSAccountBuilder Builder()
+        public static BacsAccountBuilder Builder()
         {
-            return new BACSAccountBuilder();
+            return new BacsAccountBuilder();
         }
 
         /// <summary>
@@ -298,7 +296,7 @@ namespace Paysafe.CustomerVault
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated BACSAccount object
         /// </summary>
-        public class BACSAccountBuilder : BaseJSONBuilder<BACSBankAccounts>
+        public class BacsAccountBuilder : BaseJsonBuilder<BacsBankAccounts>
         {
 
             /// <summary>
@@ -306,9 +304,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder id(string data)
+            public BacsAccountBuilder Id(string data)
             {
-                this.properties[CustomerVaultConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -317,9 +315,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder nickName(string data)
+            public BacsAccountBuilder NickName(string data)
             {
-                this.properties[CustomerVaultConstants.nickName] = data;
+                Properties[GlobalConstants.NickName] = data;
                 return this;
             }
 
@@ -328,9 +326,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder merchantRefNum(string data)
+            public BacsAccountBuilder MerchantRefNum(string data)
             {
-                this.properties[CustomerVaultConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -339,9 +337,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder status(string data)
+            public BacsAccountBuilder Status(string data)
             {
-                this.properties[CustomerVaultConstants.status] = data;
+                Properties[GlobalConstants.Status] = data;
                 return this;
             }
 
@@ -350,9 +348,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder statusReason(string data)
+            public BacsAccountBuilder StatusReason(string data)
             {
-                this.properties[CustomerVaultConstants.statusReason] = data;
+                Properties[GlobalConstants.StatusReason] = data;
                 return this;
             }
 
@@ -361,9 +359,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder accountNumber(string data)
+            public BacsAccountBuilder AccountNumber(string data)
             {
-                this.properties[CustomerVaultConstants.accountNumber] = data;
+                Properties[GlobalConstants.AccountNumber] = data;
                 return this;
             }
 
@@ -372,9 +370,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder accountHolderName(string data)
+            public BacsAccountBuilder AccountHolderName(string data)
             {
-                this.properties[CustomerVaultConstants.accountHolderName] = data;
+                Properties[GlobalConstants.AccountHolderName] = data;
                 return this;
             }
 
@@ -383,9 +381,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder sortCode(string data)
+            public BacsAccountBuilder SortCode(string data)
             {
-                this.properties[CustomerVaultConstants.sortCode] = data;
+                Properties[GlobalConstants.SortCode] = data;
                 return this;
             }           
 
@@ -394,9 +392,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder lastDigits(string data)
+            public BacsAccountBuilder LastDigits(string data)
             {
-                this.properties[CustomerVaultConstants.lastDigits] = data;
+                Properties[GlobalConstants.LastDigits] = data;
                 return this;
             }
 
@@ -405,9 +403,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder billingAddressId(string data)
+            public BacsAccountBuilder BillingAddressId(string data)
             {
-                this.properties[CustomerVaultConstants.billingAddressId] = data;
+                Properties[GlobalConstants.BillingAddressId] = data;
                 return this;
             }
 
@@ -416,9 +414,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder paymentToken(string data)
+            public BacsAccountBuilder PaymentToken(string data)
             {
-                this.properties[CustomerVaultConstants.paymentToken] = data;
+                Properties[GlobalConstants.PaymentToken] = data;
                 return this;
             }
            
@@ -428,9 +426,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder profileId(string data)
+            public BacsAccountBuilder ProfileId(string data)
             {
-                this.properties[CustomerVaultConstants.profileId] = data;
+                Properties[GlobalConstants.ProfileId] = data;
                 return this;
             }
 
@@ -439,9 +437,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>List</param>
             /// <returns>BACSAccountBuilder</returns>
-            public BACSAccountBuilder mandates(List<Mandates> data)
+            public BacsAccountBuilder Mandates(List<Mandates> data)
             {
-                this.properties[CustomerVaultConstants.mandates] = data;
+                Properties[GlobalConstants.Mandates] = data;
                 return this;
             }
         }   

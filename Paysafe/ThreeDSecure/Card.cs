@@ -17,15 +17,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.ThreeDSecure
 {
-    public class Card : JSONObject
+    public class Card : JsonObject
     {
 
         /// <summary>
@@ -33,185 +30,185 @@ namespace Paysafe.ThreeDSecure
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Card(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
         /// <summary>
         /// This object is used to validate any properties set within the object
         /// </summary>
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {ThreeDSecureConstants.paymentToken, STRING_TYPE},
-            {ThreeDSecureConstants.cardNum, STRING_TYPE},
-            {ThreeDSecureConstants.cardType, ThreeDSecureConstants.enumType},
-            {ThreeDSecureConstants.lastDigits, STRING_TYPE},
-            {ThreeDSecureConstants.cardExpiry, typeof(CardExpiry)},
-            {ThreeDSecureConstants.cvv, STRING_TYPE},
-            {ThreeDSecureConstants.track1, STRING_TYPE},
-            {ThreeDSecureConstants.track2, STRING_TYPE},
+            {GlobalConstants.PaymentToken, StringType},
+            {GlobalConstants.CardNum, StringType},
+            {GlobalConstants.CardType, ThreeDSecureConstants.EnumType},
+            {GlobalConstants.LastDigits, StringType},
+            {GlobalConstants.CardExpiry, typeof(CardExpiry)},
+            {GlobalConstants.Cvv, StringType},
+            {GlobalConstants.Track1, StringType},
+            {GlobalConstants.Track2, StringType},
         };
 
         /// <summary>
         /// Get the payment token
         /// </summary>
         /// <returns>string</returns>
-        public string paymentToken()
+        public string PaymentToken()
         {
-            return this.getProperty(ThreeDSecureConstants.paymentToken);
+            return GetProperty(GlobalConstants.PaymentToken);
         }
 
         /// <summary>
         /// Set the payment token
         /// </summary>
         /// <param name=data>string</param>
-        public void paymentToken(string data)
+        public void PaymentToken(string data)
         {
-            this.setProperty(ThreeDSecureConstants.paymentToken, data);
+            SetProperty(GlobalConstants.PaymentToken, data);
         }
 
         /// <summary>
         /// Get the card number
         /// </summary>
         /// <returns>string</returns>
-        public string cardNum()
+        public string CardNum()
         {
-            return this.getProperty(ThreeDSecureConstants.cardNum);
+            return GetProperty(GlobalConstants.CardNum);
         }
 
         /// <summary>
         /// Set the card number
         /// </summary>
         /// <param name=data>string</param>
-        public void cardNum(string data)
+        public void CardNum(string data)
         {
-            this.setProperty(ThreeDSecureConstants.cardNum, data);
+            SetProperty(GlobalConstants.CardNum, data);
         }
 
         /// <summary>
         /// Get the card's type
         /// </summary>
         /// <returns>string</returns>
-        public string cardType()
+        public string CardType()
         {
-            return this.getProperty(ThreeDSecureConstants.cardType);
+            return GetProperty(GlobalConstants.CardType);
         }
 
         /// <summary>
         /// Set the card's type
         /// </summary>
         /// <param name=data>string</param>
-        public void cardType(string data)
+        public void CardType(string data)
         {
-            this.setProperty(ThreeDSecureConstants.cardType, data);
+            SetProperty(GlobalConstants.CardType, data);
         }
 
         /// <summary>
         /// Get the card's last digits
         /// </summary>
         /// <returns>string</returns>
-        public string lastDigits()
+        public string LastDigits()
         {
-            return this.getProperty(ThreeDSecureConstants.lastDigits);
+            return GetProperty(GlobalConstants.LastDigits);
         }
 
         /// <summary>
         /// Set the card's last digits
         /// </summary>
         /// <param name=data>string</param>
-        public void lastDigits(string data)
+        public void LastDigits(string data)
         {
-            this.setProperty(ThreeDSecureConstants.lastDigits, data);
+            SetProperty(GlobalConstants.LastDigits, data);
         }
 
         /// <summary>
         /// Get the card expiry
         /// </summary>
         /// <returns>CardExpiry</returns>
-        public CardExpiry cardExpiry()
+        public CardExpiry CardExpiry()
         {
-            return this.getProperty(ThreeDSecureConstants.cardExpiry);
+            return GetProperty(GlobalConstants.CardExpiry);
         }
 
         /// <summary>
         /// Set the card expiry
         /// </summary>
         /// <param name=data>CardExpiry</param>
-        public void cardExpiry(CardExpiry data)
+        public void CardExpiry(CardExpiry data)
         {
-            this.setProperty(ThreeDSecureConstants.cardExpiry, data);
+            SetProperty(GlobalConstants.CardExpiry, data);
         }
 
         /// <summary>
         /// Get the card cvv
         /// </summary>
         /// <returns>string</returns>
-        public string cvv()
+        public string Cvv()
         {
-            return this.getProperty(ThreeDSecureConstants.cvv);
+            return GetProperty(GlobalConstants.Cvv);
         }
 
         /// <summary>
         /// Set the card cvv
         /// </summary>
         /// <param name=data>string</param>
-        public void cvv(string data)
+        public void Cvv(string data)
         {
-            this.setProperty(ThreeDSecureConstants.cvv, data);
+            SetProperty(GlobalConstants.Cvv, data);
         }
 
         /// <summary>
         /// Get the track1 data
         /// </summary>
         /// <returns>string</returns>
-        public string track1()
+        public string Track1()
         {
-            return this.getProperty(ThreeDSecureConstants.track1);
+            return GetProperty(GlobalConstants.Track1);
         }
 
         /// <summary>
         /// Set the track1 data
         /// </summary>
         /// <param name=data>string</param>
-        public void track1(string data)
+        public void Track1(string data)
         {
-            this.setProperty(ThreeDSecureConstants.track1, data);
+            SetProperty(GlobalConstants.Track1, data);
         }
 
         /// <summary>
         /// Get the track2 data
         /// </summary>
         /// <returns>string</returns>
-        public string track2()
+        public string Track2()
         {
-            return this.getProperty(ThreeDSecureConstants.track1);
+            return GetProperty(GlobalConstants.Track1);
         }
 
         /// <summary>
         /// Set the track2 data
         /// </summary>
         /// <param name=data>string</param>
-        public void track2(string data)
+        public void Track2(string data)
         {
-            this.setProperty(ThreeDSecureConstants.track2, data);
+            SetProperty(GlobalConstants.Track2, data);
         }
 
         /// <summary>
-        /// CardBuilder<typeparam name="TBLDR"></typeparam> will allow an card to be initialized
+        /// CardBuilder<typeparam name="TBldr"></typeparam> will allow an card to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back tot he parent builder
         /// </summary>
-        public class CardBuilder<TBLDR> : NestedJSONBuilder<Card, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class CardBuilder<TBldr> : NestedJsonBuilder<Card, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Card builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public CardBuilder(TBLDR parent)
+            public CardBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -219,9 +216,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> paymentToken(string data)
+            public CardBuilder<TBldr> PaymentToken(string data)
             {
-                this.properties[ThreeDSecureConstants.paymentToken] = data;
+                Properties[GlobalConstants.PaymentToken] = data;
                 return this;
             }
 
@@ -230,9 +227,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> cardNum(string data)
+            public CardBuilder<TBldr> CardNum(string data)
             {
-                this.properties[ThreeDSecureConstants.cardNum] = data;
+                Properties[GlobalConstants.CardNum] = data;
                 return this;
             }
 
@@ -241,9 +238,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=CardPaparam>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> cardType(string data)
+            public CardBuilder<TBldr> CardType(string data)
             {
-                this.properties[ThreeDSecureConstants.cardType] = data;
+                Properties[GlobalConstants.CardType] = data;
                 return this;
             }
 
@@ -252,9 +249,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> lastDigits(string data)
+            public CardBuilder<TBldr> LastDigits(string data)
             {
-                this.properties[ThreeDSecureConstants.lastDigits] = data;
+                Properties[GlobalConstants.LastDigits] = data;
                 return this;
             }
 
@@ -262,13 +259,13 @@ namespace Paysafe.ThreeDSecure
             /// Build a card expiry within this card.
             /// </summary>
             /// <returns>CardExpiry.CardExpiryBuilder<CardBuilder<TBLDR>></returns>
-            public CardExpiry.CardExpiryBuilder<CardBuilder<TBLDR>> cardExpiry()
+            public CardExpiry.CardExpiryBuilder<CardBuilder<TBldr>> CardExpiry()
             {
-                if (!this.properties.ContainsKey(ThreeDSecureConstants.cardExpiry))
+                if (!Properties.ContainsKey(GlobalConstants.CardExpiry))
                 {
-                    this.properties[ThreeDSecureConstants.cardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder<TBLDR>>(this);
+                    Properties[GlobalConstants.CardExpiry] = new CardExpiry.CardExpiryBuilder<CardBuilder<TBldr>>(this);
                 }
-                return this.properties[ThreeDSecureConstants.cardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder<TBLDR>>;
+                return Properties[GlobalConstants.CardExpiry] as CardExpiry.CardExpiryBuilder<CardBuilder<TBldr>>;
             }
 
             /// <summary>
@@ -276,9 +273,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> cvv(string data)
+            public CardBuilder<TBldr> Cvv(string data)
             {
-                this.properties[ThreeDSecureConstants.cvv] = data;
+                Properties[GlobalConstants.Cvv] = data;
                 return this;
             }
 
@@ -287,9 +284,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> track1(string data)
+            public CardBuilder<TBldr> Track1(string data)
             {
-                this.properties[ThreeDSecureConstants.track1] = data;
+                Properties[GlobalConstants.Track1] = data;
                 return this;
             }
 
@@ -298,9 +295,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>CardBuilder<TBLDR></returns>
-            public CardBuilder<TBLDR> track2(string data)
+            public CardBuilder<TBldr> Track2(string data)
             {
-                this.properties[ThreeDSecureConstants.track2] = data;
+                Properties[GlobalConstants.Track2] = data;
                 return this;
             }
         }

@@ -20,256 +20,254 @@
 using Paysafe.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.ThreeDSecure
 {
     //Created by Tushar.Sukhiya on 03.05.2016. This is Authentications class.
-    public class Authentications : JSONObject
+    public class Authentications : JsonObject
     {
         /// <summary>
         /// Initialize the Authentications object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Authentications(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {ThreeDSecureConstants.id, STRING_TYPE},
-            {ThreeDSecureConstants.merchantRefNum, STRING_TYPE},
-            {ThreeDSecureConstants.paResp, STRING_TYPE},
-            {ThreeDSecureConstants.customerIp, STRING_TYPE},
-            {ThreeDSecureConstants.txnTime, typeof(DateTime)},
-            {ThreeDSecureConstants.error, typeof(Error)},
-            {ThreeDSecureConstants.status, ThreeDSecureConstants.enumStatus},
-            {ThreeDSecureConstants.threeDResult, ThreeDSecureConstants.enumThreeDResult},
-            {ThreeDSecureConstants.signatureStatus, ThreeDSecureConstants.enumSignatureStatus},
-            {ThreeDSecureConstants.eci, INT_TYPE},
-            {ThreeDSecureConstants.cavv, STRING_TYPE},
-            {ThreeDSecureConstants.xid, STRING_TYPE},
-            {ThreeDSecureConstants.enrollmentId, STRING_TYPE},
-            {ThreeDSecureConstants.links, typeof(List<Link>)},
-            {ThreeDSecureConstants.enrollmentchecks, typeof(List<EnrollmentChecks>)}
+            {GlobalConstants.Id, StringType},
+            {GlobalConstants.MerchantRefNum, StringType},
+            {GlobalConstants.PaResp, StringType},
+            {GlobalConstants.CustomerIp, StringType},
+            {GlobalConstants.TxnTime, typeof(DateTime)},
+            {GlobalConstants.Error, typeof(Error)},
+            {GlobalConstants.Status, ThreeDSecureConstants.EnumStatus},
+            {GlobalConstants.ThreeDResult, ThreeDSecureConstants.EnumThreeDResult},
+            {GlobalConstants.SignatureStatus, ThreeDSecureConstants.EnumSignatureStatus},
+            {GlobalConstants.Eci, IntType},
+            {GlobalConstants.Cavv, StringType},
+            {GlobalConstants.Xid, StringType},
+            {GlobalConstants.EnrollmentId, StringType},
+            {GlobalConstants.Links, typeof(List<Link>)},
+            {GlobalConstants.Enrollmentchecks, typeof(List<EnrollmentChecks>)}
         };
 
         /// <summary>
         /// Get the id
         /// </summary>
         /// <returns>String</returns>
-        public string id()
+        public string Id()
         {
-            return this.getProperty(ThreeDSecureConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(String data)
+        public void Id(String data)
         {
-            this.setProperty(ThreeDSecureConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the merchantRefNum
         /// </summary>
         /// <returns>String</returns>
-        public string merchantRefNum()
+        public string MerchantRefNum()
         {
-            return this.getProperty(ThreeDSecureConstants.merchantRefNum);
+            return GetProperty(GlobalConstants.MerchantRefNum);
         }
 
         /// <summary>
         /// Set the merchantRefNum
         /// </summary>
         /// <returns>void</returns>
-        public void merchantRefNum(String data)
+        public void MerchantRefNum(String data)
         {
-            this.setProperty(ThreeDSecureConstants.merchantRefNum, data);
+            SetProperty(GlobalConstants.MerchantRefNum, data);
         }
 
         /// <summary>
         /// Get the paRes
         /// </summary>
         /// <returns>String</returns>
-        public string paRes()
+        public string PaRes()
         {
-            return this.getProperty(ThreeDSecureConstants.paResp);
+            return GetProperty(GlobalConstants.PaResp);
         }
 
         /// <summary>
         /// Set the paRes
         /// </summary>
         /// <returns>void</returns>
-        public void paRes(String data)
+        public void PaRes(String data)
         {
-            this.setProperty(ThreeDSecureConstants.paResp, data);
+            SetProperty(GlobalConstants.PaResp, data);
         }
 
         /// <summary>
         /// Get the customerIp
         /// </summary>
         /// <returns>String</returns>
-        public string customerIp()
+        public string CustomerIp()
         {
-            return this.getProperty(ThreeDSecureConstants.customerIp);
+            return GetProperty(GlobalConstants.CustomerIp);
         }
 
         /// <summary>
         /// Set the customerIp
         /// </summary>
         /// <returns>void</returns>
-        public void customerIp(String data)
+        public void CustomerIp(String data)
         {
-            this.setProperty(ThreeDSecureConstants.customerIp, data);
+            SetProperty(GlobalConstants.CustomerIp, data);
         }
 
         /// <summary>
         /// Get the txnTime
         /// </summary>
         /// <returns>DateTime</returns>
-        public DateTime txnTime()
+        public DateTime TxnTime()
         {
-            return this.getProperty(ThreeDSecureConstants.txnTime);
+            return GetProperty(GlobalConstants.TxnTime);
         }
 
         /// <summary>
         /// Set the txnTime
         /// </summary>
         /// <returns>void</returns>
-        public void txnTime(DateTime data)
+        public void TxnTime(DateTime data)
         {
-            this.setProperty(ThreeDSecureConstants.txnTime, data);
+            SetProperty(GlobalConstants.TxnTime, data);
         }
 
         /// <summary>
         /// Get the error
         /// </summary>
         /// <returns>Error</returns>
-        public Error error()
+        public Error Error()
         {
-            return this.getProperty(ThreeDSecureConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
         /// Set the error
         /// </summary>
         /// <returns>void</returns>
-        public void error(Error data)
+        public void Error(Error data)
         {
-            this.setProperty(ThreeDSecureConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>String</returns>
-        public string status()
+        public string Status()
         {
-            return this.getProperty(ThreeDSecureConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>String</returns>
-        public void status(String data)
+        public void Status(String data)
         {
-            this.setProperty(ThreeDSecureConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the threeDResult
         /// </summary>
         /// <returns>String</returns>
-        public string threeDResult()
+        public string ThreeDResult()
         {
-            return this.getProperty(ThreeDSecureConstants.threeDResult);
+            return GetProperty(GlobalConstants.ThreeDResult);
         }
 
         /// <summary>
         /// Set the threeDResult
         /// </summary>
         /// <returns>String</returns>
-        public void threeDResult(String data)
+        public void ThreeDResult(String data)
         {
-            this.setProperty(ThreeDSecureConstants.threeDResult, data);
+            SetProperty(GlobalConstants.ThreeDResult, data);
         }
 
         /// <summary>
         /// Get the signatureStatus
         /// </summary>
         /// <returns>String</returns>
-        public string signatureStatus()
+        public string SignatureStatus()
         {
-            return this.getProperty(ThreeDSecureConstants.signatureStatus);
+            return GetProperty(GlobalConstants.SignatureStatus);
         }
 
         /// <summary>
         /// Set the signatureStatus
         /// </summary>
         /// <returns>String</returns>
-        public void signatureStatus(String data)
+        public void SignatureStatus(String data)
         {
-            this.setProperty(ThreeDSecureConstants.signatureStatus, data);
+            SetProperty(GlobalConstants.SignatureStatus, data);
         }
         
         /// <summary>
         /// Get the eci
         /// </summary>
         /// <returns>integer</returns>
-        public int eci()
+        public int Eci()
         {
-            return this.getProperty(ThreeDSecureConstants.eci);
+            return GetProperty(GlobalConstants.Eci);
         }
 
         /// <summary>
         /// Set the eci
         /// </summary>
         /// <returns>void</returns>
-        public void eci(int data)
+        public void Eci(int data)
         {
-            this.setProperty(ThreeDSecureConstants.eci, data);
+            SetProperty(GlobalConstants.Eci, data);
         }
 
         /// <summary>
         /// Get the cavv
         /// </summary>
         /// <returns>String</returns>
-        public string cavv()
+        public string Cavv()
         {
-            return this.getProperty(ThreeDSecureConstants.cavv);
+            return GetProperty(GlobalConstants.Cavv);
         }
 
         /// <summary>
         /// Set the cavv
         /// </summary>
         /// <returns>void</returns>
-        public void cavv(String data)
+        public void Cavv(String data)
         {
-            this.setProperty(ThreeDSecureConstants.cavv, data);
+            SetProperty(GlobalConstants.Cavv, data);
         }
 
         /// <summary>
         /// Get the xid
         /// </summary>
         /// <returns>String</returns>
-        public string xid()
+        public string Xid()
         {
-            return this.getProperty(ThreeDSecureConstants.xid);
+            return GetProperty(GlobalConstants.Xid);
         }
 
         /// <summary>
         /// Set the xid
         /// </summary>
         /// <returns>void</returns>
-        public void xid(String data)
+        public void Xid(String data)
         {
-            this.setProperty(ThreeDSecureConstants.xid, data);
+            SetProperty(GlobalConstants.Xid, data);
         }
 
         public static AuthenticationsBuilder Builder()
@@ -281,54 +279,54 @@ namespace Paysafe.ThreeDSecure
         /// Get the enrollmentId
         /// </summary>
         /// <returns>String</returns>
-        public string enrollmentId()
+        public string EnrollmentId()
         {
-            return this.getProperty(ThreeDSecureConstants.enrollmentId);
+            return GetProperty(GlobalConstants.EnrollmentId);
         }
 
         /// <summary>
         /// Set the enrollmentId
         /// </summary>
         /// <returns>void</returns>
-        public void enrollmentId(String data)
+        public void EnrollmentId(String data)
         {
-            this.setProperty(ThreeDSecureConstants.enrollmentId, data);
+            SetProperty(GlobalConstants.EnrollmentId, data);
         }
 
         /// <summary>
         /// Get the Links
         /// </summary>
         /// <returns>Link</returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(ThreeDSecureConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the Links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(ThreeDSecureConstants.links, data);
+            SetProperty(GlobalConstants.Links, data);
         }
 
         /// <summary>
         /// Get the enrollmentchecks
         /// </summary>
         /// <returns>EnrollmentChecks</returns>
-        public List<EnrollmentChecks> enrollmentchecks()
+        public List<EnrollmentChecks> Enrollmentchecks()
         {
-            return this.getProperty(ThreeDSecureConstants.enrollmentchecks);
+            return GetProperty(GlobalConstants.Enrollmentchecks);
         }
 
         /// <summary>
         /// Set the enrollmentchecks
         /// </summary>
         /// <returns>void</returns>
-        public void enrollmentchecks(List<EnrollmentChecks> data)
+        public void Enrollmentchecks(List<EnrollmentChecks> data)
         {
-            this.setProperty(ThreeDSecureConstants.enrollmentchecks, data);
+            SetProperty(GlobalConstants.Enrollmentchecks, data);
         }
 
         /// <summary>
@@ -336,16 +334,16 @@ namespace Paysafe.ThreeDSecure
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated Authentications object
         /// </summary>
-        public class AuthenticationsBuilder : BaseJSONBuilder<Authentications>
+        public class AuthenticationsBuilder : BaseJsonBuilder<Authentications>
         {
             /// <summary>
             /// Set the id parameter
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder id(string data)
+            public AuthenticationsBuilder Id(string data)
             {
-                this.properties[ThreeDSecureConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -354,9 +352,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder merchantRefNum(string data)
+            public AuthenticationsBuilder MerchantRefNum(string data)
             {
-                this.properties[ThreeDSecureConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -365,9 +363,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder paResp(string data)
+            public AuthenticationsBuilder PaResp(string data)
             {
-                this.properties[ThreeDSecureConstants.paResp] = data;
+                Properties[GlobalConstants.PaResp] = data;
                 return this;
             }
 
@@ -376,9 +374,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder customerIp(string data)
+            public AuthenticationsBuilder CustomerIp(string data)
             {
-                this.properties[ThreeDSecureConstants.customerIp] = data;
+                Properties[GlobalConstants.CustomerIp] = data;
                 return this;
             }
 
@@ -387,9 +385,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>DateTime</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder txnTime(DateTime data)
+            public AuthenticationsBuilder TxnTime(DateTime data)
             {
-                this.properties[ThreeDSecureConstants.txnTime] = data;
+                Properties[GlobalConstants.TxnTime] = data;
                 return this;
             }
 
@@ -397,13 +395,13 @@ namespace Paysafe.ThreeDSecure
             /// Build a Error object within this Authentications.
             /// </summary>
             /// <returns>Error.ErrorBuilder<AuthenticationsBuilder></returns>
-            public Error.ErrorBuilder<AuthenticationsBuilder> error()
+            public Error.ErrorBuilder<AuthenticationsBuilder> Error()
             {
-                if (!this.properties.ContainsKey(ThreeDSecureConstants.error))
+                if (!Properties.ContainsKey(GlobalConstants.Error))
                 {
-                    this.properties[ThreeDSecureConstants.error] = new Error.ErrorBuilder<AuthenticationsBuilder>(this);
+                    Properties[GlobalConstants.Error] = new Error.ErrorBuilder<AuthenticationsBuilder>(this);
                 }
-                return this.properties[ThreeDSecureConstants.error] as Error.ErrorBuilder<AuthenticationsBuilder>;
+                return Properties[GlobalConstants.Error] as Error.ErrorBuilder<AuthenticationsBuilder>;
             }
 
             /// <summary>
@@ -411,9 +409,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder status(string data)
+            public AuthenticationsBuilder Status(string data)
             {
-                this.properties[ThreeDSecureConstants.status] = data;
+                Properties[GlobalConstants.Status] = data;
                 return this;
             }
 
@@ -422,9 +420,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder threeDResult(string data)
+            public AuthenticationsBuilder ThreeDResult(string data)
             {
-                this.properties[ThreeDSecureConstants.threeDResult] = data;
+                Properties[GlobalConstants.ThreeDResult] = data;
                 return this;
             }
 
@@ -433,9 +431,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder signatureStatus(string data)
+            public AuthenticationsBuilder SignatureStatus(string data)
             {
-                this.properties[ThreeDSecureConstants.signatureStatus] = data;
+                Properties[GlobalConstants.SignatureStatus] = data;
                 return this;
             }
 
@@ -444,9 +442,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>Integer</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder eci(int data)
+            public AuthenticationsBuilder Eci(int data)
             {
-                this.properties[ThreeDSecureConstants.eci] = data;
+                Properties[GlobalConstants.Eci] = data;
                 return this;
             }
 
@@ -455,9 +453,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder cavv(string data)
+            public AuthenticationsBuilder Cavv(string data)
             {
-                this.properties[ThreeDSecureConstants.cavv] = data;
+                Properties[GlobalConstants.Cavv] = data;
                 return this;
             }
 
@@ -466,9 +464,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder xid(string data)
+            public AuthenticationsBuilder Xid(string data)
             {
-                this.properties[ThreeDSecureConstants.xid] = data;
+                Properties[GlobalConstants.Xid] = data;
                 return this;
             }
 
@@ -477,9 +475,9 @@ namespace Paysafe.ThreeDSecure
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationsBuilder</returns>
-            public AuthenticationsBuilder enrollmentId(string data)
+            public AuthenticationsBuilder EnrollmentId(string data)
             {
-                this.properties[ThreeDSecureConstants.enrollmentId] = data;
+                Properties[GlobalConstants.EnrollmentId] = data;
                 return this;
             }
         }

@@ -16,40 +16,38 @@
 * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 namespace Paysafe.CustomerVault
 {
     public class BillingAddress : AddressDetails
     {
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>(addressFieldTypes);
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>(AddressFieldTypes);
 
         public BillingAddress(Dictionary<string, object> properties)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
 
         /// <summary>
-        /// BillingAddressBuilder<typeparam name="TBLDR"></typeparam> will allow a BillingAddress to be initialized
+        /// BillingAddressBuilder<typeparam name="TBldr"></typeparam> will allow a BillingAddress to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class BillingAddressBuilder<TBLDR> : NestedJSONBuilder<BillingAddress, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class BillingAddressBuilder<TBldr> : NestedJsonBuilder<BillingAddress, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the BillingDetails builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public BillingAddressBuilder(TBLDR parent)
+            public BillingAddressBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -57,9 +55,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> nickName(string data)
+            public BillingAddressBuilder<TBldr> NickName(string data)
             {
-                this.properties[CustomerVaultConstants.nickName] = data;
+                Properties[GlobalConstants.NickName] = data;
                 return this;
             }
 
@@ -68,9 +66,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> street(string data)
+            public BillingAddressBuilder<TBldr> Street(string data)
             {
-                this.properties[CustomerVaultConstants.street] = data;
+                Properties[GlobalConstants.Street] = data;
                 return this;
             }
 
@@ -79,9 +77,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> street2(string data)
+            public BillingAddressBuilder<TBldr> Street2(string data)
             {
-                this.properties[CustomerVaultConstants.street2] = data;
+                Properties[GlobalConstants.Street2] = data;
                 return this;
             }
 
@@ -90,9 +88,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> city(string data)
+            public BillingAddressBuilder<TBldr> City(string data)
             {
-                this.properties[CustomerVaultConstants.city] = data;
+                Properties[GlobalConstants.City] = data;
                 return this;
             }
 
@@ -101,9 +99,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> state(string data)
+            public BillingAddressBuilder<TBldr> State(string data)
             {
-                this.properties[CustomerVaultConstants.state] = data;
+                Properties[GlobalConstants.State] = data;
                 return this;
             }
 
@@ -112,9 +110,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> country(string data)
+            public BillingAddressBuilder<TBldr> Country(string data)
             {
-                this.properties[CustomerVaultConstants.country] = data;
+                Properties[GlobalConstants.Country] = data;
                 return this;
             }
 
@@ -123,9 +121,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> zip(string data)
+            public BillingAddressBuilder<TBldr> Zip(string data)
             {
-                this.properties[CustomerVaultConstants.zip] = data;
+                Properties[GlobalConstants.Zip] = data;
                 return this;
             }
 
@@ -134,9 +132,9 @@ namespace Paysafe.CustomerVault
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>BillingAddressBuilder<TBLDR></returns>
-            public BillingAddressBuilder<TBLDR> phone(string data)
+            public BillingAddressBuilder<TBldr> Phone(string data)
             {
-                this.properties[CustomerVaultConstants.phone] = data;
+                Properties[GlobalConstants.Phone] = data;
                 return this;
             }
         }

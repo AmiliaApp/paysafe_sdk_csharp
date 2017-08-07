@@ -19,21 +19,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is StandaloneCredits class.
-    public class StandaloneCredits : Paysafe.Common.JSONObject
+    public class StandaloneCredits : JsonObject
     {
         /// <summary>
         /// Initialize the StandaloneCredits object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public StandaloneCredits(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
@@ -42,38 +40,38 @@ namespace Paysafe.DirectDebit
         /// </summary>
         /// <param name="id"></param>
         public StandaloneCredits(String id)
-            : base(fieldTypes)
+            : base(_fieldTypes)
         {
-            this.id(id);
+            Id(id);
         }
 
         /// <summary>
         /// Gets the array key to access the array of StandaloneCredits
         /// </summary>
         /// <returns>The key to be checked in the returning JSON</returns>
-        public static string getPageableArrayKey()
+        public static string GetPageableArrayKey()
         {
             return "standaloneCredits";
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {DirectDebitConstants.id, STRING_TYPE},
-            {DirectDebitConstants.merchantRefNum,STRING_TYPE },
-            {DirectDebitConstants.amount,INT_TYPE},
-            {DirectDebitConstants.ach, typeof(ACHBankAccounts)},
-            {DirectDebitConstants.eft, typeof(EFTBankAccounts)},
-            {DirectDebitConstants.bacs, typeof(BACSBankAccounts)},          
-            {DirectDebitConstants.profile,typeof(Profile)},
-            {DirectDebitConstants.billingDetails, typeof(BillingDetails)},
-            {DirectDebitConstants.shippingDetails, typeof(ShippingDetails)},
-            {DirectDebitConstants.customerIp, STRING_TYPE},
-            {DirectDebitConstants.dupCheck, BOOL_TYPE},
-            {DirectDebitConstants.txnTime, typeof(DateTime)},
-            {DirectDebitConstants.currencyCode,STRING_TYPE},
-            {DirectDebitConstants.error, typeof(OptError)},
-            {DirectDebitConstants.status, DirectDebitConstants.enumStatus},
-            {DirectDebitConstants.links, typeof(List<Link>)}
+            {GlobalConstants.Id, StringType},
+            {GlobalConstants.MerchantRefNum,StringType },
+            {GlobalConstants.Amount,IntType},
+            {GlobalConstants.Ach, typeof(AchBankAccounts)},
+            {GlobalConstants.Eft, typeof(EftBankAccounts)},
+            {GlobalConstants.Bacs, typeof(BacsBankAccounts)},          
+            {GlobalConstants.Profile,typeof(Profile)},
+            {GlobalConstants.BillingDetails, typeof(BillingDetails)},
+            {GlobalConstants.ShippingDetails, typeof(ShippingDetails)},
+            {GlobalConstants.CustomerIp, StringType},
+            {GlobalConstants.DupCheck, BoolType},
+            {GlobalConstants.TxnTime, typeof(DateTime)},
+            {GlobalConstants.CurrencyCode,StringType},
+            {GlobalConstants.Error, typeof(OptError)},
+            {GlobalConstants.Status, DirectDebitConstants.EnumStatus},
+            {GlobalConstants.Links, typeof(List<Link>)}
             
         };
 
@@ -81,108 +79,108 @@ namespace Paysafe.DirectDebit
         /// Get the id
         /// </summary>
         /// <returns>string</returns>
-        public string id()
+        public string Id()
         {
-            return this.getProperty(DirectDebitConstants.id);
+            return GetProperty(GlobalConstants.Id);
         }
 
         /// <summary>
         /// Set the id
         /// </summary>
         /// <returns>void</returns>
-        public void id(string data)
+        public void Id(string data)
         {
-            this.setProperty(DirectDebitConstants.id, data);
+            SetProperty(GlobalConstants.Id, data);
         }
 
         /// <summary>
         /// Get the merchantRefNum
         /// </summary>
         /// <returns>string</returns>
-        public string merchantRefNum()
+        public string MerchantRefNum()
         {
-            return this.getProperty(DirectDebitConstants.merchantRefNum);
+            return GetProperty(GlobalConstants.MerchantRefNum);
         }
 
         /// <summary>
         /// Set the merchantRefNum
         /// </summary>
         /// <returns>void</returns>
-        public void merchantRefNum(string data)
+        public void MerchantRefNum(string data)
         {
-            this.setProperty(DirectDebitConstants.merchantRefNum, data);
+            SetProperty(GlobalConstants.MerchantRefNum, data);
         }
 
         /// <summary>
         /// Get the amount
         /// </summary>
         /// <returns>int</returns>
-        public int amount()
+        public int Amount()
         {
-            return this.getProperty(DirectDebitConstants.amount);
+            return GetProperty(GlobalConstants.Amount);
         }
 
         /// <summary>
         /// Set the amount
         /// </summary>
         /// <returns>void</returns>
-        public void amount(int data)
+        public void Amount(int data)
         {
-            this.setProperty(DirectDebitConstants.amount, data);
+            SetProperty(GlobalConstants.Amount, data);
         }
 
         /// <summary>
         /// Get the ach
         /// </summary>
         /// <returns>ACHBankAccount</returns>
-        public ACHBankAccounts ach()
+        public AchBankAccounts Ach()
         {
-            return this.getProperty(DirectDebitConstants.ach);
+            return GetProperty(GlobalConstants.Ach);
         }
 
         /// <summary>
         /// Set the ach
         /// </summary>
         /// <returns>void</returns>
-        public void ach(ACHBankAccounts data)
+        public void Ach(AchBankAccounts data)
         {
-            this.setProperty(DirectDebitConstants.ach, data);
+            SetProperty(GlobalConstants.Ach, data);
         }
 
         /// <summary>
         /// Get the eft
         /// </summary>
         /// <returns>EFTBankAccount</returns>
-        public EFTBankAccounts eft()
+        public EftBankAccounts Eft()
         {
-            return this.getProperty(DirectDebitConstants.eft);
+            return GetProperty(GlobalConstants.Eft);
         }
 
         /// <summary>
         /// Set the eft
         /// </summary>
         /// <returns>void</returns>
-        public void eft(EFTBankAccounts data)
+        public void Eft(EftBankAccounts data)
         {
-            this.setProperty(DirectDebitConstants.eft, data);
+            SetProperty(GlobalConstants.Eft, data);
         }
 
         /// <summary>
         /// Get the bacs
         /// </summary>
         /// <returns>BACSBankAccount</returns>
-        public BACSBankAccounts bacs()
+        public BacsBankAccounts Bacs()
         {
-            return this.getProperty(DirectDebitConstants.bacs);
+            return GetProperty(GlobalConstants.Bacs);
         }
 
         /// <summary>
         /// Set the bacs
         /// </summary>
         /// <returns>void</returns>
-        public void bacs(BACSBankAccounts data)
+        public void Bacs(BacsBankAccounts data)
         {
-            this.setProperty(DirectDebitConstants.bacs, data);
+            SetProperty(GlobalConstants.Bacs, data);
         }
 
 
@@ -190,180 +188,180 @@ namespace Paysafe.DirectDebit
         /// Get the profile
         /// </summary>
         /// <returns>Profile</returns>
-        public Profile profile()
+        public Profile Profile()
         {
-            return this.getProperty(DirectDebitConstants.profile);
+            return GetProperty(GlobalConstants.Profile);
         }
 
         /// <summary>
         /// Set the profile
         /// </summary>
         /// <returns>void</returns>
-        public void profile(Profile data)
+        public void Profile(Profile data)
         {
-            this.setProperty(DirectDebitConstants.profile, data);
+            SetProperty(GlobalConstants.Profile, data);
         }
 
         /// <summary>
         /// Get the billingDetails
         /// </summary>
         /// <returns>string</returns>
-        public BillingDetails billingDetails()
+        public BillingDetails BillingDetails()
         {
-            return this.getProperty(DirectDebitConstants.billingDetails);
+            return GetProperty(GlobalConstants.BillingDetails);
         }
 
         /// <summary>
         /// Set the billingDetails
         /// </summary>
         /// <returns>void</returns>
-        public void billingDetails(BillingDetails data)
+        public void BillingDetails(BillingDetails data)
         {
-            this.setProperty(DirectDebitConstants.billingDetails, data);
+            SetProperty(GlobalConstants.BillingDetails, data);
         }
 
         /// <summary>
         /// Get the shippingDetails
         /// </summary>
         /// <returns>string</returns>
-        public ShippingDetails shippingDetails()
+        public ShippingDetails ShippingDetails()
         {
-            return this.getProperty(DirectDebitConstants.shippingDetails);
+            return GetProperty(GlobalConstants.ShippingDetails);
         }
 
         /// <summary>
         /// Set the shippingDetails
         /// </summary>
         /// <returns>void</returns>
-        public void shippingDetails(ShippingDetails data)
+        public void ShippingDetails(ShippingDetails data)
         {
-            this.setProperty(DirectDebitConstants.shippingDetails, data);
+            SetProperty(GlobalConstants.ShippingDetails, data);
         }
 
         /// <summary>
         /// Get the customerIp
         /// </summary>
         /// <returns>string</returns>
-        public string customerIp()
+        public string CustomerIp()
         {
-            return this.getProperty(DirectDebitConstants.customerIp);
+            return GetProperty(GlobalConstants.CustomerIp);
         }
 
         /// <summary>
         /// Set the customerIp
         /// </summary>
         /// <returns>void</returns>
-        public void customerIp(string data)
+        public void CustomerIp(string data)
         {
-            this.setProperty(DirectDebitConstants.customerIp, data);
+            SetProperty(GlobalConstants.CustomerIp, data);
         }
 
         /// <summary>
         /// Get the dupCheck
         /// </summary>
         /// <returns>bool</returns>
-        public bool dupCheck()
+        public bool DupCheck()
         {
-            return this.getProperty(DirectDebitConstants.dupCheck);
+            return GetProperty(GlobalConstants.DupCheck);
         }
 
         /// <summary>
         /// Set the dupCheck
         /// </summary>
         /// <returns>void</returns>
-        public void dupCheck(string data)
+        public void DupCheck(string data)
         {
-            this.setProperty(DirectDebitConstants.dupCheck, data);
+            SetProperty(GlobalConstants.DupCheck, data);
         }
 
         /// <summary>
         /// Get the txnTime
         /// </summary>
         /// <returns>DateTime</returns>
-        public DateTime txnTime()
+        public DateTime TxnTime()
         {
-            return this.getProperty(DirectDebitConstants.txnTime);
+            return GetProperty(GlobalConstants.TxnTime);
         }
 
         /// <summary>
         /// Set the txnTime
         /// </summary>
         /// <returns>void</returns>
-        public void txnTime(DateTime data)
+        public void TxnTime(DateTime data)
         {
-            this.setProperty(DirectDebitConstants.txnTime, data);
+            SetProperty(GlobalConstants.TxnTime, data);
         }
 
         /// <summary>
         /// Get the currencyCode
         /// </summary>
         /// <returns>string</returns>
-        public string currencyCode()
+        public string CurrencyCode()
         {
-            return this.getProperty(DirectDebitConstants.currencyCode);
+            return GetProperty(GlobalConstants.CurrencyCode);
         }
 
         /// <summary>
         /// Set the currencyCode
         /// </summary>
         /// <returns>void</returns>
-        public void currencyCode(string data)
+        public void CurrencyCode(string data)
         {
-            this.setProperty(DirectDebitConstants.currencyCode, data);
+            SetProperty(GlobalConstants.CurrencyCode, data);
         }
 
         /// <summary>
         /// Get the status
         /// </summary>
         /// <returns>string</returns>
-        public string status()
+        public string Status()
         {
-            return this.getProperty(DirectDebitConstants.status);
+            return GetProperty(GlobalConstants.Status);
         }
 
         /// <summary>
         /// Set the status
         /// </summary>
         /// <returns>void</returns>
-        public void status(string data)
+        public void Status(string data)
         {
-            this.setProperty(DirectDebitConstants.status, data);
+            SetProperty(GlobalConstants.Status, data);
         }
 
         /// <summary>
         /// Get the error
         /// </summary>
         /// <returns>OptError</returns>
-        public OptError error()
+        public OptError Error()
         {
-            return this.getProperty(DirectDebitConstants.error);
+            return GetProperty(GlobalConstants.Error);
         }
 
         /// <summary>
         /// Set the error
         /// </summary>
         /// <returns>void</returns>
-        public void error(OptError data)
+        public void Error(OptError data)
         {
-            this.setProperty(DirectDebitConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
 
          /// <summary>
         /// Get the Links
         /// </summary>
         /// <returns>Link</returns>
-        public List<Link> links()
+        public List<Link> Links()
         {
-            return this.getProperty(DirectDebitConstants.links);
+            return GetProperty(GlobalConstants.Links);
         }
 
         /// <summary>
         /// Set the Links
         /// </summary>
         /// <returns>void</returns>
-        public void links(List<Link> data)
+        public void Links(List<Link> data)
         {
-            this.setProperty(DirectDebitConstants.error, data);
+            SetProperty(GlobalConstants.Error, data);
         }
        
         public static StandaloneCreditsBuilder Builder()
@@ -376,7 +374,7 @@ namespace Paysafe.DirectDebit
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated Profile object
         /// </summary>
-        public class StandaloneCreditsBuilder : BaseJSONBuilder<StandaloneCredits>
+        public class StandaloneCreditsBuilder : BaseJsonBuilder<StandaloneCredits>
         {
 
             /// <summary>
@@ -384,9 +382,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder id(string data)
+            public StandaloneCreditsBuilder Id(string data)
             {
-                this.properties[DirectDebitConstants.id] = data;
+                Properties[GlobalConstants.Id] = data;
                 return this;
             }
 
@@ -395,9 +393,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder merchantRefNum(string data)
+            public StandaloneCreditsBuilder MerchantRefNum(string data)
             {
-                this.properties[DirectDebitConstants.merchantRefNum] = data;
+                Properties[GlobalConstants.MerchantRefNum] = data;
                 return this;
             }
 
@@ -406,9 +404,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>List<string></param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder amount(int data)
+            public StandaloneCreditsBuilder Amount(int data)
             {
-                this.properties[DirectDebitConstants.amount] = data;
+                Properties[GlobalConstants.Amount] = data;
                 return this;
             }
 
@@ -416,65 +414,65 @@ namespace Paysafe.DirectDebit
             /// Build a ACHBankAccount within this authorization.
             /// </summary>
             /// <returns>ACHBankAccount.ACHAccountBuilder<ProfileBuilder></returns>
-            public ACHBankAccounts.ACHAccountBuilder<StandaloneCreditsBuilder> ach()
+            public AchBankAccounts.AchAccountBuilder<StandaloneCreditsBuilder> Ach()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.ach))
+                if (!Properties.ContainsKey(GlobalConstants.Ach))
                 {
-                    this.properties[DirectDebitConstants.ach] = new ACHBankAccounts.ACHAccountBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.Ach] = new AchBankAccounts.AchAccountBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.ach] as ACHBankAccounts.ACHAccountBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.Ach] as AchBankAccounts.AchAccountBuilder<StandaloneCreditsBuilder>;
             }
 
             /// <summary>
             /// Build a BACSBankAccount within this authorization.
             /// </summary>
             /// <returns>BACSBankAccount.BACSBankAccountBuilder></returns>
-            public BACSBankAccounts.BACSBankAccountBuilder<StandaloneCreditsBuilder> bacs()
+            public BacsBankAccounts.BacsBankAccountBuilder<StandaloneCreditsBuilder> Bacs()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.bacs))
+                if (!Properties.ContainsKey(GlobalConstants.Bacs))
                 {
-                    this.properties[DirectDebitConstants.bacs] = new BACSBankAccounts.BACSBankAccountBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.Bacs] = new BacsBankAccounts.BacsBankAccountBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.bacs] as BACSBankAccounts.BACSBankAccountBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.Bacs] as BacsBankAccounts.BacsBankAccountBuilder<StandaloneCreditsBuilder>;
             }
 
             /// <summary>
             /// Build a EFTBankAccount within this authorization.
             /// </summary>
             /// <returns>EFTBankAccount.EFTAccountBuilder</returns>
-            public EFTBankAccounts.EFTAccountBuilder<StandaloneCreditsBuilder> eft()
+            public EftBankAccounts.EftAccountBuilder<StandaloneCreditsBuilder> Eft()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.eft))
+                if (!Properties.ContainsKey(GlobalConstants.Eft))
                 {
-                    this.properties[DirectDebitConstants.eft] = new EFTBankAccounts.EFTAccountBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.Eft] = new EftBankAccounts.EftAccountBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.eft] as EFTBankAccounts.EFTAccountBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.Eft] as EftBankAccounts.EftAccountBuilder<StandaloneCreditsBuilder>;
             }
 
             /// <summary>
             /// Build a profile within this authorization.
             /// </summary>
             /// <returns>profile.profileBuilder<ProfileBuilder></returns>
-            public Profile.ProfileBuilder<StandaloneCreditsBuilder> profile()
+            public Profile.ProfileBuilder<StandaloneCreditsBuilder> Profile()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.profile))
+                if (!Properties.ContainsKey(GlobalConstants.Profile))
                 {
-                    this.properties[DirectDebitConstants.profile] = new Profile.ProfileBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.Profile] = new Profile.ProfileBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.profile] as Profile.ProfileBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.Profile] as Profile.ProfileBuilder<StandaloneCreditsBuilder>;
             }
 
             /// <summary>
             /// Build a billing details object within this authorization.
             /// </summary>
             /// <returns>BillingDetails.BillingDetailsBuilder<AuthorizationBuilder></returns>
-            public BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder> billingDetails()
+            public BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder> BillingDetails()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.billingDetails))
+                if (!Properties.ContainsKey(GlobalConstants.BillingDetails))
                 {
-                    this.properties[DirectDebitConstants.billingDetails] = new BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.BillingDetails] = new BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.billingDetails] as BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.BillingDetails] as BillingDetails.BillingDetailsBuilder<StandaloneCreditsBuilder>;
             }
 
 
@@ -482,13 +480,13 @@ namespace Paysafe.DirectDebit
             /// Build a ShippingDetails within this authorization.
             /// </summary>
             /// <returns>ShippingDetails.ShippingDetailsBuilder<ProfileBuilder></returns>
-            public ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder> dateOfBirth()
+            public ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder> DateOfBirth()
             {
-                if (!this.properties.ContainsKey(DirectDebitConstants.dateOfBirth))
+                if (!Properties.ContainsKey(GlobalConstants.DateOfBirth))
                 {
-                    this.properties[DirectDebitConstants.dateOfBirth] = new ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder>(this);
+                    Properties[GlobalConstants.DateOfBirth] = new ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder>(this);
                 }
-                return this.properties[DirectDebitConstants.dateOfBirth] as ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder>;
+                return Properties[GlobalConstants.DateOfBirth] as ShippingDetails.ShippingDetailsBuilder<StandaloneCreditsBuilder>;
             }
 
 
@@ -498,9 +496,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder customerIp(string data)
+            public StandaloneCreditsBuilder CustomerIp(string data)
             {
-                this.properties[DirectDebitConstants.customerIp] = data;
+                Properties[GlobalConstants.CustomerIp] = data;
                 return this;
             }
 
@@ -509,9 +507,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder dupCheck(bool data)
+            public StandaloneCreditsBuilder DupCheck(bool data)
             {
-                this.properties[DirectDebitConstants.dupCheck] = data;
+                Properties[GlobalConstants.DupCheck] = data;
                 return this;
             }
 
@@ -520,9 +518,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder txnTime(DateTime data)
+            public StandaloneCreditsBuilder TxnTime(DateTime data)
             {
-                this.properties[DirectDebitConstants.txnTime] = data;
+                Properties[GlobalConstants.TxnTime] = data;
                 return this;
             }
 
@@ -531,9 +529,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder currencyCode(string data)
+            public StandaloneCreditsBuilder CurrencyCode(string data)
             {
-                this.properties[DirectDebitConstants.currencyCode] = data;
+                Properties[GlobalConstants.CurrencyCode] = data;
                 return this;
             }
 
@@ -542,9 +540,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>StandaloneCreditsBuilder</returns>
-            public StandaloneCreditsBuilder status(string data)
+            public StandaloneCreditsBuilder Status(string data)
             {
-                this.properties[DirectDebitConstants.status] = data;
+                Properties[GlobalConstants.Status] = data;
                 return this;
             }
         }

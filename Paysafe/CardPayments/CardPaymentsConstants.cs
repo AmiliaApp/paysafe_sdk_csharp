@@ -17,48 +17,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.CardPayments
 {
     /**
      * This class can be used to override any of the string literals from the global strings class
      */
-    class CardPaymentsConstants : Paysafe.Common.GlobalConstants
+    class CardPaymentsConstants : Common.GlobalConstants
     {
-        public static readonly List<string> enumAVSResponse = new List<string>() {
-            validationMatch,
-            validationMatchAddressOnly,
-            validationMatchZipOnly,
-            validationNoMatch,
-            validationNotProcessed,
-            validationUnknown
+        public static readonly List<string> EnumAvsResponse = new List<string>() {
+            ValidationMatch,
+            ValidationMatchAddressOnly,
+            ValidationMatchZipOnly,
+            ValidationNoMatch,
+            ValidationNotProcessed,
+            ValidationUnknown
         };
-        public static readonly List<string> enumCVVVerification = new List<string>() {
-            validationMatch,
-            validationNoMatch,
-            validationNotProcessed,
-            validationUnknown
+        public static readonly List<string> EnumCvvVerification = new List<string>() {
+            ValidationMatch,
+            ValidationNoMatch,
+            ValidationNotProcessed,
+            ValidationUnknown
 
         };
-        public static readonly List<string> enumFinancingType = new List<string>() {
-            financingDeferredPayment,
-            financingEqualPayment
+        public static readonly List<string> EnumFinancingType = new List<string>() {
+            FinancingDeferredPayment,
+            FinancingEqualPayment
         };
-        public static readonly List<string> enumRecurring = new List<string>() {
-            recurringInitial,
-            recurringRecurring
+        public static readonly List<string> EnumRecurring = new List<string>() {
+            RecurringInitial,
+            RecurringRecurring
         };
-        public static readonly List<string> enumStatus = new List<string>() {
-            statusReceived,
-            statusPending,
-            statusProcessing,
-            statusCompleted,
-            statusFailed,
-            statusCancelled
+
+        public static readonly List<string> EnumStatus = new List<string>() {
+            StatusReceived,
+            StatusPending,
+            StatusProcessing,
+            StatusCompleted,
+            StatusFailed,
+            StatusCancelled
         };
     }
 }

@@ -17,33 +17,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is SEPABankAccounts class.
-    public class SEPABankAccounts : Paysafe.Common.JSONObject
+    public class SepaBankAccounts : JsonObject
     {
         /// <summary>
         /// Initialize the SEPABankAccounts object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
-        public SEPABankAccounts(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+        public SepaBankAccounts(Dictionary<string, object> properties = null)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {DirectDebitConstants.paymentToken,STRING_TYPE}, 
-            {DirectDebitConstants.mandateReference,STRING_TYPE}, 
-            {DirectDebitConstants.accountHolderName,STRING_TYPE}, 
-            {DirectDebitConstants.iban,STRING_TYPE}, 
-            {DirectDebitConstants.lastDigits,STRING_TYPE}, 
+            {GlobalConstants.PaymentToken,StringType}, 
+            {GlobalConstants.MandateReference,StringType}, 
+            {GlobalConstants.AccountHolderName,StringType}, 
+            {GlobalConstants.Iban,StringType}, 
+            {GlobalConstants.LastDigits,StringType}, 
                                        
         };
 
@@ -51,87 +48,87 @@ namespace Paysafe.DirectDebit
         /// Get the paymentToken
         /// </summary>
         /// <returns>string</returns>
-        public string paymentToken()
+        public string PaymentToken()
         {
-            return this.getProperty(DirectDebitConstants.paymentToken);
+            return GetProperty(GlobalConstants.PaymentToken);
         }
 
         /// <summary>
         /// Set the paymentToken
         /// </summary>
         /// <returns>void</returns>
-        public void paymentToken(string data)
+        public void PaymentToken(string data)
         {
-            this.setProperty(DirectDebitConstants.paymentToken, data);
+            SetProperty(GlobalConstants.PaymentToken, data);
         }
 
         /// <summary>
         /// Get the mandateReference
         /// </summary>
         /// <returns>string</returns>
-        public string mandateReference()
+        public string MandateReference()
         {
-            return this.getProperty(DirectDebitConstants.mandateReference);
+            return GetProperty(GlobalConstants.MandateReference);
         }
 
         /// <summary>
         /// Set the mandateReference
         /// </summary>
         /// <returns>void</returns>
-        public void mandateReference(string data)
+        public void MandateReference(string data)
         {
-            this.setProperty(DirectDebitConstants.mandateReference, data);
+            SetProperty(GlobalConstants.MandateReference, data);
         }
         /// <summary>
         /// Get the accountHolderName
         /// </summary>
         /// <returns>string</returns>
-        public string accountHolderName()
+        public string AccountHolderName()
         {
-            return this.getProperty(DirectDebitConstants.accountHolderName);
+            return GetProperty(GlobalConstants.AccountHolderName);
         }
 
         /// <summary>
         /// Set the accountHolderName
         /// </summary>
         /// <returns>void</returns>
-        public void accountHolderName(string data)
+        public void AccountHolderName(string data)
         {
-            this.setProperty(DirectDebitConstants.accountHolderName, data);
+            SetProperty(GlobalConstants.AccountHolderName, data);
         }
         /// <summary>
         /// Get the iban
         /// </summary>
         /// <returns>string</returns>
-        public string iban()
+        public string Iban()
         {
-            return this.getProperty(DirectDebitConstants.iban);
+            return GetProperty(GlobalConstants.Iban);
         }
 
         /// <summary>
         /// Set the iban
         /// </summary>
         /// <returns>void</returns>
-        public void iban(string data)
+        public void Iban(string data)
         {
-            this.setProperty(DirectDebitConstants.iban, data);
+            SetProperty(GlobalConstants.Iban, data);
         }
         /// <summary>
         /// Get the lastDigits
         /// </summary>
         /// <returns>string</returns>
-        public string lastDigits()
+        public string LastDigits()
         {
-            return this.getProperty(DirectDebitConstants.lastDigits);
+            return GetProperty(GlobalConstants.LastDigits);
         }
 
         /// <summary>
         /// Set the lastDigits
         /// </summary>
         /// <returns>void</returns>
-        public void lastDigits(string data)
+        public void LastDigits(string data)
         {
-            this.setProperty(DirectDebitConstants.lastDigits, data);
+            SetProperty(GlobalConstants.LastDigits, data);
         }
        
         /// <summary>
@@ -139,18 +136,18 @@ namespace Paysafe.DirectDebit
         /// set all properties and subpropeties, then trigger .Build() to 
         /// get the generated SEPABankAccount object
         /// </summary>
-        public class SEPAAccountBuilder<TBLDR> : NestedJSONBuilder<SEPABankAccounts, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class SepaAccountBuilder<TBldr> : NestedJsonBuilder<SepaBankAccounts, TBldr>
+            where TBldr : GenericJsonBuilder
         {
 
            /// <summary>
             /// Initialize the SEPAAccountBuilder builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public SEPAAccountBuilder(TBLDR parent)
+            public SepaAccountBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -158,9 +155,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SEPAAccountBuilder<TBLDR></returns>
-            public SEPAAccountBuilder<TBLDR> paymentToken(string data)
+            public SepaAccountBuilder<TBldr> PaymentToken(string data)
             {
-                this.properties[DirectDebitConstants.paymentToken] = data;
+                Properties[GlobalConstants.PaymentToken] = data;
                 return this;
             }
             
@@ -169,9 +166,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SEPAAccountBuilder<TBLDR></returns>
-            public SEPAAccountBuilder<TBLDR> mandateReference(string data)
+            public SepaAccountBuilder<TBldr> MandateReference(string data)
             {
-                this.properties[DirectDebitConstants.mandateReference] = data;
+                Properties[GlobalConstants.MandateReference] = data;
                 return this;
             }
 
@@ -180,9 +177,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SEPAAccountBuilder<TBLDR></returns>
-            public SEPAAccountBuilder<TBLDR> accountHolderName(string data)
+            public SepaAccountBuilder<TBldr> AccountHolderName(string data)
             {
-                this.properties[DirectDebitConstants.accountHolderName] = data;
+                Properties[GlobalConstants.AccountHolderName] = data;
                 return this;
             }
           
@@ -191,9 +188,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SEPAAccountBuilder<TBLDR></returns>
-            public SEPAAccountBuilder<TBLDR> iban(string data)
+            public SepaAccountBuilder<TBldr> Iban(string data)
             {
-                this.properties[DirectDebitConstants.iban] = data;
+                Properties[GlobalConstants.Iban] = data;
                 return this;
             }          
 
@@ -202,9 +199,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>SEPAAccountBuilder<TBLDR></returns>
-            public SEPAAccountBuilder<TBLDR> lastDigits(string data)
+            public SepaAccountBuilder<TBldr> LastDigits(string data)
             {
-                this.properties[DirectDebitConstants.lastDigits] = data;
+                Properties[GlobalConstants.LastDigits] = data;
                 return this;
             }
 

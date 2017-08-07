@@ -17,33 +17,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.CustomerVault
 {
-    public class CustomerVaultConstants : Paysafe.Common.GlobalConstants
+    public class CustomerVaultConstants : Common.GlobalConstants
     {
-        public static readonly List<string> enumStatus = new List<string>() {
-            statusInitial,
-            statusActive,
-            statusInvalid,
-            statusInactive,
-            statusPending,
-            statusDeclined,
-            statusBatched,
-            statusCancelled,
-            statusRejected,
-            statusDisputed
+        public static readonly List<string> EnumStatus = new List<string>() {
+            StatusInitial,
+            StatusActive,
+            StatusInvalid,
+            StatusInactive,
+            StatusPending,
+            StatusDeclined,
+            StatusBatched,
+            StatusCancelled,
+            StatusRejected,
+            StatusDisputed
         };
 
-       public static readonly List<string> enumAccountType = new List<string>
+       public static readonly List<string> EnumAccountType = new List<string>
         {
-            accountTypeChecking,
-            accountTypeLoan,
-            accountTypeSavings
+            AccountTypeChecking,
+            AccountTypeLoan,
+            AccountTypeSavings
         };
     }
 }

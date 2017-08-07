@@ -17,28 +17,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.Common
 {
-    public class Link: JSONObject
+    public class Link: JsonObject
     {
         /// <summary>
         /// Initialize the Link object with some set of properties
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public Link(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
          {
-             {CommonConstants.rel, STRING_TYPE},
-             {CommonConstants.href, URL_TYPE}
+             {GlobalConstants.Rel, StringType},
+             {GlobalConstants.Href, UrlType}
          };
 
 
@@ -46,36 +43,33 @@ namespace Paysafe.Common
         /// Get the rel
         /// </summary>
         /// <returns>string</returns>
-        public string rel()
+        public string Rel()
         {
-            return this.getProperty(CommonConstants.rel);
+            return GetProperty(GlobalConstants.Rel);
         }
 
         /// <summary>
         /// Set the rel
         /// </summary>
         /// <returns>void</returns>
-        public void rel(string data)
+        public void Rel(string data)
         {
-            this.setProperty(CommonConstants.rel, data);
+            SetProperty(GlobalConstants.Rel, data);
         }
 
         /// <summary>
         /// Get the href
         /// </summary>
         /// <returns>string</returns>
-        public string href()
-        {
-            return this.getProperty(CommonConstants.href);
-        }
+        public string Href() => GetProperty(GlobalConstants.Href);
 
         /// <summary>
         /// Set the href
         /// </summary>
         /// <returns>void</returns>
-        public void href(string data)
+        public void Href(string data)
         {
-            this.setProperty(CommonConstants.href, data);
+            SetProperty(GlobalConstants.Href, data);
         }
 
     }

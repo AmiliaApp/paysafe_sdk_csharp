@@ -17,30 +17,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Paysafe.DirectDebit
 {
     //Created by Manjiri.Bankar on 03.05.2016. This is DirectDebitConstants class.
-    class DirectDebitConstants : Paysafe.Common.GlobalConstants
+    class DirectDebitConstants : Common.GlobalConstants
     {
-        public static readonly List<string> enumStatus = new List<string>() { 
-            statusReceived,         
-            statusPending, 
-            statusProcessing,
-            statusCompleted,
-            statusFailed,
-            statusCancelled,           
+        public static readonly List<string> EnumStatus = new List<string>() { 
+            StatusReceived,         
+            StatusPending, 
+            StatusProcessing,
+            StatusCompleted,
+            StatusFailed,
+            StatusCancelled,           
         };
 
-        public static readonly List<string> enumPaymentType = new List<string>() { 
-            WEB,         
-            TEL, 
-            PPD,
-            CCD,                    
+        public static readonly List<string> EnumPaymentType = new List<string>() { 
+            Web,         
+            Tel, 
+            Ppd,
+            Ccd,                    
         };
     }
 }

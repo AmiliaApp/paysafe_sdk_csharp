@@ -27,7 +27,7 @@ namespace Paysafe
 {
     public enum Environment
     {
-        LIVE,
-        TEST
+        Live,
+        Test
     }
 }

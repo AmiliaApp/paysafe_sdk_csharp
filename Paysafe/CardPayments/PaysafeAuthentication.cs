@@ -17,16 +17,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Paysafe.Common;
 
 
 namespace Paysafe.CardPayments
 {
-    public class PaysafeAuthentication : JSONObject
+    public class PaysafeAuthentication : JsonObject
     {
 
         /// <summary>
@@ -34,145 +31,145 @@ namespace Paysafe.CardPayments
         /// </summary>
         /// <param name="properties">Dictionary<string, object></param>
         public PaysafeAuthentication(Dictionary<string, object> properties = null)
-            : base(fieldTypes, properties)
+            : base(_fieldTypes, properties)
         {
         }
 
-        private static new Dictionary<string, object> fieldTypes = new Dictionary<string, object>
+        private new static Dictionary<string, object> _fieldTypes = new Dictionary<string, object>
         {
-            {CardPaymentsConstants.eci, INT_TYPE},
-            {CardPaymentsConstants.cavv, STRING_TYPE},
-            {CardPaymentsConstants.xid, STRING_TYPE},
-            {CardPaymentsConstants.threeDEnrollment, STRING_TYPE},
-            {CardPaymentsConstants.threeDResult, STRING_TYPE},
-            {CardPaymentsConstants.signatureStatus, STRING_TYPE}
+            {GlobalConstants.Eci, IntType},
+            {GlobalConstants.Cavv, StringType},
+            {GlobalConstants.Xid, StringType},
+            {GlobalConstants.ThreeDEnrollment, StringType},
+            {GlobalConstants.ThreeDResult, StringType},
+            {GlobalConstants.SignatureStatus, StringType}
         };
 
         /// <summary>
         /// Get the eci
         /// </summary>
         /// <returns>int</returns>
-        public int eci()
+        public int Eci()
         {
-            return this.getProperty(CardPaymentsConstants.eci);
+            return GetProperty(GlobalConstants.Eci);
         }
 
         /// <summary>
         /// Set the eci
         /// </summary>
         /// <returns>void</returns>
-        public void eci(int data)
+        public void Eci(int data)
         {
-            this.setProperty(CardPaymentsConstants.eci, data);
+            SetProperty(GlobalConstants.Eci, data);
         }
 
         /// <summary>
         /// Get the cavv
         /// </summary>
         /// <returns>string</returns>
-        public string cavv()
+        public string Cavv()
         {
-            return this.getProperty(CardPaymentsConstants.cavv);
+            return GetProperty(GlobalConstants.Cavv);
         }
 
         /// <summary>
         /// Set the cavv
         /// </summary>
         /// <returns>void</returns>
-        public void cavv(string data)
+        public void Cavv(string data)
         {
-            this.setProperty(CardPaymentsConstants.cavv, data);
+            SetProperty(GlobalConstants.Cavv, data);
         }
 
         /// <summary>
         /// Get the xid
         /// </summary>
         /// <returns>string</returns>
-        public string xid()
+        public string Xid()
         {
-            return this.getProperty(CardPaymentsConstants.xid);
+            return GetProperty(GlobalConstants.Xid);
         }
 
         /// <summary>
         /// Set the xid
         /// </summary>
         /// <returns>void</returns>
-        public void xid(string data)
+        public void Xid(string data)
         {
-            this.setProperty(CardPaymentsConstants.xid, data);
+            SetProperty(GlobalConstants.Xid, data);
         }
 
         /// <summary>
         /// Get the threeDEnrollment
         /// </summary>
         /// <returns>string</returns>
-        public string threeDEnrollment()
+        public string ThreeDEnrollment()
         {
-            return this.getProperty(CardPaymentsConstants.threeDEnrollment);
+            return GetProperty(GlobalConstants.ThreeDEnrollment);
         }
 
         /// <summary>
         /// Set the threeDEnrollment
         /// </summary>
         /// <returns>void</returns>
-        public void threeDEnrollment(string data)
+        public void ThreeDEnrollment(string data)
         {
-            this.setProperty(CardPaymentsConstants.threeDEnrollment, data);
+            SetProperty(GlobalConstants.ThreeDEnrollment, data);
         }
 
         /// <summary>
         /// Get the threeDResult
         /// </summary>
         /// <returns>string</returns>
-        public string threeDResult()
+        public string ThreeDResult()
         {
-            return this.getProperty(CardPaymentsConstants.threeDResult);
+            return GetProperty(GlobalConstants.ThreeDResult);
         }
 
         /// <summary>
         /// Set the threeDResult
         /// </summary>
         /// <returns>void</returns>
-        public void threeDResult(string data)
+        public void ThreeDResult(string data)
         {
-            this.setProperty(CardPaymentsConstants.threeDResult, data);
+            SetProperty(GlobalConstants.ThreeDResult, data);
         }
 
         /// <summary>
         /// Get the signatureStatus
         /// </summary>
         /// <returns>string</returns>
-        public string signatureStatus()
+        public string SignatureStatus()
         {
-            return this.getProperty(CardPaymentsConstants.signatureStatus);
+            return GetProperty(GlobalConstants.SignatureStatus);
         }
 
         /// <summary>
         /// Set the signatureStatus
         /// </summary>
         /// <returns>void</returns>
-        public void signatureStatus(string data)
+        public void SignatureStatus(string data)
         {
-            this.setProperty(CardPaymentsConstants.signatureStatus, data);
+            SetProperty(GlobalConstants.SignatureStatus, data);
         }
 
 
         /// <summary>
-        /// AuthenticationBuilder<typeparam name="TBLDR"></typeparam> will allow a Authentication to be initialized
+        /// AuthenticationBuilder<typeparam name="TBldr"></typeparam> will allow a Authentication to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class AuthenticationBuilder<TBLDR> : NestedJSONBuilder<PaysafeAuthentication, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class AuthenticationBuilder<TBldr> : NestedJsonBuilder<PaysafeAuthentication, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the Authentication builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public AuthenticationBuilder(TBLDR parent)
+            public AuthenticationBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
 
@@ -181,9 +178,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> eci(int data)
+            public AuthenticationBuilder<TBldr> Eci(int data)
             {
-                this.properties[CardPaymentsConstants.eci] = data;
+                Properties[GlobalConstants.Eci] = data;
                 return this;
             }
 
@@ -192,9 +189,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> cavv(string data)
+            public AuthenticationBuilder<TBldr> Cavv(string data)
             {
-                this.properties[CardPaymentsConstants.cavv] = data;
+                Properties[GlobalConstants.Cavv] = data;
                 return this;
             }
 
@@ -203,9 +200,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> xid(string data)
+            public AuthenticationBuilder<TBldr> Xid(string data)
             {
-                this.properties[CardPaymentsConstants.xid] = data;
+                Properties[GlobalConstants.Xid] = data;
                 return this;
             }
 
@@ -214,9 +211,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> threeDEnrollment(string data)
+            public AuthenticationBuilder<TBldr> ThreeDEnrollment(string data)
             {
-                this.properties[CardPaymentsConstants.threeDEnrollment] = data;
+                Properties[GlobalConstants.ThreeDEnrollment] = data;
                 return this;
             }
 
@@ -225,9 +222,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> threeDResult(string data)
+            public AuthenticationBuilder<TBldr> ThreeDResult(string data)
             {
-                this.properties[CardPaymentsConstants.threeDResult] = data;
+                Properties[GlobalConstants.ThreeDResult] = data;
                 return this;
             }
 
@@ -236,9 +233,9 @@ namespace Paysafe.CardPayments
             /// </summary>
             /// <param name=data>string</param>
             /// <returns>AuthenticationBuilder<TBLDR></returns>
-            public AuthenticationBuilder<TBLDR> signatureStatus(string data)
+            public AuthenticationBuilder<TBldr> SignatureStatus(string data)
             {
-                this.properties[CardPaymentsConstants.signatureStatus] = data;
+                Properties[GlobalConstants.SignatureStatus] = data;
                 return this;
             }
 

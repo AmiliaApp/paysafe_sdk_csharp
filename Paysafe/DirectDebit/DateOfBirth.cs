@@ -17,11 +17,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json.Linq;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
@@ -39,26 +35,25 @@ namespace Paysafe.DirectDebit
         }
 
         public DateOfBirth()
-            : base()
         {
         }
 
         /// <summary>
-        /// DateOfBirthBuilder<typeparam name="TBLDR"></typeparam> will allow a DateOfBirth to be initialized
+        /// DateOfBirthBuilder<typeparam name="TBldr"></typeparam> will allow a DateOfBirth to be initialized
         /// within another builder. Set properties and subpropeties, then trigger .Done() to 
         /// get back to the parent builder
         /// </summary>
-        public class DateOfBirthBuilder<TBLDR> : NestedJSONBuilder<DateOfBirth, TBLDR>
-            where TBLDR : GenericJSONBuilder
+        public class DateOfBirthBuilder<TBldr> : NestedJsonBuilder<DateOfBirth, TBldr>
+            where TBldr : GenericJsonBuilder
         {
             /// <summary>
             /// Initialize the DateOfBirth builder within the context of a parent builder
             /// </summary>
             /// <param name="parent">TBLDR</param>
-            public DateOfBirthBuilder(TBLDR parent)
+            public DateOfBirthBuilder(TBldr parent)
                 : base(parent)
             {
-                this.parent = parent;
+                Parent = parent;
             }
 
             /// <summary>
@@ -66,9 +61,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>DateOfBirthBuilder<TBLDR></returns>
-            public DateOfBirthBuilder<TBLDR> day(int data)
+            public DateOfBirthBuilder<TBldr> Day(int data)
             {
-                this.properties[DirectDebitConstants.day] = data;
+                Properties[GlobalConstants.Day] = data;
                 return this;
             }
 
@@ -77,9 +72,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>DateOfBirthBuilder<TBLDR></returns>
-            public DateOfBirthBuilder<TBLDR> month(int data)
+            public DateOfBirthBuilder<TBldr> Month(int data)
             {
-                this.properties[DirectDebitConstants.month] = data;
+                Properties[GlobalConstants.Month] = data;
                 return this;
             }
 
@@ -88,9 +83,9 @@ namespace Paysafe.DirectDebit
             /// </summary>
             /// <param name=data>int</param>
             /// <returns>DateOfBirthBuilder<TBLDR></returns>
-            public DateOfBirthBuilder<TBLDR> year(int data)
+            public DateOfBirthBuilder<TBldr> Year(int data)
             {
-                this.properties[DirectDebitConstants.year] = data;
+                Properties[GlobalConstants.Year] = data;
                 return this;
             }
         }
