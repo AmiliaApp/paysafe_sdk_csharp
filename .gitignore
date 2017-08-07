@@ -23,4 +23,5 @@ _Upgrade*
 [Oo]bj
 
 
-copyOfPaysafe/
+#nuget packages
+*.nupkg
