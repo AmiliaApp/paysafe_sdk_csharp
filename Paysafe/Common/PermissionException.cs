@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace optimal.common
+namespace Paysafe.Common
 {
-    public class PermissionException : NetbanxException
+    public class PermissionException : PaysafeException
     {
         public PermissionException()
             : base()
