@@ -1,0 +1,24 @@
+#1
+
+In Paysafe project Properties update these fields for version information
+[assembly: AssemblyInformationalVersion("1.0.0-beta")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+#2
+Build the solution in release Any CPU
+
+#3
+https://github.com/AmiliaApp/paysafe_sdk_csharp/
+Create a release zip the release folder binaires and drag&drop the binaries in github
+
+#4
+update the nuspec file for assembly and version information plus release project link
+
+#5
+run 
+nuget pack Paysafe.csproj -properties Configuration=Release
+
+#6
+to upload the package
+https://www.nuget.org/packages/manage/upload
