@@ -23,6 +23,11 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.Remoting.Messaging;
+using System.Threading.Tasks;
+using System.Web;
 using CardPaymentService = Paysafe.CardPayments.CardPaymentService;
 using CustomerVaultService = Paysafe.CustomerVault.CustomerVaultService;
 using DirectDebitService = Paysafe.DirectDebit.DirectDebitService;
@@ -151,18 +156,19 @@ namespace Paysafe
         /// Get an instance of the customer vault service
         /// </summary>
         /// <returns>CustomerVaultService</returns>
-        public CustomerVaultService customerVaultService() {
+        public CustomerVaultService customerVaultService()
+        {
             return new CustomerVaultService(this);
         }
 
-	    
+
 
         /// <summary>
         /// Get an instance of the Direct debit service
         /// </summary>
         /// <returns>DirectDebitService</returns>
         public DirectDebitService directDebitService()
-        
+
         {
             return new DirectDebitService(this);
         }
@@ -190,9 +196,9 @@ namespace Paysafe
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Dictionary<string,object></returns>
-        public Dictionary<string,object> ProcessRequest(Request request)
+        public Dictionary<string, object> ProcessRequest(Request request)
         {
-            HttpWebRequest conn = (HttpWebRequest)WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
+            HttpWebRequest conn = (HttpWebRequest) WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
             conn.Headers["Authorization"] = "Basic " + GetAuthString();
             conn.ContentType = "application/json; charset=utf-8";
 
@@ -219,66 +225,133 @@ namespace Paysafe
             }
             catch (WebException ex)
             {
-                HttpWebResponse response = (HttpWebResponse)ex.Response;
-                StreamReader sr = new StreamReader(response.GetResponseStream());
-                string body = sr.ReadToEnd();
-
-                string exceptionType = null;
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.BadRequest: // 400
-                        exceptionType = "InvalidRequestException";
-                        break;
-                    case HttpStatusCode.Unauthorized: // 401
-                        exceptionType = "InvalidCredentialsException";
-                        break;
-                    case HttpStatusCode.PaymentRequired: //402
-                        exceptionType = "RequestDeclinedException";
-                        break;
-                    case HttpStatusCode.Forbidden: //403
-                        exceptionType = "PermissionException";
-                        break;
-                    case HttpStatusCode.NotFound: //404
-                        exceptionType = "EntityNotFoundException";
-                        break;
-                    case HttpStatusCode.Conflict: //409
-                        exceptionType = "RequestConflictException";
-                        break;
-                    case HttpStatusCode.NotAcceptable: //406
-                    case HttpStatusCode.UnsupportedMediaType: //415
-                    case HttpStatusCode.InternalServerError: //500
-                    case HttpStatusCode.NotImplemented: //501
-                    case HttpStatusCode.BadGateway: //502
-                    case HttpStatusCode.ServiceUnavailable: //503
-                    case HttpStatusCode.GatewayTimeout: //504
-                    case HttpStatusCode.HttpVersionNotSupported: //505
-                        exceptionType = "APIException";
-                        break;
-                }
-                if (exceptionType != null)
-                {
-                    String message = ex.Message;
-                    Dictionary<string, dynamic> rawResponse = ParseResponse(body);
-                    if (rawResponse.ContainsKey("error"))
-                    {
-                        message = rawResponse["error"]["message"];
-                    }
-
-                    Object[] args = { message, ex.InnerException };
-                    PaysafeException paysafeException = Activator.CreateInstance
-                        (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
-                    paysafeException.RawResponse(rawResponse);
-                    if (rawResponse.ContainsKey("error"))
-                    {
-                        paysafeException.Code(int.Parse(rawResponse["error"]["code"]));
-                    }
-                    throw paysafeException;
-                }
-                throw;
+                HandlePaysafeExceptionSync(ex);
             }
-            throw new PaysafeException("An unknown error has occurred.");
+            throw new PaysafeException("An unhandled error has occured.");
         }
 
+        /// <summary>
+        /// This method will perform a the http request asynchronously, and return the json decoded result
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Task<Dictionary<string,object>></returns>
+        public async Task<Dictionary<string, object>> ProcessRequestAsync(Request request)
+        {
+            HttpWebRequest conn = WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
+            conn.Headers["Authorization"] = "Basic " + GetAuthString();
+            conn.ContentType = "application/json; charset=utf-8";
+
+            conn.Method = request.Method();
+            if (request.Method().Equals(RequestType.Post.ToString())
+                || request.Method().Equals(RequestType.Put.ToString()))
+            {
+                string requestBody = request.Body();
+                byte[] requestData = Encoding.UTF8.GetBytes(requestBody);
+
+                using (Stream postStream = await Task.Factory.FromAsync(
+                    conn.BeginGetRequestStream(null, null),
+                    asyncResult => conn.EndGetRequestStream(asyncResult)))
+                {
+                    postStream.Write(requestData, 0, requestData.Length);
+                }
+            }
+
+            try
+            {
+                Task<WebResponse> responseRequest = Task.Factory.FromAsync(
+                    conn.BeginGetResponse(null, null),
+                    asyncResult => conn.EndGetResponse(asyncResult));
+
+                return ParseResponse(await responseRequest);
+            }
+            catch (WebException ex)
+            {
+                await HandlePaysafeException(ex);
+            }
+            throw new PaysafeException("An unhandled error has occured.");
+        }
+
+        //Will be removed, left in for showing purposes only
+        public async Task<Dictionary<string, object>> ProcessRequestAsync_OLD(Request request)
+        {
+            using (var conn = new HttpClient())
+            {
+                conn.BaseAddress = new Uri(_apiEndPoint);
+
+                HttpRequestMessage requestMessage;
+                switch (request.Method())
+                {
+                    case "Post":
+                        requestMessage = new HttpRequestMessage(HttpMethod.Post, request.BuildUrl(_apiEndPoint));
+                        requestMessage.Headers.Add("Authorization", "Basic " + GetAuthString());
+                        break;
+                    case "Put":
+                        requestMessage = new HttpRequestMessage(HttpMethod.Put, request.BuildUrl(_apiEndPoint));
+                        requestMessage.Headers.Add("Authorization", "Basic " + GetAuthString());
+                        break;
+                    case "Get":
+                        conn.DefaultRequestHeaders.Authorization =
+                            new AuthenticationHeaderValue("Basic", GetAuthString());
+
+                        var field = typeof(System.Net.Http.Headers.HttpRequestHeaders)
+                                        .GetField("invalidHeaders",
+                                            System.Reflection.BindingFlags.NonPublic |
+                                            System.Reflection.BindingFlags.Static)
+                                    ?? typeof(System.Net.Http.Headers.HttpRequestHeaders)
+                                        .GetField("s_invalidHeaders",
+                                            System.Reflection.BindingFlags.NonPublic |
+                                            System.Reflection.BindingFlags.Static);
+
+                        if (field != null)
+                        {
+                            var invalidFields = (HashSet<string>) field.GetValue(null);
+                            try
+                            {
+                                invalidFields.Remove("Content-Type");
+                                conn.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type",
+                                    "application/json; charset=utf-8");
+                                var content = await conn.GetAsync(request.BuildUrl(_apiEndPoint));
+                                return ParseResponse(await content.Content.ReadAsStringAsync());
+                            }
+                            finally
+                            {
+                                invalidFields.Add("Content-Type");
+                            }
+                        }
+                        else
+                        {
+                            var content = await conn.GetAsync(request.BuildUrl(_apiEndPoint));
+                            return ParseResponse(await content.Content.ReadAsStringAsync());
+                        }
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                var requestBody = request.Body();
+                requestMessage.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await conn.SendAsync(requestMessage);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return ParseResponse(await response.Content.ReadAsStringAsync());
+                    }
+                    throw new HttpException((int) response.StatusCode, await response.Content.ReadAsStringAsync());
+                }
+                catch (HttpException ex)
+                {
+                    var statusCode = (HttpStatusCode) ex.GetHttpCode();
+                    var body = ex.Message;
+                    var innerException = ex.InnerException;
+
+                    //HandlePaysafeException(statusCode, body, innerException);
+                }
+                throw new PaysafeException("An unhandled error has occured.");
+            }
+        }
+
+        //Legacy code for synchronous method, to be removed
         public static Dictionary<string, object> ParseResponse(string response)
         {
             if (String.IsNullOrWhiteSpace(response))
@@ -287,6 +360,145 @@ namespace Paysafe
             }
             return JsonHelper.Deserialize(response) as Dictionary<string, object>;
         }
+
+        private static Dictionary<string, object> ParseResponse(WebResponse response)
+        {
+            using (Stream responseStream = response.GetResponseStream())
+            using (StreamReader sr = new StreamReader(responseStream))
+            {
+                string strContent = sr.ReadToEnd();
+                if (String.IsNullOrWhiteSpace(strContent))
+                {
+                    return null;
+                }
+                return JsonHelper.Deserialize(strContent) as Dictionary<string, object>;
+            }
+        }
+
+        public async Task HandlePaysafeException(WebException ex)
+        {
+            var response = (HttpWebResponse) ex.Response;
+            var statusCode = response.StatusCode;
+            var sr = new StreamReader(response.GetResponseStream());
+            var body = await sr.ReadToEndAsync();
+            var innerException = ex.InnerException;
+
+            string exceptionType = null;
+            switch (statusCode)
+            {
+                case HttpStatusCode.BadRequest: // 400
+                    exceptionType = "InvalidRequestException";
+                    break;
+                case HttpStatusCode.Unauthorized: // 401
+                    exceptionType = "InvalidCredentialsException";
+                    break;
+                case HttpStatusCode.PaymentRequired: //402
+                    exceptionType = "RequestDeclinedException";
+                    break;
+                case HttpStatusCode.Forbidden: //403
+                    exceptionType = "PermissionException";
+                    break;
+                case HttpStatusCode.NotFound: //404
+                    exceptionType = "EntityNotFoundException";
+                    break;
+                case HttpStatusCode.Conflict: //409
+                    exceptionType = "RequestConflictException";
+                    break;
+                case HttpStatusCode.NotAcceptable: //406
+                case HttpStatusCode.UnsupportedMediaType: //415
+                case HttpStatusCode.InternalServerError: //500
+                case HttpStatusCode.NotImplemented: //501
+                case HttpStatusCode.BadGateway: //502
+                case HttpStatusCode.ServiceUnavailable: //503
+                case HttpStatusCode.GatewayTimeout: //504
+                case HttpStatusCode.HttpVersionNotSupported: //505
+                    exceptionType = "ApiException";
+                    break;
+            }
+            if (exceptionType != null)
+            {
+                String message = body;
+                Dictionary<string, dynamic> rawResponse = ParseResponse(body);
+                if (rawResponse.ContainsKey("error"))
+                {
+                    message = rawResponse["error"]["message"];
+                }
+
+                Object[] args = {message, innerException};
+                PaysafeException paysafeException = Activator.CreateInstance
+                    (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
+                paysafeException.RawResponse(rawResponse);
+                if (rawResponse.ContainsKey("error"))
+                {
+                    paysafeException.Code(int.Parse(rawResponse["error"]["code"]));
+                }
+                throw paysafeException;
+            }
+        }
+
+        //Legacy code for synchronous method, to be removed
+        public void HandlePaysafeExceptionSync(WebException ex)
+        {
+            var response = (HttpWebResponse) ex.Response;
+            var statusCode = response.StatusCode;
+            var sr = new StreamReader(response.GetResponseStream());
+            var body = sr.ReadToEnd();
+            var innerException = ex.InnerException;
+
+            string exceptionType = null;
+            switch (statusCode)
+            {
+                case HttpStatusCode.BadRequest: // 400
+                    exceptionType = "InvalidRequestException";
+                    break;
+                case HttpStatusCode.Unauthorized: // 401
+                    exceptionType = "InvalidCredentialsException";
+                    break;
+                case HttpStatusCode.PaymentRequired: //402
+                    exceptionType = "RequestDeclinedException";
+                    break;
+                case HttpStatusCode.Forbidden: //403
+                    exceptionType = "PermissionException";
+                    break;
+                case HttpStatusCode.NotFound: //404
+                    exceptionType = "EntityNotFoundException";
+                    break;
+                case HttpStatusCode.Conflict: //409
+                    exceptionType = "RequestConflictException";
+                    break;
+                case HttpStatusCode.NotAcceptable: //406
+                case HttpStatusCode.UnsupportedMediaType: //415
+                case HttpStatusCode.InternalServerError: //500
+                case HttpStatusCode.NotImplemented: //501
+                case HttpStatusCode.BadGateway: //502
+                case HttpStatusCode.ServiceUnavailable: //503
+                case HttpStatusCode.GatewayTimeout: //504
+                case HttpStatusCode.HttpVersionNotSupported: //505
+                    exceptionType = "ApiException";
+                    break;
+            }
+            if (exceptionType != null)
+            {
+                String message = body;
+                Dictionary<string, dynamic> rawResponse = ParseResponse(body);
+                if (rawResponse.ContainsKey("error"))
+                {
+                    message = rawResponse["error"]["message"];
+                }
+
+                Object[] args = {message, innerException};
+                PaysafeException paysafeException = Activator.CreateInstance
+                    (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
+                paysafeException.RawResponse(rawResponse);
+                if (rawResponse.ContainsKey("error"))
+                {
+                    paysafeException.Code(int.Parse(rawResponse["error"]["code"]));
+                }
+                throw paysafeException;
+            }
+        }
+
+
 
     }
 }

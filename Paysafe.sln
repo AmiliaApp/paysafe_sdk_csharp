@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paysafe", "Paysafe\Paysafe.csproj", "{51940519-6057-4489-8745-EAF257A681D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Test\Tests.csproj", "{3DB36D66-D80C-4DAC-A66A-B3183FED9791}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51940519-6057-4489-8745-EAF257A681D6} = {51940519-6057-4489-8745-EAF257A681D6}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{51940519-6057-4489-8745-EAF257A681D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51940519-6057-4489-8745-EAF257A681D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51940519-6057-4489-8745-EAF257A681D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB36D66-D80C-4DAC-A66A-B3183FED9791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB36D66-D80C-4DAC-A66A-B3183FED9791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB36D66-D80C-4DAC-A66A-B3183FED9791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB36D66-D80C-4DAC-A66A-B3183FED9791}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

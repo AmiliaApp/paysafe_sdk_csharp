@@ -25,3 +25,6 @@ _Upgrade*
 
 #nuget packages
 *.nupkg
+
+#tests
+Test/appsettings.config

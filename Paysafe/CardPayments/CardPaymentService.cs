@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Paysafe.Common;
 
 namespace Paysafe.CardPayments
@@ -91,6 +92,36 @@ namespace Paysafe.CardPayments
             return new Authorization(response);
         }
 
+        public async Task<Authorization> AuthorizeAsync(Authorization auth)
+        {
+            auth.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,
+                GlobalConstants.Card
+            });
+            auth.SetOptionalFields(new List<string> {
+                GlobalConstants.SettleWithAuth,
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck,
+                GlobalConstants.Description,
+                GlobalConstants.Authentication,
+                GlobalConstants.BillingDetails,
+                GlobalConstants.ShippingDetails,
+                GlobalConstants.Recurring,
+                GlobalConstants.MerchantDescriptor,
+                GlobalConstants.AccordD
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/auths"),
+                body: auth
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authorization(response);
+        }
+
         /// <summary>
         /// Cancel the Authorization
         /// </summary>
@@ -111,6 +142,25 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Authorization(response);
+        }
+
+        public async Task<Authorization> CancelHeldAuthAsync(Authorization auth)
+        {
+            auth.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            auth.CheckRequiredFields();
+
+            Authorization tmpAuth = new Authorization();
+            tmpAuth.Status("CANCELLED");
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/auths/" + auth.Id()),
+                body: tmpAuth
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Authorization(response);
         }
@@ -136,6 +186,26 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Authorization(response);
+        }
+
+        public async Task<Authorization> ApproveHeldAuthAsync(Authorization auth)
+        {
+            auth.SetRequiredFields(new List<string> { GlobalConstants.Id });
+
+            auth.CheckRequiredFields();
+
+            Authorization tmpAuth = new Authorization();
+            tmpAuth.Status("COMPLETED");
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/auths/" + auth.Id()),
+                body: tmpAuth
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Authorization(response);
         }
@@ -166,6 +236,27 @@ namespace Paysafe.CardPayments
             return new AuthorizationReversal(response);
         }
 
+        public async Task<AuthorizationReversal> ReverseAuthAsync(AuthorizationReversal authReversal)
+        {
+            authReversal.SetRequiredFields(new List<string> { GlobalConstants.AuthorizationId });
+            authReversal.CheckRequiredFields();
+            authReversal.SetRequiredFields(new List<string> { GlobalConstants.MerchantRefNum });
+            authReversal.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/auths/" + authReversal.AuthorizationId() + "/voidauths"),
+                body: authReversal
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new AuthorizationReversal(response);
+        }
+
         /// <summary>
         /// Settlement
         /// </summary>
@@ -188,6 +279,27 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Settlement(response);
+        }
+
+        public async Task<Settlement> SettlementAsync(Settlement settle)
+        {
+            settle.SetRequiredFields(new List<string> { GlobalConstants.AuthorizationId });
+            settle.CheckRequiredFields();
+            settle.SetRequiredFields(new List<string> { GlobalConstants.MerchantRefNum });
+            settle.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/auths/" + settle.AuthorizationId() + "/settlements"),
+                body: settle
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Settlement(response);
         }
@@ -216,6 +328,25 @@ namespace Paysafe.CardPayments
             return new Settlement(response);
         }
 
+        public async Task<Settlement> CancelSettlementAsync(Settlement settle)
+        {
+            settle.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            settle.CheckRequiredFields();
+
+            Settlement tmpSettlement = new Settlement();
+            tmpSettlement.Status("CANCELLED");
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/settlements/" + settle.Id()),
+                body: tmpSettlement
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Settlement(response);
+        }
+
         /// <summary>
         /// Refund
         /// </summary>
@@ -238,6 +369,27 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Refund(response);
+        }
+
+        public async Task<Refund> RefundAsync(Refund newRefund)
+        {
+            newRefund.SetRequiredFields(new List<string> { GlobalConstants.SettlementId });
+            newRefund.CheckRequiredFields();
+            newRefund.SetRequiredFields(new List<string> { GlobalConstants.MerchantRefNum });
+            newRefund.SetOptionalFields(new List<string> {
+                GlobalConstants.Amount,
+                GlobalConstants.DupCheck
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/settlements/" + newRefund.SettlementId() + "/refunds"),
+                body: newRefund
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Refund(response);
         }
@@ -317,6 +469,21 @@ namespace Paysafe.CardPayments
             return new Authorization(response);
         }
 
+        public async Task<Authorization> GetAsync(Authorization auth)
+        {
+            auth.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            auth.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/auths/" + auth.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authorization(response);
+        }
+
         /// <summary>
         /// Get the AuthorizationReversal
         /// </summary>
@@ -333,6 +500,21 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new AuthorizationReversal(response);
+        }
+
+        public async Task<AuthorizationReversal> GetAsync(AuthorizationReversal authReversal)
+        {
+            authReversal.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            authReversal.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/voidauths/" + authReversal.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new AuthorizationReversal(response);
         }
@@ -357,6 +539,21 @@ namespace Paysafe.CardPayments
             return new Settlement(response);
         }
 
+        public async Task<Settlement> GetAsync(Settlement settlement)
+        {
+            settlement.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            settlement.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/settlements/" + settlement.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Settlement(response);
+        }
+
         /// <summary>
         /// Get the Refund
         /// </summary>
@@ -373,6 +570,21 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Refund(response);
+        }
+
+        public async Task<Refund> GetAsync(Refund refund)
+        {
+            refund.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            refund.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/refunds/" + refund.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Refund(response);
         }
@@ -440,6 +652,44 @@ namespace Paysafe.CardPayments
             return new Pagerator<Authorization>(_client, typeof(Authorization), response);
         }
 
+        public async Task<Pagerator<Authorization>> GetAuthsAsync(Authorization auth = null, Filter filter = null)
+        {
+            Dictionary<String, String> queryStr = new Dictionary<String, String>();
+            if (auth != null && !String.IsNullOrWhiteSpace(auth.MerchantRefNum()))
+            {
+                queryStr.Add("merchantRefNum", auth.MerchantRefNum());
+            }
+            if (filter != null)
+            {
+                if (filter.Limit != null)
+                {
+                    queryStr.Add("limit", filter.Limit.ToString());
+                }
+                if (filter.Offset != null)
+                {
+                    queryStr.Add("offset", filter.Offset.ToString());
+                }
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
+                {
+                    queryStr.Add("startDate", filter.StartDate);
+                }
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
+                {
+                    queryStr.Add("endDate", filter.EndDate);
+                }
+            }
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/auths"),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Pagerator<Authorization>(_client, typeof(Authorization), response);
+        }
+
         /// <summary>
         /// Get matching authorization reversals
         /// </summary>
@@ -480,6 +730,44 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Pagerator<AuthorizationReversal>(_client, typeof(AuthorizationReversal), response);
+        }
+
+        public async Task<Pagerator<AuthorizationReversal>> GetAuthReversalsAsync(AuthorizationReversal authReversal = null, Filter filter = null)
+        {
+            Dictionary<String, String> queryStr = new Dictionary<String, String>();
+            if (authReversal != null && !String.IsNullOrWhiteSpace(authReversal.MerchantRefNum()))
+            {
+                queryStr.Add("merchantRefNum", authReversal.MerchantRefNum());
+            }
+            if (filter != null)
+            {
+                if (filter.Limit != null)
+                {
+                    queryStr.Add("limit", filter.Limit.ToString());
+                }
+                if (filter.Offset != null)
+                {
+                    queryStr.Add("offset", filter.Offset.ToString());
+                }
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
+                {
+                    queryStr.Add("startDate", filter.StartDate);
+                }
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
+                {
+                    queryStr.Add("endDate", filter.EndDate);
+                }
+            }
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/voidauths"),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Pagerator<AuthorizationReversal>(_client, typeof(AuthorizationReversal), response);
         }
@@ -528,6 +816,44 @@ namespace Paysafe.CardPayments
             return new Pagerator<Settlement>(_client, typeof(Settlement), response);
         }
 
+        public async Task<Pagerator<Settlement>> GetSettlementsAsync(Settlement settlement = null, Filter filter = null)
+        {
+            Dictionary<String, String> queryStr = new Dictionary<String, String>();
+            if (settlement != null && !String.IsNullOrWhiteSpace(settlement.MerchantRefNum()))
+            {
+                queryStr.Add("merchantRefNum", settlement.MerchantRefNum());
+            }
+            if (filter != null)
+            {
+                if (filter.Limit != null)
+                {
+                    queryStr.Add("limit", filter.Limit.ToString());
+                }
+                if (filter.Offset != null)
+                {
+                    queryStr.Add("offset", filter.Offset.ToString());
+                }
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
+                {
+                    queryStr.Add("startDate", filter.StartDate);
+                }
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
+                {
+                    queryStr.Add("endDate", filter.EndDate);
+                }
+            }
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/settlements"),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Pagerator<Settlement>(_client, typeof(Settlement), response);
+        }
+
         /// <summary>
         /// Get matching refunds
         /// </summary>
@@ -572,6 +898,44 @@ namespace Paysafe.CardPayments
             return new Pagerator<Refund>(_client, typeof(Refund), response);
         }
 
+        public async Task<Pagerator<Refund>> GetRefundsAsync(Refund refund = null, Filter filter = null)
+        {
+            Dictionary<String, String> queryStr = new Dictionary<String, String>();
+            if (refund != null && !String.IsNullOrWhiteSpace(refund.MerchantRefNum()))
+            {
+                queryStr.Add("merchantRefNum", refund.MerchantRefNum());
+            }
+            if (filter != null)
+            {
+                if (filter.Limit != null)
+                {
+                    queryStr.Add("limit", filter.Limit.ToString());
+                }
+                if (filter.Offset != null)
+                {
+                    queryStr.Add("offset", filter.Offset.ToString());
+                }
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
+                {
+                    queryStr.Add("startDate", filter.StartDate);
+                }
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
+                {
+                    queryStr.Add("endDate", filter.EndDate);
+                }
+            }
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/refunds"),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Pagerator<Refund>(_client, typeof(Refund), response);
+        }
+
         /// <summary>
         /// Get matching verifications
         /// </summary>
@@ -611,7 +975,7 @@ namespace Paysafe.CardPayments
                     queryString: queryStr
             );
 
-            dynamic response = _client.ProcessRequest(request);
+            dynamic response = _client.ProcessRequestAsync(request);
 
             return new Pagerator<Verification>(_client, typeof(Verification), response);
         }
