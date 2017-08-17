@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Paysafe;
 using Paysafe.CardPayments;
+using Paysafe.CustomerVault;
 using Authorization = Paysafe.CardPayments.Authorization;
+using Profile = Paysafe.CustomerVault.Profile;
+using Card = Paysafe.CustomerVault.Card;
 using Environment = Paysafe.Environment;
 
 namespace Tests
@@ -32,7 +35,7 @@ namespace Tests
 
         public static Authorization CreateSampleCustomAuthorization(string type)
         {
-            Authorization auth = Authorization.Builder()
+            return Authorization.Builder()
                 .MerchantRefNum(Guid.NewGuid().ToString())
                 .Amount(ExceptionType[type])
                 .Card()
@@ -47,12 +50,11 @@ namespace Tests
                     .Zip("M5H 2N2")
                     .Done()
                 .Build();
-            return auth;
         }
 
         public static Authorization CreateSampleIncompleteAuthorization()
         {
-            Authorization auth = Authorization.Builder()
+            return Authorization.Builder()
                 .MerchantRefNum(Guid.NewGuid().ToString())
                 .Amount(6666)
                 .Card()
@@ -67,12 +69,11 @@ namespace Tests
                 //    .Zip("M5H 2N2")
                 //    .Done()
                 .Build();
-            return auth;
         }
 
         public static Authorization CreateSampleComplexAuthorization()
         {
-            Authorization auth = Authorization.Builder()
+            return Authorization.Builder()
                 .MerchantRefNum(Guid.NewGuid().ToString())
                 .Amount(6666)
                 .Card()
@@ -80,7 +81,7 @@ namespace Tests
                     .Cvv("123")
                     .CardExpiry()
                         .Month(06)
-                        .Year(2020)
+                        .Year(DateTime.Now.AddYears(1).Year)
                         .Done()
                     .Done()
                 .Authentication()
@@ -110,12 +111,11 @@ namespace Tests
                  .CustomerIp("204.91.0.12")
                  .Description("I like turtles.")
                 .Build();
-            return auth;
         }
 
         public static Authorization CreateSampleSettledAuthorization()
         {
-            Authorization auth = Authorization.Builder()
+            return Authorization.Builder()
                 .MerchantRefNum(Guid.NewGuid().ToString())
                 .Amount(6666)
                 .SettleWithAuth(true)
@@ -131,7 +131,6 @@ namespace Tests
                     .Zip("M5H 2N2")
                     .Done()
                 .Build();
-            return auth;
         }
 
         public static PaysafeApiClient CreateSamplePaysafeApiClient()
@@ -163,5 +162,85 @@ namespace Tests
             return new CardPaymentService(client);
         }
 
+        public static Verification CreateSampleVerification()
+        {
+            return Verification.Builder()
+                .MerchantRefNum(Guid.NewGuid().ToString())
+                .Card()
+                    .CardNum("4111111111111111")
+                    .CardExpiry()
+                        .Month(DateTime.Now.Month)
+                        .Year(DateTime.Now.Year)
+                        .Done()
+                    .Cvv("123")
+                    .Done()
+                .Profile()
+                    .FirstName("Joe")
+                    .LastName("Smith")
+                    .Email("Joe.Smith@canada.com")
+                    .Done()
+                .BillingDetails()
+                    .Street("100 Queen Street West")
+                    .City("Toronto")
+                    .State("ON")
+                    .Country("CA")
+                    .Zip("M5H2N2")
+                    .Done()
+                .CustomerIp("204.91.0.12")
+                .Description("This is a test transaction")
+                .Build();
+        }
+
+        public static CustomerVaultService CreateSampleCustomerVaultService()
+        {
+            return new CustomerVaultService(CreateSamplePaysafeApiClient());
+        }
+
+        public static Profile CreateSampleProfile()
+        {
+            return Profile.Builder()
+                .MerchantCustomerId(Guid.NewGuid().ToString())
+                .Locale("en_US")
+                .FirstName("John")
+                .LastName("Smith")
+                .Email("john.smith@example.com")
+                .Phone("713-444-5555")
+                .Build();
+        }
+
+        public static Address CreateSampleAddress(Profile profile)
+        {
+            return Address.Builder()
+                .ProfileId(profile.Id())
+                .NickName("home")
+                .Street("100 Queen Street West")
+                .Street2("Unit 201")
+                .City("Toronto")
+                .Country("CA")
+                .State("ON")
+                .Zip("M5H 2N2")
+                .RecipientName("Jane Doe")
+                .Phone("647-788-3901")
+                .Build();
+        }
+
+        public static Card CreateSampleCard(Profile profile)
+        {
+            return Card.Builder()
+                .ProfileId(profile.Id())
+                .CardNum("4111111111111111")
+                .CardExpiry()
+                    .Month(DateTime.Now.Month)
+                    .Year(DateTime.Now.AddYears(1).Year)
+                    .Done()
+                .BillingAddress()
+                    .Street("100 Queen Street West")
+                    .City("Toronto")
+                    .State("ON")
+                    .Country("CA")
+                    .Zip("M5H2N2")
+                    .Done()
+                .Build();
+        }
     }
 }

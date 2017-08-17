@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Paysafe.Common;
 
 namespace Paysafe.CustomerVault
@@ -93,6 +94,36 @@ namespace Paysafe.CustomerVault
             return new Profile(response);
         }
 
+        public async Task<Profile> CreateAsync(Profile profile)
+        {
+            profile.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantCustomerId,
+                GlobalConstants.Locale
+            });
+            profile.SetOptionalFields(new List<string> {
+                GlobalConstants.FirstName,
+                GlobalConstants.MiddleName,
+                GlobalConstants.LastName,
+                GlobalConstants.DateOfBirth,
+                GlobalConstants.Ip,
+                GlobalConstants.Gender,
+                GlobalConstants.Nationality,
+                GlobalConstants.Email,
+                GlobalConstants.Phone,
+                GlobalConstants.CellPhone,
+                GlobalConstants.Card
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles"),
+                body: profile
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Profile(response);
+        }
+
         /// <summary>
         /// create address 
         /// </summary>
@@ -154,6 +185,34 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            Card returnVal = new Card(response);
+            returnVal.ProfileId(card.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<Card> CreateAsync(Card card)
+        {
+            card.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            card.CheckRequiredFields();
+            card.SetRequiredFields(new List<string> {
+                GlobalConstants.CardNum,
+                GlobalConstants.CardExpiry
+            });
+            card.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.HolderName,
+                GlobalConstants.BillingAddressId
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards"),
+                body: card
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             Card returnVal = new Card(response);
             returnVal.ProfileId(card.ProfileId());
@@ -362,6 +421,38 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Profile(response);
+        }
+
+        public async Task<Profile> UpdateAsync(Profile profile)
+        {
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
+            profile.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantCustomerId,
+                GlobalConstants.Locale
+            });
+            profile.SetOptionalFields(new List<string> {
+                GlobalConstants.FirstName,
+                GlobalConstants.MiddleName,
+                GlobalConstants.LastName,
+                GlobalConstants.DateOfBirth,
+                GlobalConstants.Ip,
+                GlobalConstants.Gender,
+                GlobalConstants.Nationality,
+                GlobalConstants.Email,
+                GlobalConstants.Phone,
+                GlobalConstants.CellPhone
+            });
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + profile.Id()),
+                body: profile
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Profile(response);
         }
@@ -828,6 +919,71 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Profile(response);
+        }
+
+        public async Task<Profile> GetAsync(Profile profile, bool includeAddresses = false, bool includeCards = false, bool includeAchBankAccounts = false,
+            bool includeBacsBankAccounts = false, bool includeEftBankAccounts = false, bool includeSepaBankAccounts = false)
+        {
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
+
+            Dictionary<string, string> queryStr = new Dictionary<string, string>();
+            StringBuilder toInclude = new StringBuilder();
+            if (includeAddresses)
+            {
+                toInclude.Append("addresses");
+            }
+            if (includeCards)
+            {
+                if (toInclude.Length > 0)
+                {
+                    toInclude.Append(",");
+                }
+                toInclude.Append("cards");
+            }
+            if (includeAchBankAccounts)
+            {
+                if (toInclude.Length > 0)
+                {
+                    toInclude.Append(",");
+                }
+                toInclude.Append("achbankaccounts");
+            }
+            if (includeBacsBankAccounts)
+            {
+                if (toInclude.Length > 0)
+                {
+                    toInclude.Append(",");
+                }
+                toInclude.Append("bacsbankaccounts");
+            }
+            if (includeEftBankAccounts)
+            {
+                if (toInclude.Length > 0)
+                {
+                    toInclude.Append(",");
+                }
+                toInclude.Append("eftbankaccounts");
+            }
+            if (includeSepaBankAccounts)
+            {
+                if (toInclude.Length > 0)
+                {
+                    toInclude.Append(",");
+                }
+                toInclude.Append("sepabankaccounts");
+            }
+
+            queryStr.Add("fields", toInclude.ToString());
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + profile.Id()),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Profile(response);
         }

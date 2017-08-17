@@ -449,6 +449,32 @@ namespace Paysafe.CardPayments
             return new Verification(response);
         }
 
+        public async Task<Verification> VerifyAsync(Verification verification)
+        {
+            verification.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Card
+            });
+
+            verification.SetOptionalFields(new List<string> {
+                GlobalConstants.Profile,
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck,
+                GlobalConstants.Description,
+                GlobalConstants.BillingDetails
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/verifications"),
+                body: verification
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Verification(response);
+        }
+
         /// <summary>
         /// Get the authorization
         /// </summary>
@@ -605,6 +631,21 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Verification(response);
+        }
+
+        public async Task<Verification> GetAsync(Verification verify)
+        {
+            verify.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            verify.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/verifications/" + verify.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Verification(response);
         }
@@ -975,7 +1016,45 @@ namespace Paysafe.CardPayments
                     queryString: queryStr
             );
 
-            dynamic response = _client.ProcessRequestAsync(request);
+            dynamic response = _client.ProcessRequest(request);
+
+            return new Pagerator<Verification>(_client, typeof(Verification), response);
+        }
+
+        public async Task<Pagerator<Verification>> GetVerificationsAsync(Verification verify = null, Filter filter = null)
+        {
+            Dictionary<String, String> queryStr = new Dictionary<String, String>();
+            if (verify != null && !String.IsNullOrWhiteSpace(verify.MerchantRefNum()))
+            {
+                queryStr.Add("merchantRefNum", verify.MerchantRefNum());
+            }
+            if (filter != null)
+            {
+                if (filter.Limit != null)
+                {
+                    queryStr.Add("limit", filter.Limit.ToString());
+                }
+                if (filter.Offset != null)
+                {
+                    queryStr.Add("offset", filter.Offset.ToString());
+                }
+                if (!String.IsNullOrWhiteSpace(filter.StartDate))
+                {
+                    queryStr.Add("startDate", filter.StartDate);
+                }
+                if (!String.IsNullOrWhiteSpace(filter.EndDate))
+                {
+                    queryStr.Add("endDate", filter.EndDate);
+                }
+            }
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/verifications"),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Pagerator<Verification>(_client, typeof(Verification), response);
         }

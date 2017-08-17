@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardPayments\GivenAPaysafeCardPaymentApi.cs" />
+    <Compile Include="CustomerVault\GivenAPaysafeCustomerVaultApi.cs" />
     <Compile Include="GivenAPaysafeApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleFactory.cs" />

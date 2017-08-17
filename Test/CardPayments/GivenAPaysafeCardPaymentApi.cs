@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Tests;
 using NUnit.Framework;
 using Paysafe;
 using Paysafe.CardPayments;
@@ -572,11 +563,6 @@ namespace Tests.CardPayments
 
             settle = service.Settlement(settle);
 
-            service.Refund(Refund.Builder()
-                .MerchantRefNum(settle.MerchantRefNum())
-                .SettlementId(settle.Id())
-                .Build());
-
             Assert.Throws<Paysafe.Common.RequestDeclinedException>(() => service.Refund(Refund.Builder()
                                                                                 .MerchantRefNum(settle.MerchantRefNum())
                                                                                 .SettlementId(settle.Id())
@@ -599,11 +585,96 @@ namespace Tests.CardPayments
             settle = await service.SettlementAsync(settle);
 
             Assert.ThrowsAsync<Paysafe.Common.RequestDeclinedException>(async () => await service.RefundAsync(Refund.Builder()
-                .MerchantRefNum(settle.MerchantRefNum())
-                .SettlementId(settle.Id())
-                .Build()));
+                                                                                                 .MerchantRefNum(settle.MerchantRefNum())
+                                                                                                 .SettlementId(settle.Id())
+                                                                                                 .Build()));
         }
 
+        /*
+         * Verify a Card Payment
+         */
+
+        [Test]
+        public void When_I_verify_a_card_payment_Then_it_should_return_a_valid_response_sync()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            var response = service.Verify(ver);
+
+            Assert.IsTrue(response.Status() == "COMPLETED");
+        }
+
+        [Test]
+        public async Task When_I_verify_a_card_payment_Then_it_should_return_a_valid_response_async()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            var response = await service.VerifyAsync(ver);
+
+            Assert.IsTrue(response.Status() == "COMPLETED");
+        }
+
+        [Test]
+        public void When_I_lookup_a_verification_using_a_verification_id_Then_it_should_return_a_valid_verification_sync()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            ver = service.Verify(ver);
+
+            var returnedVer = service.Get(new Verification(ver.Id()));
+
+            Assert.IsTrue(VerificationsAreEquivalent(ver, returnedVer));
+        }
+
+        [Test]
+        public async Task When_I_lookup_a_verification_using_a_verification_id_Then_it_should_return_a_valid_verification_async()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            ver = service.Verify(ver);
+
+            var returnedVer = await service.GetAsync(new Verification(ver.Id()));
+
+            Assert.IsTrue(VerificationsAreEquivalent(ver, returnedVer));
+        }
+
+        [Test]
+        public void When_I_lookup_a_verification_using_a_merchant_refNum_Then_it_should_return_a_valid_verification_sync()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            ver = service.Verify(ver);
+
+            Pagerator<Verification> verifications = service.GetVerifications(Verification.Builder()
+                .MerchantRefNum(ver.MerchantRefNum())
+                .Build());
+
+            var verList = verifications.GetResults();
+            Assert.IsTrue(verList.Count == 1);
+            Assert.IsTrue(VerificationsAreEquivalent(ver, verList[0]));
+        }
+
+        [Test]
+        public async Task When_I_lookup_a_verification_using_a_merchant_refNum_Then_it_should_return_a_valid_verification_async()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var ver = SampleFactory.CreateSampleVerification();
+
+            ver = await service.VerifyAsync(ver);
+
+            Pagerator<Verification> verifications = await service.GetVerificationsAsync(Verification.Builder()
+                .MerchantRefNum(ver.MerchantRefNum())
+                .Build());
+
+            var verList = verifications.GetResults();
+            Assert.IsTrue(verList.Count == 1);
+            Assert.IsTrue(VerificationsAreEquivalent(ver, verList[0]));
+        }
 
         /*
         * Helpers
@@ -646,6 +717,24 @@ namespace Tests.CardPayments
                 || !settle1.Amount().Equals(settle2.Amount())
                 || !settle1.Status().Equals(settle2.Status())
                 || !settle1.MerchantRefNum().Equals(settle2.MerchantRefNum()))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool VerificationsAreEquivalent(Verification ver1, Verification ver2)
+        {
+            if (!ver1.Id().Equals(ver2.Id())
+                || !ver1.Card().LastDigits().Equals(ver2.Card().LastDigits())
+                || !ver1.TxnTime().Equals(ver2.TxnTime())
+                || !ver1.AuthCode().Equals(ver2.AuthCode())
+                || !ver1.CustomerIp().Equals(ver2.CustomerIp())
+                || !ver1.Description().Equals(ver2.Description())
+                || !ver1.MerchantRefNum().Equals(ver2.MerchantRefNum())
+                || !ver1.CurrencyCode().Equals(ver2.CurrencyCode())
+                || !ver1.Status().Equals(ver2.Status()))
             {
                 return false;
             }
