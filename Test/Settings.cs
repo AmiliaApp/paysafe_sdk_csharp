@@ -16,11 +16,20 @@ namespace Tests
             Secret = ConfigurationManager.AppSettings["paysafePaymentApiSecret"];
 
             MerchantdId = ConfigurationManager.AppSettings["paysafeMerchantId"];
+
+            MerchanUsdId = ConfigurationManager.AppSettings["paysafeMerchantUsdId"];
+
+            DirectDebitEftId = ConfigurationManager.AppSettings["paysafeDirectDebitMerchantEftId"];
+
+            DirectDebitAchId = ConfigurationManager.AppSettings["paysafeDirectDebitMerchantAchId"];
         }
         public static Settings Instance => Nested.instance;
         public string Key { get; private set; }
         public string Secret { get; private set; }
         public string MerchantdId { get; private set; }
+        public string MerchanUsdId { get; private set; }
+        public string DirectDebitEftId { get; private set; }
+        public string DirectDebitAchId { get; private set; }
 
         private class Nested
         {

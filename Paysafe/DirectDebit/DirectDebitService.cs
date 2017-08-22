@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Paysafe.Common;
 
 namespace Paysafe.DirectDebit
@@ -85,6 +86,33 @@ namespace Paysafe.DirectDebit
                 body: purchases
             );
             dynamic response = _client.ProcessRequest(request);
+
+            return new Purchases(response);
+        }
+
+        public async Task<Purchases> SubmitAsync(Purchases purchases)
+        {
+            purchases.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,
+            });
+            purchases.CheckRequiredFields();
+            purchases.SetOptionalFields(new List<string> {
+                GlobalConstants.CustomerIp,
+                GlobalConstants.DupCheck,
+                GlobalConstants.Ach,
+                GlobalConstants.Bacs,
+                GlobalConstants.Eft,
+                GlobalConstants.Sepa,
+                GlobalConstants.BillingDetails,
+                GlobalConstants.Profile
+            });
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri(_client.Account() + "/purchases"),
+                body: purchases
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Purchases(response);
         }

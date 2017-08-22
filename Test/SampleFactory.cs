@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Paysafe;
 using Paysafe.CardPayments;
 using Paysafe.CustomerVault;
+using Paysafe.DirectDebit;
+using AchBankAccounts = Paysafe.CustomerVault.AchBankAccounts;
 using Authorization = Paysafe.CardPayments.Authorization;
 using Profile = Paysafe.CustomerVault.Profile;
 using Card = Paysafe.CustomerVault.Card;
+using EftBankAccounts = Paysafe.CustomerVault.EftBankAccounts;
 using Purchases =  Paysafe.DirectDebit.Purchases;
 using Environment = Paysafe.Environment;
 
@@ -146,6 +149,21 @@ namespace Tests
                                         Settings.Instance.MerchantdId);
         }
 
+        public static PaysafeApiClient CreateSampleAchPaysafeApiClient()
+        {
+            return new PaysafeApiClient(Settings.Instance.Key,
+                                        Settings.Instance.Secret,
+                                        Environment.Test,
+                                        Settings.Instance.DirectDebitAchId);
+        }
+
+        public static PaysafeApiClient CreateSampleEftPaysafeApiClient()
+        {
+            return new PaysafeApiClient(Settings.Instance.Key,
+                Settings.Instance.Secret,
+                Environment.Test,
+                Settings.Instance.DirectDebitEftId);
+        }
 
         public static CardPaymentService CreateSampleCardPaymentService()
         {
@@ -191,6 +209,16 @@ namespace Tests
         public static CustomerVaultService CreateSampleCustomerVaultService()
         {
             return new CustomerVaultService(CreateSamplePaysafeApiClient());
+        }
+
+        public static DirectDebitService CreateSampleAchDirectDebitService()
+        {
+            return new DirectDebitService(CreateSampleAchPaysafeApiClient());
+        }
+
+        public static DirectDebitService CreateSampleEftDirectDebitService()
+        {
+            return new DirectDebitService(CreateSampleEftPaysafeApiClient());
         }
 
         public static Profile CreateSampleProfile()
@@ -282,14 +310,13 @@ namespace Tests
                 .Build();
         }
 
-        public static Purchases CreateSampleAchPurchase(Profile profile, Address address)
+        public static Purchases CreateSampleAchPurchase()
         {
             long accountNumber = LongRandom(1000, 99999999999999999);
-            var profile = CreateSampleProfile();
 
             return Purchases.Builder()
                 .MerchantRefNum(Guid.NewGuid().ToString())
-                .Amount(999999)
+                .Amount(9999)
                 .Ach()
                     .AccountType("CHECKING")
                     .AccountNumber(accountNumber.ToString())
@@ -297,8 +324,51 @@ namespace Tests
                     .RoutingNumber("122000661")
                     .PayMethod("WEB")
                     .Done()
-                    .CustomerIp("192.0.126.111")
-                    .Profile(profile)
+                    .CustomerIp("192.0.126.101")
+                    .Profile()
+                        .FirstName("John")
+                        .LastName("Smith")
+                        .Email("john.smith@somedomain.com")
+                        .Done()
+                    .BillingDetails()
+                        .Street("100 Queen Street West")
+                        .City("Los Angeles")
+                        .State("CA")
+                        .Country("US")
+                        .Zip("90210")
+                        .Phone("3102649010")
+                        .Done()
+                    .Build();
+        }
+
+        public static Purchases CreateSampleEftPurchase()
+        {
+            long accountNumber = LongRandom(100000000, 9999999999);
+
+            return Purchases.Builder()
+                .MerchantRefNum(Guid.NewGuid().ToString())
+                .Amount(9999)
+                .Eft()
+                    .AccountHolderName("XYZ Company")
+                    .AccountNumber(accountNumber.ToString())
+                    .TransitNumber("22446")
+                    .InstitutionId("001")
+                    .Done()
+                .CustomerIp("192.0.126.101")
+                .Profile()
+                    .FirstName("John")
+                    .LastName("Smith")
+                    .Email("john.smith@somedomain.com")
+                    .Done()
+                .BillingDetails()
+                    .Street("100 Queen Street West")
+                    .City("Los Angeles")
+                    .State("CA")
+                    .Country("US")
+                    .Zip("90210")
+                    .Phone("3102649010")
+                    .Done()
+                .Build();
         }
 
         /*

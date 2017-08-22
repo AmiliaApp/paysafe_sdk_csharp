@@ -32,6 +32,16 @@ namespace Tests.CustomerVault
     */
     class GivenAPaysafeCustomerVaultApi
     {
+        private CustomerVaultService service;
+        private Profile profile;
+
+
+        [SetUp]
+        public void Init()
+        {
+            service = SampleFactory.CreateSampleCustomerVaultService();
+            profile = SampleFactory.CreateSampleProfile();
+        }
 
         /*
          * Customer profiles
@@ -40,20 +50,14 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_a_profile_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             var response = service.Create(profile);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.AreEqual(response.Status(), "ACTIVE");
         }
 
         [Test]
         public async Task When_I_create_a_profile_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             var response = await service.CreateAsync(profile);
 
             Assert.IsTrue(response.Status() == "ACTIVE");
@@ -62,9 +66,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_a_profile_using_a_profile_id_Then_it_should_return_a_valid_profile_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = service.Create(profile);
 
             var returnedProfile = service.Get(Profile.Builder()
@@ -77,9 +78,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_lookup_a_profile_using_a_profile_id_Then_it_should_return_a_valid_profile_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = await service.CreateAsync(profile);
 
             var returnedProfile = await service.GetAsync(Profile.Builder()
@@ -92,8 +90,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_update_a_profile_Then_the_profile_should_be_updated_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             var newFirstName = "Toto";
 
             profile = service.Create(profile);
@@ -107,8 +103,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_update_a_profile_Then_the_profile_should_be_updated_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             var newFirstName = "Toto";
 
             profile = await service.CreateAsync(profile);
@@ -122,9 +116,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_a_profile_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = service.Create(profile);
 
             bool response = service.Delete(profile);
@@ -135,9 +126,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_a_profile_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = await service.CreateAsync(profile);
 
             bool response = await service.DeleteAsync(profile);
@@ -148,9 +136,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_a_profile_Then_it_should_be_deleted_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = service.Create(profile);
 
             service.Delete(profile);
@@ -163,9 +148,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_a_profile_Then_it_should_be_deleted_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
-
             profile = await service.CreateAsync(profile);
 
             await service.DeleteAsync(profile);
@@ -182,8 +164,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_an_address_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
 
@@ -195,8 +175,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_create_an_address_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
 
@@ -208,8 +186,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_an_address_Then_it_should_return_a_valid_address_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -225,8 +201,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_lookup_an_address_Then_it_should_return_a_valid_address_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -242,8 +216,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_update_an_address_Then_the_address_should_be_updated_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -259,8 +231,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_update_an_address_Then_the_address_should_be_updated_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -276,8 +246,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_an_address_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -290,8 +258,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_an_address_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -304,8 +270,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_an_address_Then_it_should_be_deleted_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -321,8 +285,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_an_address_Then_it_should_be_deleted_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -342,8 +304,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_a_card_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var card = SampleFactory.CreateSampleCard(profile);
 
@@ -355,8 +315,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_create_a_card_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var card = SampleFactory.CreateSampleCard(profile);
 
@@ -368,8 +326,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_a_card_Then_it_should_return_a_valid_card_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var card = SampleFactory.CreateSampleCard(profile);
             card = service.Create(card);
@@ -385,8 +341,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_lookup_a_card_Then_it_should_return_a_valid_card_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var card = SampleFactory.CreateSampleCard(profile);
             card = await service.CreateAsync(card);
@@ -402,8 +356,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_update_a_card_Then_the_address_should_be_updated_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var card = SampleFactory.CreateSampleCard(profile);
             card = service.Create(card);
@@ -419,11 +371,11 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_update_a_card_Then_the_address_should_be_updated_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var card = SampleFactory.CreateSampleCard(profile);
             card = await service.CreateAsync(card);
+
             var newNickname = "New card name";
 
             card.NickName(newNickname);
@@ -436,9 +388,8 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_a_card_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var card = SampleFactory.CreateSampleCard(profile);
             card = service.Create(card);
 
@@ -450,9 +401,8 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_a_card_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var card = SampleFactory.CreateSampleCard(profile);
             card = await service.CreateAsync(card);
 
@@ -464,9 +414,8 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_a_card_Then_it_should_be_deleted_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var card = SampleFactory.CreateSampleCard(profile);
             card = service.Create(card);
 
@@ -481,9 +430,8 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_a_card_Then_it_should_be_deleted_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var card = SampleFactory.CreateSampleCard(profile);
             card = await service.CreateAsync(card);
 
@@ -504,11 +452,11 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_an_AHC_bank_account_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
 
             account = service.Create(account);
@@ -521,11 +469,11 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_create_an_AHC_bank_account_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
 
             account = await service.CreateAsync(account);
@@ -538,11 +486,11 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_an_AHC_bank_account_Then_it_should_return_a_valid_AHC_bank_account_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
 
             account = service.Create(account);
@@ -560,11 +508,11 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_lookup_an_AHC_bank_account_Then_it_should_return_a_valid_AHC_bank_account_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = await service.CreateAsync(account);
 
@@ -581,11 +529,11 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_update_an_AHC_bank_account_Then_it_should_be_updated_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = service.Create(account);
 
@@ -608,11 +556,11 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_update_an_AHC_bank_account_Then_it_should_be_updated_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = await service.CreateAsync(account);
 
@@ -635,11 +583,11 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_an_AHC_bank_account_Then_it_should_be_deleted_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = service.Create(account);
 
@@ -653,11 +601,11 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_an_AHC_bank_account_Then_it_should_be_deleted_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
+
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
+
             AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = await service.CreateAsync(account);
 
@@ -672,8 +620,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_an_EFT_bank_account_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -689,8 +635,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_create_an_EFT_bank_account_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -706,8 +650,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_an_EFT_bank_account_Then_it_should_return_a_valid_EFT_bank_account_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -728,8 +670,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_lookup_an_EFT_bank_account_Then_it_should_return_a_valid_EFT_bank_account_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -750,8 +690,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_update_an_EFT_bank_account_Then_it_should_be_updated_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -778,8 +716,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_update_an_EFT_bank_account_Then_it_should_be_updated_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);
@@ -806,8 +742,6 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_an_EFT_bank_account_Then_it_should_be_deleted_sync()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = service.Create(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = service.Create(address);
@@ -825,8 +759,6 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_an_EFT_bank_account_Then_it_should_be_deleted_async()
         {
-            var service = SampleFactory.CreateSampleCustomerVaultService();
-            var profile = SampleFactory.CreateSampleProfile();
             profile = await service.CreateAsync(profile);
             var address = SampleFactory.CreateSampleAddress(profile);
             address = await service.CreateAsync(address);

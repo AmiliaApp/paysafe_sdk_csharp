@@ -351,7 +351,7 @@ namespace Paysafe
             }
         }
 
-        //Legacy code for synchronous method, to be removed
+        //Todo: Legacy code for synchronous method, to be removed
         public static Dictionary<string, object> ParseResponse(string response)
         {
             if (String.IsNullOrWhiteSpace(response))
