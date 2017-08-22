@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Paysafe;
 using Paysafe.CardPayments;
 using Paysafe.CustomerVault;
 using Authorization = Paysafe.CardPayments.Authorization;
 using Profile = Paysafe.CustomerVault.Profile;
 using Card = Paysafe.CustomerVault.Card;
+using Purchases =  Paysafe.DirectDebit.Purchases;
 using Environment = Paysafe.Environment;
 
 namespace Tests
@@ -241,6 +238,79 @@ namespace Tests
                     .Zip("M5H2N2")
                     .Done()
                 .Build();
+        }
+        public static Card CreateSampleCard(Profile profile, Address address)
+        {
+            return Card.Builder()
+                .ProfileId(profile.Id())
+                .CardNum("4111111111111111")
+                .CardExpiry()
+                .Month(DateTime.Now.Month)
+                .Year(DateTime.Now.AddYears(1).Year)
+                .Done()
+                .BillingAddressId(address.Id())
+                .Build();
+        }
+
+        public static AchBankAccounts CreatSampleAchBankAccount(Profile profile, Address address)
+        {
+            long accountNumber = LongRandom(1000, 99999999999999999);
+
+            return AchBankAccounts.Builder()
+                .NickName("Sally Barclays Account")
+                .AccountType("CHECKING")
+                .AccountNumber(accountNumber.ToString())
+                .AccountHolderName("XYZ Business")
+                .RoutingNumber("122000661")
+                .BillingAddressId(address.Id())
+                .ProfileId(profile.Id())
+                .Build();
+        }
+
+        public static EftBankAccounts CreatSampleEftBankAccount(Profile profile, Address address)
+        {
+            long accountNumber = LongRandom(1000, 999999999999);
+
+            return EftBankAccounts.Builder()
+                .NickName("Sally Barclays Account")
+                .AccountNumber(accountNumber.ToString())
+                .AccountHolderName("XYZ Business")
+                .BillingAddressId(address.Id())
+                .ProfileId(profile.Id())
+                .TransitNumber("00000")
+                .InstitutionId("123")
+                .Build();
+        }
+
+        public static Purchases CreateSampleAchPurchase(Profile profile, Address address)
+        {
+            long accountNumber = LongRandom(1000, 99999999999999999);
+            var profile = CreateSampleProfile();
+
+            return Purchases.Builder()
+                .MerchantRefNum(Guid.NewGuid().ToString())
+                .Amount(999999)
+                .Ach()
+                    .AccountType("CHECKING")
+                    .AccountNumber(accountNumber.ToString())
+                    .AccountHolderName("XYZ Business")
+                    .RoutingNumber("122000661")
+                    .PayMethod("WEB")
+                    .Done()
+                    .CustomerIp("192.0.126.111")
+                    .Profile(profile)
+        }
+
+        /*
+         * Helpers
+         */
+        public static long LongRandom(long min, long max)
+        {
+            Random rand = new Random();
+            byte[] buf = new byte[8];
+            rand.NextBytes(buf);
+            long longRand = BitConverter.ToInt64(buf, 0);
+            return Math.Abs(longRand % (max - min)) + min;
         }
     }
 }

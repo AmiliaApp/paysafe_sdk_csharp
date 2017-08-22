@@ -158,6 +158,35 @@ namespace Paysafe.CustomerVault
             return returnVal;
         }
 
+        public async Task<Address> CreateAsync(Address address)
+        {
+            address.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            address.CheckRequiredFields();
+            address.SetRequiredFields(new List<string> { GlobalConstants.Country });
+            address.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.Street,
+                GlobalConstants.Street2,
+                GlobalConstants.City,
+                GlobalConstants.State,
+                GlobalConstants.Zip,
+                GlobalConstants.RecipientName,
+                GlobalConstants.Phone
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses"),
+                body: address
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            Address returnVal = new Address(response);
+            returnVal.ProfileId(address.ProfileId());
+            return returnVal;
+        }
+
         /// <summary>
         /// Create card 
         /// </summary>
@@ -253,6 +282,35 @@ namespace Paysafe.CustomerVault
             return returnVal;          
         }
 
+        public async Task<AchBankAccounts> CreateAsync(AchBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.AccountHolderName,
+                GlobalConstants.AccountNumber,
+                GlobalConstants.RoutingNumber,
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.AccountType,
+            });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts"),
+                body: account
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
+        }
+
         /// <summary>
         /// Create BACSBankAccount
         /// </summary>
@@ -315,6 +373,35 @@ namespace Paysafe.CustomerVault
                 body: account
             );
             dynamic response = _client.ProcessRequest(request);
+
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<EftBankAccounts> CreateAsync(EftBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.AccountNumber,
+                GlobalConstants.TransitNumber,
+                GlobalConstants.InstitutionId,
+                GlobalConstants.AccountHolderName,
+                GlobalConstants.BillingAddressId,
+            });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+            });
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts"),
+                body: account
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             EftBankAccounts returnVal = new EftBankAccounts(response);
             returnVal.ProfileId(account.ProfileId());
@@ -494,6 +581,38 @@ namespace Paysafe.CustomerVault
             return returnVal;
         }
 
+        public async Task<Address> UpdateAsync(Address address)
+        {
+            address.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            address.CheckRequiredFields();
+            address.SetRequiredFields(new List<string> { GlobalConstants.Country });
+            address.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.Street,
+                GlobalConstants.Street2,
+                GlobalConstants.City,
+                GlobalConstants.State,
+                GlobalConstants.Zip,
+                GlobalConstants.RecipientName,
+                GlobalConstants.Phone
+            });
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id()),
+                body: address
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            Address returnVal = new Address(response);
+            returnVal.ProfileId(address.ProfileId());
+            return returnVal;
+        }
+
         /// <summary>
         /// Update card 
         /// </summary>
@@ -522,6 +641,35 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            Card returnVal = new Card(response);
+            returnVal.ProfileId(card.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<Card> UpdateAsync(Card card)
+        {
+            card.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            card.CheckRequiredFields();
+            card.SetRequiredFields(new List<string> { });
+            card.SetOptionalFields(new List<string> {
+                GlobalConstants.CardExpiry,
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.HolderName,
+                GlobalConstants.BillingAddressId
+            });
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id()),
+                body: card
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             Card returnVal = new Card(response);
             returnVal.ProfileId(card.ProfileId());
@@ -560,6 +708,35 @@ namespace Paysafe.CustomerVault
             AchBankAccounts returnVal = new AchBankAccounts(response);
             returnVal.ProfileId(account.ProfileId());
             return returnVal;           
+        }
+
+        public async Task<AchBankAccounts> UpdateAsync(AchBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.AccountHolderName,
+                GlobalConstants.RoutingNumber,
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.AccountType,
+            });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.AccountNumber
+            });
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id()),
+                body: account
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
         }
 
         /// <summary>
@@ -620,6 +797,35 @@ namespace Paysafe.CustomerVault
                 body: account
             );
             dynamic response = _client.ProcessRequest(request);
+
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<EftBankAccounts> UpdateAsync(EftBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> { GlobalConstants.ProfileId });
+            account.CheckRequiredFields();
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.TransitNumber,
+                GlobalConstants.InstitutionId,
+                GlobalConstants.AccountHolderName,
+                GlobalConstants.BillingAddressId
+            });
+            account.CheckRequiredFields();
+            account.SetOptionalFields(new List<string> {
+                GlobalConstants.NickName,
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.AccountNumber
+            });
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id()),
+                body: account
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             EftBankAccounts returnVal = new EftBankAccounts(response);
             returnVal.ProfileId(account.ProfileId());
@@ -697,6 +903,21 @@ namespace Paysafe.CustomerVault
             return true;
         }
 
+        public async Task<bool> DeleteAsync(Profile profile)
+        {
+            profile.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            profile.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + profile.Id())
+            );
+
+            await _client.ProcessRequestAsync(request);
+
+            return true;
+        }
+
         /// <summary>
         ///Delete address 
         /// </summary>
@@ -716,6 +937,23 @@ namespace Paysafe.CustomerVault
             );
 
             _client.ProcessRequest(request);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(Address address)
+        {
+            address.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            address.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id())
+            );
+
+            await _client.ProcessRequestAsync(request);
             return true;
         }
 
@@ -743,6 +981,25 @@ namespace Paysafe.CustomerVault
             return true;
         }
 
+        public async Task<bool> DeleteAsync(Card card)
+        {
+            card.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            card.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id()),
+                body: card
+            );
+
+            await _client.ProcessRequestAsync(request);
+
+            return true;
+        }
+
         /// <summary>
         ///Delete ACHBankAccount 
         /// </summary>
@@ -762,6 +1019,23 @@ namespace Paysafe.CustomerVault
             );
 
             _client.ProcessRequest(request);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(AchBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            account.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id())
+            );
+
+            await _client.ProcessRequestAsync(request);
             return true;
         }
 
@@ -806,6 +1080,23 @@ namespace Paysafe.CustomerVault
             );
 
             _client.ProcessRequest(request);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(EftBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            account.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Delete,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id())
+            );
+
+            await _client.ProcessRequestAsync(request);
             return true;
         }
 
@@ -1014,6 +1305,27 @@ namespace Paysafe.CustomerVault
             return returnVal;
         }
 
+        public async Task<Address> GetAsync(Address address)
+        {
+            address.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            address.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + address.ProfileId() + "/addresses/" + address.Id()),
+                body: address
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            Address returnVal = new Address(response);
+            returnVal.ProfileId(address.ProfileId());
+            return returnVal;
+        }
+
         /// <summary>
         /// Get card 
         /// </summary>
@@ -1039,6 +1351,26 @@ namespace Paysafe.CustomerVault
             return returnVal;
         }
 
+        public async Task<Card> GetAsync(Card card)
+        {
+            card.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            card.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + card.ProfileId() + "/cards/" + card.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            Card returnVal = new Card(response);
+            returnVal.ProfileId(card.ProfileId());
+            return returnVal;
+        }
+
         /// <summary>
         /// Get ACHBankAccount 
         /// </summary>
@@ -1057,6 +1389,25 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            AchBankAccounts returnVal = new AchBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<AchBankAccounts> GetAsync(AchBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.ProfileId,
+                GlobalConstants.Id
+            });
+            account.CheckRequiredFields();
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/achbankaccounts/" + account.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             AchBankAccounts returnVal = new AchBankAccounts(response);
             returnVal.ProfileId(account.ProfileId());
@@ -1105,6 +1456,25 @@ namespace Paysafe.CustomerVault
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            EftBankAccounts returnVal = new EftBankAccounts(response);
+            returnVal.ProfileId(account.ProfileId());
+            return returnVal;
+        }
+
+        public async Task<EftBankAccounts> GetAsync(EftBankAccounts account)
+        {
+            account.SetRequiredFields(new List<string> {
+                GlobalConstants.BillingAddressId,
+                GlobalConstants.Id
+            });
+            account.CheckRequiredFields();
+            Request request = new Request(
+                method: RequestType.Get,
+                uri: PrepareUri("/profiles/" + account.ProfileId() + "/eftbankaccounts/" + account.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             EftBankAccounts returnVal = new EftBankAccounts(response);
             returnVal.ProfileId(account.ProfileId());

@@ -29,6 +29,28 @@ namespace Tests.CardPayments
          */
 
         [Test]
+        public void When_I_send_a_valid_auth_Then_the_transaction_should_complete_synchronous()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
+
+            var response = service.Authorize(auth);
+
+            Assert.IsTrue(response.Status() == "COMPLETED");
+        }
+
+        [Test]
+        public async Task When_I_send_a_valid_auth_Then_the_transaction_should_complete_asynchronous()
+        {
+            var service = SampleFactory.CreateSampleCardPaymentService();
+            var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
+
+            var response = await service.AuthorizeAsync(auth);
+
+            Assert.IsTrue(response.Status() == "COMPLETED");
+        }
+
+        [Test]
         public void When_I_process_a_complex_auth_Then_it_should_return_a_valid_response_sync()
         {
             var service = SampleFactory.CreateSampleCardPaymentService();
