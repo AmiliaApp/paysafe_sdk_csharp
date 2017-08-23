@@ -659,7 +659,8 @@ namespace Paysafe.CardPayments
         public Pagerator<Authorization> GetAuths(Authorization auth = null, Filter filter = null)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (auth != null && !String.IsNullOrWhiteSpace(auth.MerchantRefNum())) {
+            if (auth != null && !String.IsNullOrWhiteSpace(auth.MerchantRefNum()))
+            {
               queryStr.Add("merchantRefNum", auth.MerchantRefNum());
             }
             if (filter != null)

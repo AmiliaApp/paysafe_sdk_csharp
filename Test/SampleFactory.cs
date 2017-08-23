@@ -285,6 +285,7 @@ namespace Tests
             long accountNumber = LongRandom(1000, 99999999999999999);
 
             return AchBankAccounts.Builder()
+                .MerchantRefNum(Guid.NewGuid().ToString())
                 .NickName("Sally Barclays Account")
                 .AccountType("CHECKING")
                 .AccountNumber(accountNumber.ToString())
@@ -300,6 +301,7 @@ namespace Tests
             long accountNumber = LongRandom(1000, 999999999999);
 
             return EftBankAccounts.Builder()
+                .MerchantRefNum(Guid.NewGuid().ToString())
                 .NickName("Sally Barclays Account")
                 .AccountNumber(accountNumber.ToString())
                 .AccountHolderName("XYZ Business")
@@ -324,21 +326,21 @@ namespace Tests
                     .RoutingNumber("122000661")
                     .PayMethod("WEB")
                     .Done()
-                    .CustomerIp("192.0.126.101")
-                    .Profile()
-                        .FirstName("John")
-                        .LastName("Smith")
-                        .Email("john.smith@somedomain.com")
-                        .Done()
-                    .BillingDetails()
-                        .Street("100 Queen Street West")
-                        .City("Los Angeles")
-                        .State("CA")
-                        .Country("US")
-                        .Zip("90210")
-                        .Phone("3102649010")
-                        .Done()
-                    .Build();
+                .CustomerIp("192.0.126.101")
+                .Profile()
+                    .FirstName("John")
+                    .LastName("Smith")
+                    .Email("john.smith@somedomain.com")
+                    .Done()
+                .BillingDetails()
+                    .Street("100 Queen Street West")
+                    .City("Los Angeles")
+                    .State("CA")
+                    .Country("US")
+                    .Zip("90210")
+                    .Phone("3102649010")
+                    .Done()
+                .Build();
         }
 
         public static Purchases CreateSampleEftPurchase()
@@ -369,6 +371,67 @@ namespace Tests
                     .Phone("3102649010")
                     .Done()
                 .Build();
+        }
+
+        public static StandaloneCredits CreateSampleEftStandaloneCredits()
+        {
+            long accountNumber = LongRandom(100000000, 9999999999);
+
+            return StandaloneCredits.Builder()
+                                    .MerchantRefNum(System.Guid.NewGuid().ToString())
+                                    .Amount(10000)
+                                    .Eft()
+                                        .AccountHolderName("John Smith")
+                                        .AccountNumber(accountNumber.ToString())
+                                        .TransitNumber("22446")
+                                        .InstitutionId("001")
+                                        .Done()
+                                    .CustomerIp("192.0.126.111")
+                                    .Profile()
+                                          .FirstName("John")
+                                          .LastName("Smith")
+                                          .Email("john.smith@somedomain.com")
+                                          .Done()
+                                     .BillingDetails()
+                                           .Street("100 Queen Street West")
+                                           .City("Los Angeles")
+                                           .State("CA")
+                                           .Country("US")
+                                           .Zip("90210")
+                                           .Phone("3102649010")
+                                           .Done()
+                                     .Build();
+        }
+
+        public static StandaloneCredits CreateSampleAchStandaloneCredits()
+        {
+            long accountNumber = LongRandom(1000, 99999999999999999);
+
+            return StandaloneCredits.Builder()
+                                    .MerchantRefNum(System.Guid.NewGuid().ToString())
+                                    .Amount(10000)
+                                    .Ach()
+                                        .AccountHolderName("John Smith")
+                                        .AccountNumber(accountNumber.ToString())
+                                        .AccountType("CHECKING")
+                                        .RoutingNumber("211589828")
+                                        .PayMethod("WEB")
+                                        .Done()
+                                    .CustomerIp("192.0.126.111")
+                                    .Profile()
+                                          .FirstName("John")
+                                          .LastName("Smith")
+                                          .Email("john.smith@somedomain.com")
+                                          .Done()
+                                     .BillingDetails()
+                                           .Street("100 Queen Street West")
+                                           .City("Los Angeles")
+                                           .State("CA")
+                                           .Country("US")
+                                           .Zip("90210")
+                                           .Phone("3102649010")
+                                           .Done()
+                                     .Build();
         }
 
         /*

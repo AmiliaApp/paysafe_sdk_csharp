@@ -309,7 +309,7 @@ namespace Tests.CustomerVault
 
             var response = service.Create(card);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]
@@ -320,7 +320,7 @@ namespace Tests.CustomerVault
 
             var response = await service.CreateAsync(card);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]

@@ -28,6 +28,7 @@ namespace Tests.CardPayments
             cardService = SampleFactory.CreateSampleCardPaymentService();
             auth = SampleFactory.CreateSampleCustomAuthorization("noException");
         }
+
         /*
          * Authorize a Card Payment
          */
@@ -96,8 +97,8 @@ namespace Tests.CardPayments
             auth = cardService.Authorize(auth);
 
             Pagerator<Authorization> auths = cardService.GetAuths(Authorization.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .Build());
+                                                                                .MerchantRefNum(auth.MerchantRefNum())
+                                                                                .Build());
 
             var authList = auths.GetResults();
             Assert.IsTrue(authList.Count == 1);
@@ -110,8 +111,8 @@ namespace Tests.CardPayments
             auth = cardService.Authorize(auth);
 
             Pagerator<Authorization> auths = await cardService.GetAuthsAsync(Authorization.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .Build());
+                                                                                          .MerchantRefNum(auth.MerchantRefNum())
+                                                                                          .Build());
 
             var authList = auths.GetResults();
             Assert.IsTrue(authList.Count == 1);
