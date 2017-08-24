@@ -32,15 +32,33 @@ namespace Tests.CustomerVault
     */
     class GivenAPaysafeCustomerVaultApi
     {
-        private CustomerVaultService service;
-        private Profile profile;
+        private CustomerVaultService _service;
+        private Profile _profile;
 
 
         [SetUp]
         public void Init()
         {
-            service = SampleFactory.CreateSampleCustomerVaultService();
-            profile = SampleFactory.CreateSampleProfile();
+            _service = SampleFactory.CreateSampleCustomerVaultService();
+            _profile = SampleFactory.CreateSampleProfile();
+        }
+
+      /*
+       * Monitor
+       */
+
+        [Test]
+        public void Card_payment_api_Should_be_up_sync()
+        {
+            bool status = _service.Monitor();
+            Assert.That(status, Is.True);
+        }
+
+        [Test]
+        public async Task Card_payment_api_Should_be_up_async()
+        {
+            bool status = await _service.MonitorAsync();
+            Assert.That(status, Is.True);
         }
 
         /*
@@ -50,41 +68,41 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_a_profile_Then_it_should_return_a_valid_response_sync()
         {
-            var response = service.Create(profile);
+            var response = _service.Create(_profile);
 
-            Assert.AreEqual(response.Status(), "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]
         public async Task When_I_create_a_profile_Then_it_should_return_a_valid_response_async()
         {
-            var response = await service.CreateAsync(profile);
+            var response = await _service.CreateAsync(_profile);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]
         public void When_I_lookup_a_profile_using_a_profile_id_Then_it_should_return_a_valid_profile_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var returnedProfile = service.Get(Profile.Builder()
-                                                     .Id(profile.Id())
+            var returnedProfile = _service.Get(Profile.Builder()
+                                                     .Id(_profile.Id())
                                                      .Build());
 
-            Assert.IsTrue(ProfilesAreEquivalent(profile, returnedProfile));
+            Assert.That(ProfilesAreEquivalent(_profile, returnedProfile));
         }
 
         [Test]
         public async Task When_I_lookup_a_profile_using_a_profile_id_Then_it_should_return_a_valid_profile_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var returnedProfile = await service.GetAsync(Profile.Builder()
-                                                                .Id(profile.Id())
+            var returnedProfile = await _service.GetAsync(Profile.Builder()
+                                                                .Id(_profile.Id())
                                                                 .Build());
 
-            Assert.IsTrue(ProfilesAreEquivalent(profile, returnedProfile));
+            Assert.That(ProfilesAreEquivalent(_profile, returnedProfile));
         }
 
         [Test]
@@ -92,12 +110,12 @@ namespace Tests.CustomerVault
         {
             var newFirstName = "Toto";
 
-            profile = service.Create(profile);
-            profile.FirstName(newFirstName);
+            _profile = _service.Create(_profile);
+            _profile.FirstName(newFirstName);
 
-            var updatedProfile = service.Update(profile);
+            var updatedProfile = _service.Update(_profile);
 
-            Assert.AreEqual(updatedProfile.FirstName(), newFirstName);
+            Assert.That(updatedProfile.FirstName(), Is.EqualTo(newFirstName));
         }
 
         [Test]
@@ -105,10 +123,10 @@ namespace Tests.CustomerVault
         {
             var newFirstName = "Toto";
 
-            profile = await service.CreateAsync(profile);
-            profile.FirstName(newFirstName);
+            _profile = await _service.CreateAsync(_profile);
+            _profile.FirstName(newFirstName);
 
-            var updatedProfile = await service.UpdateAsync(profile);
+            var updatedProfile = await _service.UpdateAsync(_profile);
 
             Assert.AreEqual(updatedProfile.FirstName(), newFirstName);
         }
@@ -116,44 +134,44 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_delete_a_profile_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            bool response = service.Delete(profile);
+            bool response = _service.Delete(_profile);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public async Task When_I_delete_a_profile_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            bool response = await service.DeleteAsync(profile);
+            bool response = await _service.DeleteAsync(_profile);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public void When_I_delete_a_profile_Then_it_should_be_deleted_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            service.Delete(profile);
+            _service.Delete(_profile);
 
-            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => service.Get(Profile.Builder()
-                                                                                           .Id(profile.Id())
+            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _service.Get(Profile.Builder()
+                                                                                           .Id(_profile.Id())
                                                                                            .Build()));
         }
 
         [Test]
         public async Task When_I_delete_a_profile_Then_it_should_be_deleted_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            await service.DeleteAsync(profile);
+            await _service.DeleteAsync(_profile);
 
-            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await service.GetAsync(Profile.Builder()
-                                                                                                                 .Id(profile.Id())
+            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await _service.GetAsync(Profile.Builder()
+                                                                                                                 .Id(_profile.Id())
                                                                                                                  .Build()));
         }
 
@@ -164,150 +182,150 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_an_address_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
 
-            var response = service.Create(address);
+            var response = _service.Create(address);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]
         public async Task When_I_create_an_address_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
 
-            var response = await service.CreateAsync(address);
+            var response = await _service.CreateAsync(address);
 
-            Assert.IsTrue(response.Status() == "ACTIVE");
+            Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
 
         [Test]
         public void When_I_lookup_an_address_Then_it_should_return_a_valid_address_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            var returnedAddress = service.Get(Address.Builder()
+            var returnedAddress = _service.Get(Address.Builder()
                                                      .Id(address.Id())
-                                                     .ProfileId(profile.Id())
+                                                     .ProfileId(_profile.Id())
                                                      .Build());
 
-            Assert.IsTrue(AddressesAreEquivalent(address, returnedAddress));
+            Assert.That(AddressesAreEquivalent(address, returnedAddress));
         }
 
         [Test]
         public async Task When_I_lookup_an_address_Then_it_should_return_a_valid_address_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            var returnedAddress = await service.GetAsync(Address.Builder()
+            var returnedAddress = await _service.GetAsync(Address.Builder()
                                                                 .Id(address.Id())
-                                                                .ProfileId(profile.Id())
+                                                                .ProfileId(_profile.Id())
                                                                 .Build());
 
-            Assert.IsTrue(AddressesAreEquivalent(address, returnedAddress));
+            Assert.That(AddressesAreEquivalent(address, returnedAddress));
         }
 
         [Test]
         public void When_I_update_an_address_Then_the_address_should_be_updated_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
             var newNickname = "New home";
 
             address.NickName(newNickname);
 
-            var updatedAddress = service.Update(address);
+            var updatedAddress = _service.Update(address);
 
-            Assert.AreEqual(updatedAddress.NickName(), newNickname);
+            Assert.That(updatedAddress.NickName(), Is.EqualTo(newNickname));
         }
 
         [Test]
         public async Task When_I_update_an_address_Then_the_address_should_be_updated_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
             var newNickname = "New home";
 
             address.NickName(newNickname);
 
-            var updatedAddress = await service.UpdateAsync(address);
+            var updatedAddress = await _service.UpdateAsync(address);
 
-            Assert.AreEqual(updatedAddress.NickName(), newNickname);
+            Assert.That(updatedAddress.NickName(), Is.EqualTo(newNickname));
         }
 
         [Test]
         public void When_I_delete_an_address_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            bool response = service.Delete(address);
+            bool response = _service.Delete(address);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public async Task When_I_delete_an_address_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            bool response = await service.DeleteAsync(address);
+            bool response = await _service.DeleteAsync(address);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public void When_I_delete_an_address_Then_it_should_be_deleted_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            service.Delete(address);
+            _service.Delete(address);
 
-            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => service.Get(Address.Builder()
+            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _service.Get(Address.Builder()
                                                                                            .Id(address.Id())
-                                                                                           .ProfileId(profile.Id())
+                                                                                           .ProfileId(_profile.Id())
                                                                                            .Build()));
         }
 
         [Test]
         public async Task When_I_delete_an_address_Then_it_should_be_deleted_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            await service.DeleteAsync(address);
+            await _service.DeleteAsync(address);
 
-            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await service.GetAsync(Address.Builder()
+            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await _service.GetAsync(Address.Builder()
                                                                                                                  .Id(address.Id())
-                                                                                                                 .ProfileId(profile.Id())
+                                                                                                                 .ProfileId(_profile.Id())
                                                                                                                  .Build()));
         }
 
-        /*
+       /*
         * Profile cards
         */
 
         [Test]
         public void When_I_create_a_card_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
-            var card = SampleFactory.CreateSampleCard(profile);
+            _profile = _service.Create(_profile);
+            var card = SampleFactory.CreateSampleCard(_profile);
 
-            var response = service.Create(card);
+            var response = _service.Create(card);
 
             Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
@@ -315,10 +333,10 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_create_a_card_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
-            var card = SampleFactory.CreateSampleCard(profile);
+            _profile = await _service.CreateAsync(_profile);
+            var card = SampleFactory.CreateSampleCard(_profile);
 
-            var response = await service.CreateAsync(card);
+            var response = await _service.CreateAsync(card);
 
             Assert.That(response.Status(), Is.EqualTo("ACTIVE"));
         }
@@ -326,120 +344,120 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_lookup_a_card_Then_it_should_return_a_valid_card_sync()
         {
-            profile = service.Create(profile);
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = service.Create(card);
+            _profile = _service.Create(_profile);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = _service.Create(card);
 
-            var returnedCard = service.Get(Card.Builder()
+            var returnedCard = _service.Get(Card.Builder()
                                                .Id(card.Id())
-                                               .ProfileId(profile.Id())
+                                               .ProfileId(_profile.Id())
                                                .Build());
 
-            Assert.IsTrue(CardsAreEquivalent(card, returnedCard));
+            Assert.That(CardsAreEquivalent(card, returnedCard));
         }
 
         [Test]
         public async Task When_I_lookup_a_card_Then_it_should_return_a_valid_card_async()
         {
-            profile = await service.CreateAsync(profile);
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = await service.CreateAsync(card);
+            _profile = await _service.CreateAsync(_profile);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = await _service.CreateAsync(card);
 
-            var returnedCard = await service.GetAsync(Card.Builder()
+            var returnedCard = await _service.GetAsync(Card.Builder()
                                                           .Id(card.Id())
-                                                          .ProfileId(profile.Id())
+                                                          .ProfileId(_profile.Id())
                                                           .Build());
 
-            Assert.IsTrue(CardsAreEquivalent(card, returnedCard));
+            Assert.That(CardsAreEquivalent(card, returnedCard));
         }
 
         [Test]
         public void When_I_update_a_card_Then_the_address_should_be_updated_sync()
         {
-            profile = service.Create(profile);
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = service.Create(card);
+            _profile = _service.Create(_profile);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = _service.Create(card);
             var newNickname = "New card name";
 
             card.NickName(newNickname);
 
-            var updatedCard = service.Update(card);
+            var updatedCard = _service.Update(card);
 
-            Assert.AreEqual(updatedCard.NickName(), newNickname);
+            Assert.That(updatedCard.NickName(), Is.EqualTo(newNickname));
         }
 
         [Test]
         public async Task When_I_update_a_card_Then_the_address_should_be_updated_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = await service.CreateAsync(card);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = await _service.CreateAsync(card);
 
             var newNickname = "New card name";
 
             card.NickName(newNickname);
 
-            var updatedCard = await service.UpdateAsync(card);
+            var updatedCard = await _service.UpdateAsync(card);
 
-            Assert.AreEqual(updatedCard.NickName(), newNickname);
+            Assert.That(updatedCard.NickName(), Is.EqualTo(newNickname));
         }
 
         [Test]
         public void When_I_delete_a_card_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = service.Create(card);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = _service.Create(card);
 
-            bool response = service.Delete(card);
+            bool response = _service.Delete(card);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public async Task When_I_delete_a_card_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = await service.CreateAsync(card);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = await _service.CreateAsync(card);
 
-            bool response = await service.DeleteAsync(card);
+            bool response = await _service.DeleteAsync(card);
 
-            Assert.IsTrue(response);
+            Assert.That(response, Is.True);
         }
 
         [Test]
         public void When_I_delete_a_card_Then_it_should_be_deleted_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = service.Create(card);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = _service.Create(card);
 
-            service.Delete(card);
+            _service.Delete(card);
 
-            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => service.Get(Card.Builder()
+            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _service.Get(Card.Builder()
                                                                                         .Id(card.Id())
-                                                                                        .ProfileId(profile.Id())
+                                                                                        .ProfileId(_profile.Id())
                                                                                         .Build()));
         }
 
         [Test]
         public async Task When_I_delete_a_card_Then_it_should_be_deleted_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var card = SampleFactory.CreateSampleCard(profile);
-            card = await service.CreateAsync(card);
+            var card = SampleFactory.CreateSampleCard(_profile);
+            card = await _service.CreateAsync(card);
 
-            await service.DeleteAsync(card);
+            await _service.DeleteAsync(card);
 
-            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await service.GetAsync(Card.Builder()
+            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await _service.GetAsync(Card.Builder()
                                                                                                          .Id(card.Id())
-                                                                                                         .ProfileId(profile.Id())
+                                                                                                         .ProfileId(_profile.Id())
                                                                                                          .Build()));
         }
 
@@ -447,172 +465,175 @@ namespace Tests.CustomerVault
          * Profile bank accounts
          */
 
-
         // Managing ACH bank accounts
         [Test]
         public void When_I_create_an_AHC_bank_account_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
 
-            account = service.Create(account);
+            account = _service.Create(account);
 
-            Assert.IsTrue(account.Status() == "ACTIVE");
+            Assert.That(account.Status(), Is.EqualTo("ACTIVE"));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_create_an_AHC_bank_account_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
 
-            account = await service.CreateAsync(account);
+            account = await _service.CreateAsync(account);
 
-            Assert.IsTrue(account.Status() == "ACTIVE");
+            Assert.That(account.Status(), Is.EqualTo("ACTIVE"));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
         [Test]
         public void When_I_lookup_an_AHC_bank_account_Then_it_should_return_a_valid_AHC_bank_account_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
 
-            account = service.Create(account);
+            account = _service.Create(account);
 
-            var returnedAccount = service.Get(AchBankAccounts.Builder()
+            var returnedAccount = _service.Get(AchBankAccounts.Builder()
                 .Id(account.Id())
-                .ProfileId(profile.Id())
+                .ProfileId(_profile.Id())
                 .Build());
             
-            Assert.IsTrue(AchBankAccountsAreEquivalent(account, returnedAccount));
+            Assert.That(AchBankAccountsAreEquivalent(account, returnedAccount));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_lookup_an_AHC_bank_account_Then_it_should_return_a_valid_AHC_bank_account_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
-            var returnedAccount = await service.GetAsync(AchBankAccounts.Builder()
+            var returnedAccount = await _service.GetAsync(AchBankAccounts.Builder()
                                                                         .Id(account.Id())
-                                                                        .ProfileId(profile.Id())
+                                                                        .ProfileId(_profile.Id())
                                                                         .Build());
 
-            Assert.IsTrue(AchBankAccountsAreEquivalent(account, returnedAccount));
+            Assert.That(AchBankAccountsAreEquivalent(account, returnedAccount));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
         [Test]
         public void When_I_update_an_AHC_bank_account_Then_it_should_be_updated_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
-            account = service.Create(account);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
+            account = _service.Create(account);
 
             var newAccountHolderName = "Foo";
 
             account.AccountHolderName(newAccountHolderName);
 
-            service.Update(account);
+            _service.Update(account);
 
-            var returnedAccount = service.Get(AchBankAccounts.Builder()
+            var returnedAccount = _service.Get(AchBankAccounts.Builder()
                                                              .Id(account.Id())
-                                                             .ProfileId(profile.Id())
+                                                             .ProfileId(_profile.Id())
                                                              .Build());
 
-            Assert.AreEqual(returnedAccount.AccountHolderName(), newAccountHolderName);
+            Assert.That(returnedAccount.AccountHolderName(), Is.EqualTo(newAccountHolderName));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_update_an_AHC_bank_account_Then_it_should_be_updated_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
             var newAccountHolderName = "Foo";
 
             account.AccountHolderName(newAccountHolderName);
 
-            await service.UpdateAsync(account);
+            await _service.UpdateAsync(account);
 
-            var returnedAccount = await service.GetAsync(AchBankAccounts.Builder()
+            var returnedAccount = await _service.GetAsync(AchBankAccounts.Builder()
                                                                         .Id(account.Id())
-                                                                        .ProfileId(profile.Id())
+                                                                        .ProfileId(_profile.Id())
                                                                         .Build());
 
-            Assert.AreEqual(returnedAccount.AccountHolderName(), newAccountHolderName);
+            Assert.That(returnedAccount.AccountHolderName(), Is.EqualTo(newAccountHolderName));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
         [Test]
         public void When_I_delete_an_AHC_bank_account_Then_it_should_be_deleted_sync()
         {
-            profile = service.Create(profile);
+            _profile = _service.Create(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
-            account = service.Create(account);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
+            account = _service.Create(account);
 
-            Assert.IsTrue(service.Delete(account));
-            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => service.Get(AchBankAccounts.Builder()
+            var response = _service.Delete(account);
+
+            Assert.That(response, Is.True);
+            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _service.Get(AchBankAccounts.Builder()
                                                                                .Id(account.Id())
-                                                                               .ProfileId(profile.Id())
+                                                                               .ProfileId(_profile.Id())
                                                                                .Build()));
         }
 
         [Test]
         public async Task When_I_delete_an_AHC_bank_account_Then_it_should_be_deleted_async()
         {
-            profile = await service.CreateAsync(profile);
+            _profile = await _service.CreateAsync(_profile);
 
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
 
-            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            AchBankAccounts account = SampleFactory.CreatSampleAchBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
-            Assert.IsTrue(await service.DeleteAsync(account));
-            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await service.GetAsync(AchBankAccounts.Builder()
+            var response = await _service.DeleteAsync(account);
+
+            Assert.That(response, Is.True);
+            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await _service.GetAsync(AchBankAccounts.Builder()
                                                                                                                          .Id(account.Id())
-                                                                                                                         .ProfileId(profile.Id())
+                                                                                                                         .ProfileId(_profile.Id())
                                                                                                                          .Build()));
         }
 
@@ -620,138 +641,141 @@ namespace Tests.CustomerVault
         [Test]
         public void When_I_create_an_EFT_bank_account_Then_it_should_return_a_valid_response_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
 
-            account = service.Create(account);
+            account = _service.Create(account);
 
-            Assert.IsTrue(account.Status() == "ACTIVE");
+            Assert.That(account.Status(), Is.EqualTo("ACTIVE"));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_create_an_EFT_bank_account_Then_it_should_return_a_valid_response_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
 
-            account = await service.CreateAsync(account);
+            account = await _service.CreateAsync(account);
 
-            Assert.IsTrue(account.Status() == "ACTIVE");
+            Assert.That(account.Status(), Is.EqualTo("ACTIVE"));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
+        //Failed once on parsing
         [Test]
         public void When_I_lookup_an_EFT_bank_account_Then_it_should_return_a_valid_EFT_bank_account_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = service.Create(account);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = _service.Create(account);
 
-            var returnedAccount = service.Get(EftBankAccounts.Builder()
+            var returnedAccount = _service.Get(EftBankAccounts.Builder()
                                                              .Id(account.Id())
-                                                             .ProfileId(profile.Id())
+                                                             .ProfileId(_profile.Id())
                                                              .BillingAddressId(address.Id())
                                                              .Build());
 
-            Assert.IsTrue(EftBankAccountsAreEquivalent(account, returnedAccount));
+            Assert.That(EftBankAccountsAreEquivalent(account, returnedAccount));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_lookup_an_EFT_bank_account_Then_it_should_return_a_valid_EFT_bank_account_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
-            var returnedAccount = await service.GetAsync(EftBankAccounts.Builder()
+            var returnedAccount = await _service.GetAsync(EftBankAccounts.Builder()
                                                                         .Id(account.Id())
-                                                                        .ProfileId(profile.Id())
+                                                                        .ProfileId(_profile.Id())
                                                                         .BillingAddressId(address.Id())
                                                                         .Build());
 
-            Assert.IsTrue(EftBankAccountsAreEquivalent(account, returnedAccount));
+            Assert.That(EftBankAccountsAreEquivalent(account, returnedAccount));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
         [Test]
         public void When_I_update_an_EFT_bank_account_Then_it_should_be_updated_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = service.Create(account);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = _service.Create(account);
 
             var newAccountHolderName = "Foo";
 
             account.AccountHolderName(newAccountHolderName);
 
-            service.Update(account);
+            _service.Update(account);
 
-            var returnedAccount = service.Get(EftBankAccounts.Builder()
+            var returnedAccount = _service.Get(EftBankAccounts.Builder()
                                                              .Id(account.Id())
-                                                             .ProfileId(profile.Id())
+                                                             .ProfileId(_profile.Id())
                                                              .BillingAddressId(address.Id())
                                                              .Build());
 
-            Assert.AreEqual(returnedAccount.AccountHolderName(), newAccountHolderName);
+            Assert.That(returnedAccount.AccountHolderName(), Is.EqualTo(newAccountHolderName));
 
-            service.Delete(account);
+            _service.Delete(account);
         }
 
         [Test]
         public async Task When_I_update_an_EFT_bank_account_Then_it_should_be_updated_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
             var newAccountHolderName = "Foo";
 
             account.AccountHolderName(newAccountHolderName);
 
-            await service.UpdateAsync(account);
+            await _service.UpdateAsync(account);
 
-            var returnedAccount = await service.GetAsync(EftBankAccounts.Builder()
+            var returnedAccount = await _service.GetAsync(EftBankAccounts.Builder()
                                                                         .Id(account.Id())
-                                                                        .ProfileId(profile.Id())
+                                                                        .ProfileId(_profile.Id())
                                                                         .BillingAddressId(address.Id())
                                                                         .Build());
 
-            Assert.AreEqual(returnedAccount.AccountHolderName(), newAccountHolderName);
+            Assert.That(returnedAccount.AccountHolderName(), Is.EqualTo(newAccountHolderName));
 
-            await service.DeleteAsync(account);
+            await _service.DeleteAsync(account);
         }
 
         [Test]
         public void When_I_delete_an_EFT_bank_account_Then_it_should_be_deleted_sync()
         {
-            profile = service.Create(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = service.Create(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = service.Create(account);
+            _profile = _service.Create(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = _service.Create(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = _service.Create(account);
 
-            Assert.IsTrue(service.Delete(account));
-            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => service.Get(EftBankAccounts.Builder()
+            var response = _service.Delete(account);
+
+            Assert.That(response, Is.True);
+            Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _service.Get(EftBankAccounts.Builder()
                 .Id(account.Id())
-                .ProfileId(profile.Id())
+                .ProfileId(_profile.Id())
                 .BillingAddressId(address.Id())
                 .Build()));
         }
@@ -759,16 +783,18 @@ namespace Tests.CustomerVault
         [Test]
         public async Task When_I_delete_an_EFT_bank_account_Then_it_should_be_deleted_async()
         {
-            profile = await service.CreateAsync(profile);
-            var address = SampleFactory.CreateSampleAddress(profile);
-            address = await service.CreateAsync(address);
-            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(profile, address);
-            account = await service.CreateAsync(account);
+            _profile = await _service.CreateAsync(_profile);
+            var address = SampleFactory.CreateSampleAddress(_profile);
+            address = await _service.CreateAsync(address);
+            EftBankAccounts account = SampleFactory.CreatSampleEftBankAccount(_profile, address);
+            account = await _service.CreateAsync(account);
 
-            Assert.IsTrue(await service.DeleteAsync(account));
-            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await service.GetAsync(EftBankAccounts.Builder()
+            var response = await _service.DeleteAsync(account);
+
+            Assert.That(response, Is.True);
+            Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException>(async () => await _service.GetAsync(EftBankAccounts.Builder()
                 .Id(account.Id())
-                .ProfileId(profile.Id())
+                .ProfileId(_profile.Id())
                 .BillingAddressId(address.Id())
                 .Build()));
         }
@@ -798,7 +824,7 @@ namespace Tests.CustomerVault
                                                                   .Done()
                                                               .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -822,7 +848,7 @@ namespace Tests.CustomerVault
                                                                               .Done()
                                                                          .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -844,7 +870,7 @@ namespace Tests.CustomerVault
                                                               .Done()
                                                           .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -866,7 +892,7 @@ namespace Tests.CustomerVault
                                                               .Done()
                                                           .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         /*

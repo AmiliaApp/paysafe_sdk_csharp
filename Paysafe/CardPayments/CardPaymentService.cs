@@ -57,6 +57,14 @@ namespace Paysafe.CardPayments
             return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
+        public async Task<bool> MonitorAsync()
+        {
+            Request request = new Request(uri: "cardpayments/monitor");
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
+        }
+
         /// <summary>
         /// Authorize
         /// </summary>
@@ -414,6 +422,25 @@ namespace Paysafe.CardPayments
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Refund(response);
+        }
+
+        public async Task<Refund> CancelRefundAsync(Refund refund)
+        {
+            refund.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            refund.CheckRequiredFields();
+
+            Refund tmpRefund = new Refund();
+            tmpRefund.Status("CANCELLED");
+
+            Request request = new Request(
+                method: RequestType.Put,
+                uri: PrepareUri("/refunds/" + refund.Id()),
+                body: tmpRefund
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Refund(response);
         }

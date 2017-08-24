@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Paysafe.Common;
 
 namespace Paysafe.ThreeDSecure
@@ -58,11 +59,19 @@ namespace Paysafe.ThreeDSecure
             return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
+        public async Task<bool> MonitorAsync()
+        {
+            Request request = new Request(uri: "threedsecure/monitor");
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
+        }
+
         /// <summary>
         /// Submit an enrollment lookup request
         /// </summary>
-        /// <param name="EnrollmentLookups">EnrollmentLookups</param>
-        /// <returns>EnrollmentLookups</returns>
+        /// <param name="enrollmentChecks"></param>
+        /// <returns>EnrollmentChecks</returns>
         public EnrollmentChecks Submit(EnrollmentChecks enrollmentChecks)
         {
             enrollmentChecks.SetRequiredFields(new List<string> {
@@ -88,6 +97,31 @@ namespace Paysafe.ThreeDSecure
             return new EnrollmentChecks(response);
         }
 
+        public async Task<EnrollmentChecks> SubmitAsync(EnrollmentChecks enrollmentChecks)
+        {
+            enrollmentChecks.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.Amount,
+                GlobalConstants.Currency,
+                GlobalConstants.Card,
+                GlobalConstants.CustomerIp,
+                GlobalConstants.UserAgent,
+                GlobalConstants.AcceptHeader,
+                GlobalConstants.MerchantUrl
+            });
+
+            enrollmentChecks.CheckRequiredFields();
+
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks"),
+                body: enrollmentChecks
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new EnrollmentChecks(response);
+        }
+
         /// <summary>
         /// Get the Enrollment Lookup
         /// </summary>
@@ -103,6 +137,20 @@ namespace Paysafe.ThreeDSecure
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new EnrollmentChecks(response);
+        }
+
+        public async Task<EnrollmentChecks> GetAsync(EnrollmentChecks enrollmentChecks)
+        {
+            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            enrollmentChecks.CheckRequiredFields();
+
+            Request request = new Request(
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new EnrollmentChecks(response);
         }
@@ -126,6 +174,24 @@ namespace Paysafe.ThreeDSecure
                 body: authentications
             );
             dynamic response = _client.ProcessRequest(request);
+
+            return new Authentications(response);
+        }
+
+        public async Task<Authentications> SubmitAsync(Authentications authentications)
+        {
+            authentications.SetRequiredFields(new List<string> {
+                GlobalConstants.MerchantRefNum,
+                GlobalConstants.PaResp,
+            });
+
+            authentications.CheckRequiredFields();
+            Request request = new Request(
+                method: RequestType.Post,
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + authentications.EnrollmentId() + "/authentications"),
+                body: authentications
+            );
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Authentications(response);
         }
@@ -155,6 +221,30 @@ namespace Paysafe.ThreeDSecure
             );
 
             dynamic response = _client.ProcessRequest(request);
+
+            return new Authentications(response);
+        }
+
+        public async Task<Authentications> GetAsync(Authentications authentications, bool includeEnrollment = false)
+        {
+            authentications.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            authentications.CheckRequiredFields();
+
+            Dictionary<string, string> queryStr = new Dictionary<string, string>();
+            StringBuilder toInclude = new StringBuilder();
+
+            if (includeEnrollment)
+            {
+                toInclude.Append("enrollmentchecks");
+            }
+            queryStr.Add("fields", toInclude.ToString());
+
+            Request request = new Request(
+                uri: PrepareUri("/accounts/" + _client.Account() + "/authentications/" + authentications.Id()),
+                queryString: queryStr
+            );
+
+            dynamic response = await _client.ProcessRequestAsync(request);
 
             return new Authentications(response);
         }

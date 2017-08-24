@@ -378,7 +378,7 @@ namespace Tests
             long accountNumber = LongRandom(100000000, 9999999999);
 
             return StandaloneCredits.Builder()
-                                    .MerchantRefNum(System.Guid.NewGuid().ToString())
+                                    .MerchantRefNum(Guid.NewGuid().ToString())
                                     .Amount(10000)
                                     .Eft()
                                         .AccountHolderName("John Smith")
@@ -408,7 +408,7 @@ namespace Tests
             long accountNumber = LongRandom(1000, 99999999999999999);
 
             return StandaloneCredits.Builder()
-                                    .MerchantRefNum(System.Guid.NewGuid().ToString())
+                                    .MerchantRefNum(Guid.NewGuid().ToString())
                                     .Amount(10000)
                                     .Ach()
                                         .AccountHolderName("John Smith")

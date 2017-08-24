@@ -15,7 +15,7 @@ using BillingDetails = Paysafe.DirectDebit.BillingDetails;
 
 namespace Tests.DirectDebit
 /*
-*Is not covered by tests:
+* Is not covered by tests:
 * -Process a BACS purchase using a payment token
 * -Process a SEPA purchase using a payment token
 * -Process a BACS standalone credit using a payment token
@@ -25,25 +25,56 @@ namespace Tests.DirectDebit
     class GivenAPaysafeDirectDebitApi
     {
 
-        private DirectDebitService achDirectDebitService;
-        private Purchases achPurchase;
+        private DirectDebitService _achDirectDebitService;
+        private Purchases _achPurchase;
 
-        private DirectDebitService eftDirectDebitService;
-        private Purchases eftPurchase;
+        private DirectDebitService _eftDirectDebitService;
+        private Purchases _eftPurchase;
 
-        private Authorization auth;
-
+        private StandaloneCredits _standaloneCredit;
 
         [SetUp]
         public void Init()
         {
-            achDirectDebitService = SampleFactory.CreateSampleAchDirectDebitService();
-            achPurchase = SampleFactory.CreateSampleAchPurchase();
+            _achDirectDebitService = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = SampleFactory.CreateSampleAchPurchase();
 
-            eftDirectDebitService = SampleFactory.CreateSampleEftDirectDebitService();
-            eftPurchase = SampleFactory.CreateSampleEftPurchase();
+            _eftDirectDebitService = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = SampleFactory.CreateSampleEftPurchase();
 
-            auth = SampleFactory.CreateSampleCustomAuthorization("noException");
+            _standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
+        }
+
+        /*
+        * Monitor
+        */
+
+        [Test]
+        public void Eft_card_payment_api_Should_be_up_sync()
+        {
+            bool status = _eftDirectDebitService.Monitor();
+            Assert.That(status, Is.True);
+        }
+
+        [Test]
+        public async Task Eft_card_payment_api_Should_be_up_async()
+        {
+            bool status = await _eftDirectDebitService.MonitorAsync();
+            Assert.That(status, Is.True);
+        }
+
+        [Test]
+        public void Ach_card_payment_api_Should_be_up_sync()
+        {
+            bool status = _achDirectDebitService.Monitor();
+            Assert.That(status, Is.True);
+        }
+
+        [Test]
+        public async Task Ach_card_payment_api_Should_be_up_async()
+        {
+            bool status = await _achDirectDebitService.MonitorAsync();
+            Assert.That(status, Is.True);
         }
 
         /*
@@ -54,57 +85,40 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_process_an_eft_purchase_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            Purchases response = _eftDirectDebitService.Submit(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-
-            Purchases response = service.Submit(purchase);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_process_an_eft_purchase_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            Purchases response = await _eftDirectDebitService.SubmitAsync(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-
-            Purchases response = await service.SubmitAsync(purchase);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_process_an_ach_purchase_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            Purchases response = _achDirectDebitService.Submit(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-
-            Purchases response = service.Submit(purchase);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_process_an_ach_purchase_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            Purchases response = await _achDirectDebitService.SubmitAsync(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-
-            Purchases response = await service.SubmitAsync(purchase);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public void When_I_process_an_eft_purchase_using_a_token_Then_it_should_return_a_valid_response_sync()
         {
-            var directDebitService = SampleFactory.CreateSampleEftDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -116,7 +130,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = vaultService.Create(account);
 
-            Purchases response = directDebitService.Submit(Purchases.Builder()
+            Purchases response = _eftDirectDebitService.Submit(Purchases.Builder()
                                                                     .MerchantRefNum(System.Guid.NewGuid().ToString())
                                                                     .Amount(10038)
                                                                     .Eft()
@@ -124,13 +138,12 @@ namespace Tests.DirectDebit
                                                                         .Done()
                                                                     .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_process_an_eft_purchase_using_a_token_Then_it_should_return_a_valid_response_async()
         {
-            var directDebitService = SampleFactory.CreateSampleEftDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -142,7 +155,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = await vaultService.CreateAsync(account);
 
-            Purchases response = await directDebitService.SubmitAsync(Purchases.Builder()
+            Purchases response = await _eftDirectDebitService.SubmitAsync(Purchases.Builder()
                                                                                .MerchantRefNum(System.Guid.NewGuid().ToString())
                                                                                .Amount(10038)
                                                                                .Eft()
@@ -150,14 +163,13 @@ namespace Tests.DirectDebit
                                                                                    .Done()
                                                                                .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_process_an_ach_purchase_using_a_token_Then_it_should_return_a_valid_response_sync()
         {
-            var directDebitService = SampleFactory.CreateSampleAchDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -169,7 +181,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = vaultService.Create(account);
 
-            Purchases response = directDebitService.Submit(Purchases.Builder()
+            Purchases response = _achDirectDebitService.Submit(Purchases.Builder()
                                                                     .MerchantRefNum(System.Guid.NewGuid().ToString())
                                                                     .Amount(10038)
                                                                     .Ach()
@@ -177,14 +189,13 @@ namespace Tests.DirectDebit
                                                                         .Done()
                                                                     .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_process_an_ach_purchase_using_a_token_Then_it_should_return_a_valid_response_async()
         {
-            var directDebitService = SampleFactory.CreateSampleAchDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -196,7 +207,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = await vaultService.CreateAsync(account);
 
-            Purchases response = await directDebitService.SubmitAsync(Purchases.Builder()
+            Purchases response = await _achDirectDebitService.SubmitAsync(Purchases.Builder()
                                                                                .MerchantRefNum(System.Guid.NewGuid().ToString())
                                                                                .Amount(10038)
                                                                                .Ach()
@@ -204,7 +215,7 @@ namespace Tests.DirectDebit
                                                                                    .Done()
                                                                                .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         // Cancel a purchase
@@ -212,67 +223,55 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_cancel_an_eft_purchase_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = _eftDirectDebitService.Submit(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = service.Submit(purchase);
-
-            var response = service.Cancel(Purchases.Builder()
+            var response = _eftDirectDebitService.Cancel(Purchases.Builder()
                                                    .Status("CANCELLED")
-                                                   .Id(purchase.Id())
+                                                   .Id(_eftPurchase.Id())
                                                    .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         public async Task When_I_cancel_an_eft_purchase_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = await _eftDirectDebitService.SubmitAsync(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var response = await service.CancelAsync(Purchases.Builder()
+            var response = await _eftDirectDebitService.CancelAsync(Purchases.Builder()
                                                               .Status("CANCELLED")
-                                                              .Id(purchase.Id())
+                                                              .Id(_eftPurchase.Id())
                                                               .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_cancel_an_ach_purchase_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = _achDirectDebitService.Submit(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = service.Submit(purchase);
-
-            var response = service.Cancel(Purchases.Builder()
+            var response = _achDirectDebitService.Cancel(Purchases.Builder()
                 .Status("CANCELLED")
-                .Id(purchase.Id())
+                .Id(_achPurchase.Id())
                 .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_cancel_an_ach_purchase_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = await _achDirectDebitService.SubmitAsync(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var response = await service.CancelAsync(Purchases.Builder()
+            var response = await _achDirectDebitService.CancelAsync(Purchases.Builder()
                 .Status("CANCELLED")
-                .Id(purchase.Id())
+                .Id(_achPurchase.Id())
                 .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         // Lookup a purchase
@@ -280,134 +279,114 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_lookup_an_eft_purchase_using_an_id_Then_it_should_return_a_valid_eft_purchase_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = _eftDirectDebitService.Submit(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = service.Submit(purchase);
-
-            var returnedPurchase = service.Get(Purchases.Builder()
-                                                        .Id(purchase.Id())
+            var returnedPurchase = _eftDirectDebitService.Get(Purchases.Builder()
+                                                        .Id(_eftPurchase.Id())
                                                         .Build());
 
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, returnedPurchase));
+            Assert.That(PurchasesAreEquivalent(_eftPurchase, returnedPurchase));
         }
 
         [Test]
         public async Task When_I_lookup_an_eft_purchase_using_an_id_Then_it_should_return_a_valid_eft_purchase_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = await _eftDirectDebitService.SubmitAsync(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var returnedPurchase = await service.GetAsync(Purchases.Builder()
-                                                                   .Id(purchase.Id())
+            var returnedPurchase = await _eftDirectDebitService.GetAsync(Purchases.Builder()
+                                                                   .Id(_eftPurchase.Id())
                                                                    .Build());
 
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, returnedPurchase));
+            Assert.That(PurchasesAreEquivalent(_eftPurchase, returnedPurchase));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_lookup_an_ach_purchase_using_an_id_Then_it_should_return_a_valid_ach_purchase_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+           _achPurchase = _achDirectDebitService.Submit(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = service.Submit(purchase);
-
-            var returnedPurchase = service.Get(Purchases.Builder()
-                                                        .Id(purchase.Id())
+            var returnedPurchase = _achDirectDebitService.Get(Purchases.Builder()
+                                                        .Id(_achPurchase.Id())
                                                         .Build());
 
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, returnedPurchase));
+            Assert.That(PurchasesAreEquivalent(_achPurchase, returnedPurchase));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_lookup_an_ach_purchase_using_an_id_Then_it_should_return_a_valid_ach_purchase_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = await _achDirectDebitService.SubmitAsync(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var returnedPurchase = await service.GetAsync(Purchases.Builder()
-                                                                   .Id(purchase.Id())
+            var returnedPurchase = await _achDirectDebitService.GetAsync(Purchases.Builder()
+                                                                   .Id(_achPurchase.Id())
                                                                    .Build());
 
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, returnedPurchase));
+            Assert.That(PurchasesAreEquivalent(_achPurchase, returnedPurchase));
         }
 
+        // Fail: Sometimes returns empty results
+        // Dates: 2017-08-24 5:50 pm
         [Test]
         public void When_I_lookup_an_eft_purchase_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_purchase_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = _eftDirectDebitService.Submit(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = service.Submit(purchase);
-
-            var returnedPurchase = service.GetPurchase(Purchases.Builder()
-                .MerchantRefNum(purchase.MerchantRefNum())
+            var returnedPurchase = _eftDirectDebitService.GetPurchase(Purchases.Builder()
+                .MerchantRefNum(_eftPurchase.MerchantRefNum())
                 .Build());
 
             var result = returnedPurchase.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(PurchasesAreEquivalent(_eftPurchase, result.First()));
         }
 
+        // Fail: Sometimes returns empty results
+        // Dates: 2017-08-24 5:50 pm
         [Test]
         public async Task When_I_lookup_an_eft_purchase_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_purchase_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
+            _eftPurchase = await _eftDirectDebitService.SubmitAsync(_eftPurchase);
 
-            var purchase = SampleFactory.CreateSampleEftPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var returnedPurchase = await service.GetPurchaseAsync(Purchases.Builder()
-                                                                           .MerchantRefNum(purchase.MerchantRefNum())
-                                                                           .Build());
+            var returnedPurchase = await _eftDirectDebitService.GetPurchaseAsync(Purchases.Builder()
+                                                                                          .MerchantRefNum(_eftPurchase.MerchantRefNum())
+                                                                                          .Build());
             var result = returnedPurchase.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(PurchasesAreEquivalent(_eftPurchase, result.First()));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_lookup_an_ach_purchase_using_a_mercahnt_refnum_Then_it_should_return_a_valid_ach_purchase_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = _achDirectDebitService.Submit(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = service.Submit(purchase);
-
-            var returnedPurchase = service.GetPurchase(Purchases.Builder()
-                .MerchantRefNum(purchase.MerchantRefNum())
+            var returnedPurchase = _achDirectDebitService.GetPurchase(Purchases.Builder()
+                .MerchantRefNum(_achPurchase.MerchantRefNum())
                 .Build());
             var result = returnedPurchase.GetResults();
 
-            Assert.AreEqual(result.Count, 1);
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(PurchasesAreEquivalent(_achPurchase, result.First()));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_lookup_an_ach_purchase_using_a_mercahnt_refnum_Then_it_should_return_a_valid_ach_purchase_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
+            _achPurchase = await _achDirectDebitService.SubmitAsync(_achPurchase);
 
-            var purchase = SampleFactory.CreateSampleAchPurchase();
-            purchase = await service.SubmitAsync(purchase);
-
-            var returnedPurchase = await service.GetPurchaseAsync(Purchases.Builder()
-                .MerchantRefNum(purchase.MerchantRefNum())
+            var returnedPurchase = await _achDirectDebitService.GetPurchaseAsync(Purchases.Builder()
+                .MerchantRefNum(_achPurchase.MerchantRefNum())
                 .Build());
             var result = returnedPurchase.GetResults();
 
-            Assert.AreEqual(result.Count, 1);
-            Assert.IsTrue(PurchasesAreEquivalent(purchase, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(PurchasesAreEquivalent(_achPurchase, result.First()));
         }
 
         /*
@@ -419,53 +398,40 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_process_an_eft_standalone_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
+            var response = _eftDirectDebitService.Submit(_standaloneCredit);
 
-            var response = service.Submit(standaloneCredit);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_process_an_eft_standalone_credit_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
+            var response = await _eftDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var response = await service.SubmitAsync(standaloneCredit);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_process_an_ach_standalone_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
+            var response = _achDirectDebitService.Submit(_standaloneCredit);
 
-            var response = service.Submit(standaloneCredit);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_process_an_ach_standalone_credit_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
+            var response = await _achDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var response = await service.SubmitAsync(standaloneCredit);
-
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public void When_I_process_an_eft_standalone_using_a_payment_token_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var directDebitService = SampleFactory.CreateSampleEftDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -477,7 +443,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = vaultService.Create(account);
 
-            var response = directDebitService.Submit(StandaloneCredits.Builder()
+            var response = _eftDirectDebitService.Submit(StandaloneCredits.Builder()
                                                                       .MerchantRefNum(account.MerchantRefNum())
                                                                       .Amount(10038)
                                                                       .Eft()
@@ -485,13 +451,12 @@ namespace Tests.DirectDebit
                                                                           .Done()
                                                                       .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_process_an_eft_standalone_using_a_payment_token_credit_Then_it_should_return_a_valid_response_async()
         {
-            var directDebitService = SampleFactory.CreateSampleEftDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -503,7 +468,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleEftBankAccount(profile, address);
             account = await vaultService.CreateAsync(account);
 
-            var response = await directDebitService.SubmitAsync(StandaloneCredits.Builder()
+            var response = await _eftDirectDebitService.SubmitAsync(StandaloneCredits.Builder()
                                                                                  .MerchantRefNum(account.MerchantRefNum())
                                                                                  .Amount(10038)
                                                                                  .Eft()
@@ -511,14 +476,13 @@ namespace Tests.DirectDebit
                                                                                      .Done()
                                                                                  .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_process_an_ach_standalone_using_a_payment_token_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var directDebitService = SampleFactory.CreateSampleAchDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -530,7 +494,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = vaultService.Create(account);
 
-            var response = directDebitService.Submit(StandaloneCredits.Builder()
+            var response = _achDirectDebitService.Submit(StandaloneCredits.Builder()
                                                                       .MerchantRefNum(account.MerchantRefNum())
                                                                       .Amount(10038)
                                                                       .Ach()
@@ -539,14 +503,13 @@ namespace Tests.DirectDebit
                                                                           .Done()
                                                                      .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_process_an_ach_standalone_using_a_payment_token_credit_Then_it_should_return_a_valid_response_async()
         {
-            var directDebitService = SampleFactory.CreateSampleAchDirectDebitService();
             var vaultService = SampleFactory.CreateSampleCustomerVaultService();
 
             var profile = SampleFactory.CreateSampleProfile();
@@ -558,7 +521,7 @@ namespace Tests.DirectDebit
             var account = SampleFactory.CreatSampleAchBankAccount(profile, address);
             account = await vaultService.CreateAsync(account);
 
-            var response = await directDebitService.SubmitAsync(StandaloneCredits.Builder()
+            var response = await _achDirectDebitService.SubmitAsync(StandaloneCredits.Builder()
                                                                                  .MerchantRefNum(account.MerchantRefNum())
                                                                                  .Amount(10038)
                                                                                  .Ach()
@@ -567,7 +530,7 @@ namespace Tests.DirectDebit
                                                                                      .Done()
                                                                                  .Build());
 
-            Assert.AreEqual(response.Status(), "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
 
@@ -576,63 +539,55 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_cancel_an_eft_standalone_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _eftDirectDebitService.Submit(_standaloneCredit);
 
-            var response = service.Cancel(StandaloneCredits.Builder()
+            var response = _eftDirectDebitService.Cancel(StandaloneCredits.Builder()
                                                            .Status("CANCELLED")
-                                                           .Id(standaloneCredit.Id())
+                                                           .Id(_standaloneCredit.Id())
                                                            .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         public async Task When_I_cancel_an_eft_standalone_credit_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _eftDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var response = await service.CancelAsync(StandaloneCredits.Builder()
+            var response = await _eftDirectDebitService.CancelAsync(StandaloneCredits.Builder()
                                                                       .Status("CANCELLED")
-                                                                      .Id(standaloneCredit.Id())
+                                                                      .Id(_standaloneCredit.Id())
                                                                       .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_cancel_an_ach_standalone_credit_Then_it_should_return_a_valid_response_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _achDirectDebitService.Submit(_standaloneCredit);
 
-            var response = service.Cancel(StandaloneCredits.Builder()
+            var response = _achDirectDebitService.Cancel(StandaloneCredits.Builder()
                 .Status("CANCELLED")
-                .Id(standaloneCredit.Id())
+                .Id(_standaloneCredit.Id())
                 .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_cancel_an_ach_standalone_credit_Then_it_should_return_a_valid_response_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _achDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var response = await service.CancelAsync(StandaloneCredits.Builder()
+            var response = await _achDirectDebitService.CancelAsync(StandaloneCredits.Builder()
                 .Status("CANCELLED")
-                .Id(standaloneCredit.Id())
+                .Id(_standaloneCredit.Id())
                 .Build());
 
-            Assert.AreEqual(response.Status(), "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         // Lookup a standalone credit
@@ -640,129 +595,117 @@ namespace Tests.DirectDebit
         [Test]
         public void When_I_lookup_an_eft_standalone_credit_using_an_id_Then_it_should_return_a_valid_eft_standalone_credit_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _eftDirectDebitService.Submit(_standaloneCredit);
 
-            var returnedStandaloneCredit = service.Get(StandaloneCredits.Builder()
-                                                  .Id(standaloneCredit.Id())
+            var returnedStandaloneCredit = _eftDirectDebitService.Get(StandaloneCredits.Builder()
+                                                  .Id(_standaloneCredit.Id())
                                                   .Build());
 
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, returnedStandaloneCredit));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, returnedStandaloneCredit));
         }
 
         [Test]
         public async Task When_I_lookup_an_eft_standalone_credit_using_an_id_Then_it_should_return_a_valid_eft_standalone_credit_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _eftDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var returnedStandaloneCredit = await service.GetAsync(StandaloneCredits.Builder()
-                                                        .Id(standaloneCredit.Id())
+            var returnedStandaloneCredit = await _eftDirectDebitService.GetAsync(StandaloneCredits.Builder()
+                                                        .Id(_standaloneCredit.Id())
                                                         .Build());
 
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, returnedStandaloneCredit));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, returnedStandaloneCredit));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_lookup_an_ach_standalone_credit_using_an_id_Then_it_should_return_a_valid_ach_standalone_credit_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _achDirectDebitService.Submit(_standaloneCredit);
 
-            var returnedStandaloneCredit = service.Get(StandaloneCredits.Builder()
-                                                  .Id(standaloneCredit.Id())
+            var returnedStandaloneCredit = _achDirectDebitService.Get(StandaloneCredits.Builder()
+                                                  .Id(_standaloneCredit.Id())
                                                   .Build());
 
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, returnedStandaloneCredit));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, returnedStandaloneCredit));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_lookup_an_ach_standalone_using_an_id_credit_Then_it_should_return_a_valid_ach_standalone_credit_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _achDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var returnedStandaloneCredit = await service.GetAsync(StandaloneCredits.Builder()
-                                                        .Id(standaloneCredit.Id())
+            var returnedStandaloneCredit = await _achDirectDebitService.GetAsync(StandaloneCredits.Builder()
+                                                        .Id(_standaloneCredit.Id())
                                                         .Build());
 
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, returnedStandaloneCredit));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, returnedStandaloneCredit));
         }
 
+        // Fail: Sometimes returns empty results
+        // Dates: 2017-08-24 5:50 pm
         [Test]
         public void When_I_lookup_an_eft_standalone_credit_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_standalone_credit_sync()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _eftDirectDebitService.Submit(_standaloneCredit);
 
-            var returnedStandaloneCredit = service.GetStandaloneCredits(StandaloneCredits.Builder()
-                                                                                         .MerchantRefNum(standaloneCredit.MerchantRefNum())
+            var returnedStandaloneCredit = _eftDirectDebitService.GetStandaloneCredits(StandaloneCredits.Builder()
+                                                                                         .MerchantRefNum(_standaloneCredit.MerchantRefNum())
                                                                                          .Build());
 
             var result = returnedStandaloneCredit.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, result.First()));
         }
 
+        // Fail: Sometimes returns empty results
+        // Dates: 2017-08-24 5:50 pm
         [Test]
         public async Task When_I_lookup_an_eft_standalone_credit_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_standalone_credit_async()
         {
-            var service = SampleFactory.CreateSampleEftDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleEftStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _eftDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var returnedStandaloneCredit = await service.GetStandaloneCreditsAsync(StandaloneCredits.Builder()
-                .MerchantRefNum(standaloneCredit.MerchantRefNum())
+            var returnedStandaloneCredit = await _eftDirectDebitService.GetStandaloneCreditsAsync(StandaloneCredits.Builder()
+                .MerchantRefNum(_standaloneCredit.MerchantRefNum())
                 .Build());
 
             var result = returnedStandaloneCredit.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, result.First()));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public void When_I_lookup_an_ach_standalone_credit_using_a_merchant_refnum_Then_it_should_return_a_valid_ach_standalone_credit_sync()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = service.Submit(standaloneCredit);
+            _standaloneCredit = _achDirectDebitService.Submit(_standaloneCredit);
 
-            var returnedStandaloneCredit = service.GetStandaloneCredits(StandaloneCredits.Builder()
-                                                                                         .MerchantRefNum(standaloneCredit.MerchantRefNum())
+            var returnedStandaloneCredit = _achDirectDebitService.GetStandaloneCredits(StandaloneCredits.Builder()
+                                                                                         .MerchantRefNum(_standaloneCredit.MerchantRefNum())
                                                                                          .Build());
 
             var result = returnedStandaloneCredit.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, result.First()));
         }
 
         [Test]
         [Ignore("Currently causing internal server error")]
         public async Task When_I_lookup_an_ach_standalone_using_a_merchant_refnum_credit_Then_it_should_return_a_valid_ach_standalone_credit_async()
         {
-            var service = SampleFactory.CreateSampleAchDirectDebitService();
-            var standaloneCredit = SampleFactory.CreateSampleAchStandaloneCredits();
-            standaloneCredit = await service.SubmitAsync(standaloneCredit);
+            _standaloneCredit = await _achDirectDebitService.SubmitAsync(_standaloneCredit);
 
-            var returnedStandaloneCredit = await service.GetStandaloneCreditsAsync(StandaloneCredits.Builder()
-                                                                                                    .MerchantRefNum(standaloneCredit.MerchantRefNum())
+            var returnedStandaloneCredit = await _achDirectDebitService.GetStandaloneCreditsAsync(StandaloneCredits.Builder()
+                                                                                                    .MerchantRefNum(_standaloneCredit.MerchantRefNum())
                                                                                                     .Build());
 
             var result = returnedStandaloneCredit.GetResults();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(StandaloneCrditsAreEquivalent(standaloneCredit, result.First()));
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(StandaloneCrditsAreEquivalent(_standaloneCredit, result.First()));
         }
 
         /*

@@ -58,6 +58,14 @@ namespace Paysafe.DirectDebit
             return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
+        public async Task<bool> MonitorAsync()
+        {
+            Request request = new Request(uri: "directdebit/monitor");
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
+        }
+
         /// <summary>
         /// Create submit for Purchases
         /// </summary>

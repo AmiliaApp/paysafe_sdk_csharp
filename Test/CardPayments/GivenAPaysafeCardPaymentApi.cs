@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Paysafe;
@@ -19,14 +20,32 @@ namespace Tests.CardPayments
     [TestFixture]
     class GivenAPaysafeCardPaymentApi
     {
-        private CardPaymentService cardService;
-        private Authorization auth;
+        private CardPaymentService _cardService;
+        private Authorization _auth;
 
         [SetUp]
         public void Init()
         {
-            cardService = SampleFactory.CreateSampleCardPaymentService();
-            auth = SampleFactory.CreateSampleCustomAuthorization("noException");
+            _cardService = SampleFactory.CreateSampleCardPaymentService();
+            _auth = SampleFactory.CreateSampleCustomAuthorization("noException");
+        }
+
+        /*
+         * Monitor
+         */
+
+        [Test]
+        public void Card_payment_api_Should_be_up_sync()
+        {
+            bool status = _cardService.Monitor();
+            Assert.That(status, Is.True);
+        }
+
+        [Test]
+        public async Task Card_payment_api_Should_be_up_async()
+        {
+            bool status = await _cardService.MonitorAsync();
+            Assert.That(status, Is.True);
         }
 
         /*
@@ -36,17 +55,17 @@ namespace Tests.CardPayments
         [Test]
         public void When_I_send_a_valid_auth_Then_the_transaction_should_complete_synchronous()
         {
-            var response = cardService.Authorize(auth);
+            var response = _cardService.Authorize(_auth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_send_a_valid_auth_Then_the_transaction_should_complete_asynchronous()
         {
-            var response = await cardService.AuthorizeAsync(auth);
+            var response = await _cardService.AuthorizeAsync(_auth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -54,9 +73,9 @@ namespace Tests.CardPayments
         {
             var complexAuth = SampleFactory.CreateSampleComplexAuthorization();
 
-            var response = cardService.Authorize(complexAuth);
+            var response = _cardService.Authorize(complexAuth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -64,59 +83,61 @@ namespace Tests.CardPayments
         {
             var complexAuth = SampleFactory.CreateSampleComplexAuthorization();
 
-            var response =  await cardService.AuthorizeAsync(complexAuth);
+            var response =  await _cardService.AuthorizeAsync(complexAuth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public void When_I_lookup_an_auth_using_an_auth_id_Then_it_should_return_a_valid_auth_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
-            var returnedAuth = cardService.Get(new Authorization(auth.Id()));
+            var returnedAuth = _cardService.Get(new Authorization(_auth.Id()));
 
-            Assert.IsTrue(returnedAuth.Status() == "COMPLETED");
-            Assert.IsTrue(AuthorizationsAreEquivalent(auth, returnedAuth));
+            Assert.That(returnedAuth.Status(), Is.EqualTo("COMPLETED"));
+            Assert.That(AuthorizationsAreEquivalent(_auth, returnedAuth), Is.True);
         }
 
         [Test]
         public async Task When_I_lookup_an_auth_using_an_auth_id_Then_it_should_return_a_valid_auth_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
-            var returnedAuth = await cardService.GetAsync(new Authorization(auth.Id()));
+            var returnedAuth = await _cardService.GetAsync(new Authorization(_auth.Id()));
 
-            Assert.IsTrue(returnedAuth.Status() == "COMPLETED");
-            Assert.IsTrue(AuthorizationsAreEquivalent(auth, returnedAuth));
+            Assert.That(returnedAuth.Status(), Is.EqualTo("COMPLETED"));
+            Assert.That(AuthorizationsAreEquivalent(_auth, returnedAuth), Is.True);
         }
 
         [Test]
         public void When_I_lookup_an_auth_using_a_merchant_refNum_Then_it_should_return_a_valid_auth_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
-            Pagerator<Authorization> auths = cardService.GetAuths(Authorization.Builder()
-                                                                                .MerchantRefNum(auth.MerchantRefNum())
+            Pagerator<Authorization> auths = _cardService.GetAuths(Authorization.Builder()
+                                                                                .MerchantRefNum(_auth.MerchantRefNum())
                                                                                 .Build());
 
             var authList = auths.GetResults();
-            Assert.IsTrue(authList.Count == 1);
-            Assert.IsTrue(AuthorizationsAreEquivalent(auth, authList[0]));
+
+            Assert.That(authList.Count, Is.EqualTo(1));
+            Assert.That( AuthorizationsAreEquivalent(authList.First(), _auth));
         }
 
         [Test]
         public async Task When_I_lookup_an_auth_using_a_merchant_refNum_Then_it_should_return_a_valid_auth_async()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
-            Pagerator<Authorization> auths = await cardService.GetAuthsAsync(Authorization.Builder()
-                                                                                          .MerchantRefNum(auth.MerchantRefNum())
+            Pagerator<Authorization> auths = await _cardService.GetAuthsAsync(Authorization.Builder()
+                                                                                          .MerchantRefNum(_auth.MerchantRefNum())
                                                                                           .Build());
 
             var authList = auths.GetResults();
-            Assert.IsTrue(authList.Count == 1);
-            Assert.IsTrue(AuthorizationsAreEquivalent(auth, authList[0]));
+
+            Assert.That(authList.Count, Is.EqualTo(1));
+            Assert.That(AuthorizationsAreEquivalent(authList.First(), _auth));
         }
 
         /*
@@ -127,9 +148,9 @@ namespace Tests.CardPayments
         {
             var settledAuth = SampleFactory.CreateSampleSettledAuthorization();
 
-            var response = cardService.Authorize(settledAuth);
+            var response = _cardService.Authorize(settledAuth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -137,73 +158,73 @@ namespace Tests.CardPayments
         {
             var settledAuth = SampleFactory.CreateSampleSettledAuthorization();
 
-            var response = await cardService.AuthorizeAsync(settledAuth);
+            var response = await _cardService.AuthorizeAsync(settledAuth);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public void When_I_void_an_auth_Then_it_should_return_a_valid_response_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666) // Amount voided == authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            AuthorizationReversal response = cardService.ReverseAuth(authReversal);
+            AuthorizationReversal response = _cardService.ReverseAuth(authReversal);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_void_an_auth_Then_it_should_return_a_valid_response_async()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666) //Amount voided == authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            AuthorizationReversal response = await cardService.ReverseAuthAsync(authReversal);
+            AuthorizationReversal response = await _cardService.ReverseAuthAsync(authReversal);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public void When_I_partially_void_an_auth_Then_it_should_return_a_valid_response_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(111) //Amount voided < authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            AuthorizationReversal response = cardService.ReverseAuth(authReversal);
+            AuthorizationReversal response = _cardService.ReverseAuth(authReversal);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
         public async Task When_I_partially_void_an_auth_Then_it_should_return_a_valid_response_async()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(111) //Amount voided < authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            AuthorizationReversal response = await cardService.ReverseAuthAsync(authReversal);
+            AuthorizationReversal response = await _cardService.ReverseAuthAsync(authReversal);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -215,7 +236,7 @@ namespace Tests.CardPayments
             settledAuth = service.Authorize(settledAuth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666) //Amount voided == authorized amount
                 .AuthorizationId(settledAuth.Id())
                 .Build();
@@ -243,113 +264,114 @@ namespace Tests.CardPayments
         [Test]
         public void When_I_void_an_auth_with_an_amount_too_large_Then_it_should_return_throw_RequestDeclinedException_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(1000000) //Amount voided > authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            Assert.Throws<Paysafe.Common.RequestDeclinedException>(() => cardService.ReverseAuth(authReversal));
+            Assert.Throws<Paysafe.Common.RequestDeclinedException>(() => _cardService.ReverseAuth(authReversal));
         }
 
         [Test]
         public void When_I_void_an_auth_with_an_amount_too_large_Then_it_should_return_throw_RequestDeclinedException_async()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(1000000) //Amount voided > authorized amount
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            Assert.ThrowsAsync<Paysafe.Common.RequestDeclinedException>(async () => await cardService.ReverseAuthAsync(authReversal));
+            Assert.ThrowsAsync<Paysafe.Common.RequestDeclinedException>(async () => await _cardService.ReverseAuthAsync(authReversal));
         }
 
         [Test]
         public void When_I_lookup_a_reversal_using_a_reversal_id_Then_it_should_return_a_valid_reversal_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666)
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            authReversal = cardService.ReverseAuth(authReversal);
+            authReversal = _cardService.ReverseAuth(authReversal);
 
-            AuthorizationReversal returnedReversal = cardService.Get(new AuthorizationReversal(authReversal.Id()));
+            AuthorizationReversal returnedReversal = _cardService.Get(new AuthorizationReversal(authReversal.Id()));
 
-            Assert.IsTrue(returnedReversal.Status() == "COMPLETED");
-            Assert.IsTrue(AuthorizationReversalsAreEquivalent(authReversal, returnedReversal));
+            Assert.That(returnedReversal.Status(), Is.EqualTo("COMPLETED"));
+            Assert.That(AuthorizationReversalsAreEquivalent(authReversal, returnedReversal));
         }
 
         [Test]
         public async Task When_I_lookup_a_reversal_using_a_reversal_id_Then_it_should_return_a_valid_reversal_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666)
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            authReversal = await cardService.ReverseAuthAsync(authReversal);
+            authReversal = await _cardService.ReverseAuthAsync(authReversal);
 
-            AuthorizationReversal returnedReversal = await cardService.GetAsync(new AuthorizationReversal(authReversal.Id()));
+            AuthorizationReversal returnedReversal = await _cardService.GetAsync(new AuthorizationReversal(authReversal.Id()));
 
-            Assert.IsTrue(returnedReversal.Status() == "COMPLETED");
-            Assert.IsTrue(AuthorizationReversalsAreEquivalent(authReversal, returnedReversal));
+            Assert.That(returnedReversal.Status(), Is.EqualTo("COMPLETED"));
+
+            Assert.That(AuthorizationReversalsAreEquivalent(authReversal, returnedReversal));
         }
 
         [Test]
         public void When_I_lookup_a_reversal_using_a_merchant_refNum_Then_it_should_return_a_valid_reversal_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666)
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            authReversal = cardService.ReverseAuth(authReversal);
+            authReversal = _cardService.ReverseAuth(authReversal);
 
-            Pagerator<AuthorizationReversal> authReversals = cardService.GetAuthReversals(AuthorizationReversal.Builder()
+            Pagerator<AuthorizationReversal> authReversals = _cardService.GetAuthReversals(AuthorizationReversal.Builder()
                 .MerchantRefNum(authReversal.MerchantRefNum())
                 .Build());
 
 
             var authRevList = authReversals.GetResults();
-            Assert.IsTrue(authRevList.Count == 1);
-            Assert.IsTrue(AuthorizationReversalsAreEquivalent(authReversal, authRevList[0]));
+            Assert.That(authRevList.Count, Is.EqualTo(1));
+            Assert.That(AuthorizationReversalsAreEquivalent(authReversal, authRevList.First()));
         }
 
         [Test]
         public async Task When_I_lookup_a_reversal_using_a_merchant_refNum_Then_it_should_return_a_valid_reversal_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             AuthorizationReversal authReversal = AuthorizationReversal.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
+                .MerchantRefNum(_auth.MerchantRefNum())
                 .Amount(6666)
-                .AuthorizationId(auth.Id())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            authReversal = await cardService.ReverseAuthAsync(authReversal);
+            authReversal = await _cardService.ReverseAuthAsync(authReversal);
 
-            Pagerator<AuthorizationReversal> authReversals = await cardService.GetAuthReversalsAsync(AuthorizationReversal.Builder()
+            Pagerator<AuthorizationReversal> authReversals = await _cardService.GetAuthReversalsAsync(AuthorizationReversal.Builder()
                 .MerchantRefNum(authReversal.MerchantRefNum())
                 .Build());
 
 
             var authRevList = authReversals.GetResults();
-            Assert.IsTrue(authRevList.Count == 1);
-            Assert.IsTrue(AuthorizationReversalsAreEquivalent(authReversal, authRevList[0]));
+            Assert.That(authRevList.Count, Is.EqualTo(1));
+            Assert.That(AuthorizationReversalsAreEquivalent(authReversal, authRevList[0]));
         }
 
         /*
@@ -359,160 +381,161 @@ namespace Tests.CardPayments
         [Test]
         public void When_I_settle_an_auth_Then_it_should_return_a_valid_response_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            Settlement response = cardService.Settlement(settle);
+            Settlement response = _cardService.Settlement(settle);
 
-            Assert.IsTrue(response.Status() == "PENDING");
+            Assert.That(response.Status(), Is.EqualTo("PENDING"));
         }
 
         [Test]
         public async Task When_I_settle_an_auth_Then_it_should_return_a_valid_response_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            Settlement response = await cardService.SettlementAsync(settle);
+            Settlement response = await _cardService.SettlementAsync(settle);
 
-            Assert.IsTrue(response.Status() == "PENDING");
+            Assert.That(response.Status(), Is.EqualTo("PENDING"));
         }
 
         [Test]
         public void When_I_cancel_a_settlement_Then_it_should_return_a_valid_response_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = cardService.Settlement(settle);
+            settle = _cardService.Settlement(settle);
 
-            Settlement response = cardService.CancelSettlement(settle);
+            Settlement response = _cardService.CancelSettlement(settle);
 
-            Assert.IsTrue(response.Status() == "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         // Failed once
         [Test]
         public async Task When_I_cancel_a_settlement_Then_it_should_return_a_valid_response_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = await cardService.SettlementAsync(settle);
+            settle = await _cardService.SettlementAsync(settle);
 
-            Settlement response = await cardService.CancelSettlementAsync(settle);
+            Settlement response = await _cardService.CancelSettlementAsync(settle);
 
-            Assert.IsTrue(response.Status() == "CANCELLED");
+            Assert.That(response.Status(), Is.EqualTo("CANCELLED"));
         }
 
         [Test]
         public void When_I_lookup_a_settlement_using_a_settlement_id_Then_it_should_return_a_valid_settlement_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = cardService.Settlement(settle);
+            settle = _cardService.Settlement(settle);
 
-            var returnedSettle = cardService.Get(new Settlement(settle.Id()));
+            var returnedSettle = _cardService.Get(new Settlement(settle.Id()));
 
-            Assert.IsTrue(SettlementsAreEquivalent(settle, returnedSettle));
+            Assert.That(SettlementsAreEquivalent(settle, returnedSettle));
         }
 
         [Test]
         public async Task When_I_lookup_a_settlement_using_a_settlement_id_Then_it_should_return_a_valid_settlement_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = await cardService.SettlementAsync(settle);
+            settle = await _cardService.SettlementAsync(settle);
 
-            var returnedSettle = await cardService.GetAsync(new Settlement(settle.Id()));
+            var returnedSettle = await _cardService.GetAsync(new Settlement(settle.Id()));
 
-            Assert.IsTrue(SettlementsAreEquivalent(settle, returnedSettle));
+            Assert.That(SettlementsAreEquivalent(settle, returnedSettle));
         }
 
         [Test]
         public void When_I_lookup_a_settlement_using_a_merchant_refNum_Then_it_should_return_a_valid_settlement_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = cardService.Settlement(settle);
+            settle = _cardService.Settlement(settle);
 
-            Pagerator<Settlement> settlements = cardService.GetSettlements(Settlement.Builder()
+            Pagerator<Settlement> settlements = _cardService.GetSettlements(Settlement.Builder()
                 .MerchantRefNum(settle.MerchantRefNum())
                 .Build());
 
             var settleList = settlements.GetResults();
-            Assert.IsTrue(settleList.Count == 1);
+            Assert.That(settleList.Count, Is.EqualTo(1));
             Assert.IsTrue(SettlementsAreEquivalent(settle, settleList[0]));
         }
 
         [Test]
         public async Task When_I_lookup_a_settlement_using_a_merchant_refNum_Then_it_should_return_a_valid_settlement_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = await cardService.SettlementAsync(settle);
+            settle = await _cardService.SettlementAsync(settle);
 
-            Pagerator<Settlement> settlements = await cardService.GetSettlementsAsync(Settlement.Builder()
+            Pagerator<Settlement> settlements = await _cardService.GetSettlementsAsync(Settlement.Builder()
                 .MerchantRefNum(settle.MerchantRefNum())
                 .Build());
 
             var settleList = settlements.GetResults();
-            Assert.IsTrue(settleList.Count == 1);
-            Assert.IsTrue(SettlementsAreEquivalent(settle, settleList[0]));
+            Assert.That(settleList.Count, Is.EqualTo(1));
+            Assert.That(SettlementsAreEquivalent(settle, settleList.First()));
         }
 
         /*
          * Process a card refund
          */
+
         [Test]
         public void When_I_refund_a_pending_settlement_Then_it_should_throw_RequestDeclinedException_sync()
         {
-            auth = cardService.Authorize(auth);
+            _auth = _cardService.Authorize(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = cardService.Settlement(settle);
+            settle = _cardService.Settlement(settle);
 
-            Assert.Throws<Paysafe.Common.RequestDeclinedException>(() => cardService.Refund(Refund.Builder()
+            Assert.Throws<Paysafe.Common.RequestDeclinedException>(() => _cardService.Refund(Refund.Builder()
                                                                                 .MerchantRefNum(settle.MerchantRefNum())
                                                                                 .SettlementId(settle.Id())
                                                                                 .Build()));
@@ -521,16 +544,16 @@ namespace Tests.CardPayments
         [Test]
         public async Task When_I_refund_a_pending_settlement_Then_it_should_throw_RequestDeclinedException_async()
         {
-            auth = await cardService.AuthorizeAsync(auth);
+            _auth = await _cardService.AuthorizeAsync(_auth);
 
             Settlement settle = Settlement.Builder()
-                .MerchantRefNum(auth.MerchantRefNum())
-                .AuthorizationId(auth.Id())
+                .MerchantRefNum(_auth.MerchantRefNum())
+                .AuthorizationId(_auth.Id())
                 .Build();
 
-            settle = await cardService.SettlementAsync(settle);
+            settle = await _cardService.SettlementAsync(settle);
 
-            Assert.ThrowsAsync<Paysafe.Common.RequestDeclinedException>(async () => await cardService.RefundAsync(Refund.Builder()
+            Assert.ThrowsAsync<Paysafe.Common.RequestDeclinedException>(async () => await _cardService.RefundAsync(Refund.Builder()
                                                                                                  .MerchantRefNum(settle.MerchantRefNum())
                                                                                                  .SettlementId(settle.Id())
                                                                                                  .Build()));
@@ -545,9 +568,9 @@ namespace Tests.CardPayments
         {
             var ver = SampleFactory.CreateSampleVerification();
 
-            var response = cardService.Verify(ver);
+            var response = _cardService.Verify(ver);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -558,7 +581,7 @@ namespace Tests.CardPayments
 
             var response = await service.VerifyAsync(ver);
 
-            Assert.IsTrue(response.Status() == "COMPLETED");
+            Assert.That(response.Status(), Is.EqualTo("COMPLETED"));
         }
 
         [Test]
@@ -566,11 +589,11 @@ namespace Tests.CardPayments
         {
             var ver = SampleFactory.CreateSampleVerification();
 
-            ver = cardService.Verify(ver);
+            ver = _cardService.Verify(ver);
 
-            var returnedVer = cardService.Get(new Verification(ver.Id()));
+            var returnedVer = _cardService.Get(new Verification(ver.Id()));
 
-            Assert.IsTrue(VerificationsAreEquivalent(ver, returnedVer));
+            Assert.That(VerificationsAreEquivalent(ver, returnedVer));
         }
 
         [Test]
@@ -578,11 +601,11 @@ namespace Tests.CardPayments
         {
             var ver = SampleFactory.CreateSampleVerification();
 
-            ver = cardService.Verify(ver);
+            ver = _cardService.Verify(ver);
 
-            var returnedVer = await cardService.GetAsync(new Verification(ver.Id()));
+            var returnedVer = await _cardService.GetAsync(new Verification(ver.Id()));
 
-            Assert.IsTrue(VerificationsAreEquivalent(ver, returnedVer));
+            Assert.That(VerificationsAreEquivalent(ver, returnedVer));
         }
 
         [Test]
@@ -590,15 +613,15 @@ namespace Tests.CardPayments
         {
             var ver = SampleFactory.CreateSampleVerification();
 
-            ver = cardService.Verify(ver);
+            ver = _cardService.Verify(ver);
 
-            Pagerator<Verification> verifications = cardService.GetVerifications(Verification.Builder()
+            Pagerator<Verification> verifications = _cardService.GetVerifications(Verification.Builder()
                 .MerchantRefNum(ver.MerchantRefNum())
                 .Build());
 
             var verList = verifications.GetResults();
-            Assert.IsTrue(verList.Count == 1);
-            Assert.IsTrue(VerificationsAreEquivalent(ver, verList[0]));
+            Assert.That(verList.Count, Is.EqualTo(1));
+            Assert.That(VerificationsAreEquivalent(ver, verList.First()));
         }
 
         [Test]
@@ -606,15 +629,15 @@ namespace Tests.CardPayments
         {
             var ver = SampleFactory.CreateSampleVerification();
 
-            ver = await cardService.VerifyAsync(ver);
+            ver = await _cardService.VerifyAsync(ver);
 
-            Pagerator<Verification> verifications = await cardService.GetVerificationsAsync(Verification.Builder()
+            Pagerator<Verification> verifications = await _cardService.GetVerificationsAsync(Verification.Builder()
                 .MerchantRefNum(ver.MerchantRefNum())
                 .Build());
 
             var verList = verifications.GetResults();
-            Assert.IsTrue(verList.Count == 1);
-            Assert.IsTrue(VerificationsAreEquivalent(ver, verList[0]));
+            Assert.That(verList.Count, Is.EqualTo(1));
+            Assert.That(VerificationsAreEquivalent(ver, verList.First()));
         }
 
         /*
