@@ -12,11 +12,28 @@ ___
 
 Find it with nuget with PaysafeSDK
 
+
+
+
 ## Test suite
 ___
 
+### Configuration
+
+In a file named ```appsetting.config``` :
+```
+<?xml version="1.0"?>
+<appSettings>
+  <add key="paysafePaymentApiKey" value="<Your API key>" />
+  <add key="paysafePaymentApiSecret" value="<Your API secret>" />
+  <add key="paysafeMerchantId" value="<Your merchand ID>" />
+  <add key="paysafeDirectDebitMerchantEftId" value="<Your DirectDebit Merchant EFT ID>" />
+  <add key="paysafeDirectDebitMerchantAchId" value="<Your DirectDebit Merchant ACH ID>" />
+</appSettings>
+```
+
 ### Code coverage
-Every test is divided between the synchronous method causing an API call and its asynchronous counterpart.
+Every test covers the synchronous method and its asynchronous counterpart.
 
 #### Covered by tests
 
@@ -107,7 +124,4 @@ and their Async equivalents sometimes result empty values, for minutes at a time
 
 ### Possible ameliorations
 #### AbstractPagerator
-```
-AbstractPagerator.MoveNext()
-```
-has not been made async dues to the difficulty of async method that implements IEnumerator.
+```AbstractPagerator.MoveNext()``` has not been made async due to the difficulty of an async method that implements IEnumerator.

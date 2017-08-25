@@ -17,8 +17,6 @@ namespace Tests
 
             MerchantdId = ConfigurationManager.AppSettings["paysafeMerchantId"];
 
-            MerchanUsdId = ConfigurationManager.AppSettings["paysafeMerchantUsdId"];
-
             DirectDebitEftId = ConfigurationManager.AppSettings["paysafeDirectDebitMerchantEftId"];
 
             DirectDebitAchId = ConfigurationManager.AppSettings["paysafeDirectDebitMerchantAchId"];
@@ -27,7 +25,6 @@ namespace Tests
         public string Key { get; private set; }
         public string Secret { get; private set; }
         public string MerchantdId { get; private set; }
-        public string MerchanUsdId { get; private set; }
         public string DirectDebitEftId { get; private set; }
         public string DirectDebitAchId { get; private set; }
 
