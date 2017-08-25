@@ -73,32 +73,21 @@ namespace Paysafe.DirectDebit
         /// <returns>Purchases</returns>
         public Purchases Submit(Purchases purchases)
         {
-            purchases.SetRequiredFields(new List<string> {
-                GlobalConstants.MerchantRefNum,
-                GlobalConstants.Amount,                
-            });
-            purchases.CheckRequiredFields();
-            purchases.SetOptionalFields(new List<string> {
-                GlobalConstants.CustomerIp,
-                GlobalConstants.DupCheck, 
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft,
-                GlobalConstants.Sepa,
-                GlobalConstants.BillingDetails,
-                GlobalConstants.Profile
-            });
-            Request request = new Request(
-                method: RequestType.Post,
-                uri: PrepareUri(_client.Account() + "/purchases"),
-                body: purchases
-            );
+            var request = SubmitInternal(purchases);
             dynamic response = _client.ProcessRequest(request);
 
             return new Purchases(response);
         }
 
         public async Task<Purchases> SubmitAsync(Purchases purchases)
+        {
+            var request = SubmitInternal(purchases);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Purchases(response);
+        }
+
+        private Request SubmitInternal(Purchases purchases)
         {
             purchases.SetRequiredFields(new List<string> {
                 GlobalConstants.MerchantRefNum,
@@ -115,14 +104,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.BillingDetails,
                 GlobalConstants.Profile
             });
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Post,
                 uri: PrepareUri(_client.Account() + "/purchases"),
                 body: purchases
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Purchases(response);
         }
 
         /// <summary>
@@ -132,25 +118,7 @@ namespace Paysafe.DirectDebit
         /// <returns>StandaloneCredits</returns>
         public StandaloneCredits Submit(StandaloneCredits standalonecredits)
         {
-            standalonecredits.SetRequiredFields(new List<string> {
-                GlobalConstants.MerchantRefNum,
-                GlobalConstants.Amount,               
-            });
-            standalonecredits.CheckRequiredFields();
-            standalonecredits.SetOptionalFields(new List<string> {
-                GlobalConstants.CustomerIp,
-                GlobalConstants.DupCheck,
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft, 
-                GlobalConstants.BillingDetails,
-                GlobalConstants.Profile,
-            });
-            Request request = new Request(
-                method: RequestType.Post,
-                uri: PrepareUri(_client.Account() + "/standalonecredits"),
-                body: standalonecredits
-            );
+            var request = SubmitInternal(standalonecredits);
             dynamic response = _client.ProcessRequest(request);
 
             return new StandaloneCredits(response);
@@ -158,12 +126,22 @@ namespace Paysafe.DirectDebit
 
         public async Task<StandaloneCredits> SubmitAsync(StandaloneCredits standalonecredits)
         {
-            standalonecredits.SetRequiredFields(new List<string> {
+            var request = SubmitInternal(standalonecredits);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new StandaloneCredits(response);
+        }
+
+        private Request SubmitInternal(StandaloneCredits standalonecredits)
+        {
+            standalonecredits.SetRequiredFields(new List<string>
+            {
                 GlobalConstants.MerchantRefNum,
                 GlobalConstants.Amount,
             });
             standalonecredits.CheckRequiredFields();
-            standalonecredits.SetOptionalFields(new List<string> {
+            standalonecredits.SetOptionalFields(new List<string>
+            {
                 GlobalConstants.CustomerIp,
                 GlobalConstants.DupCheck,
                 GlobalConstants.Ach,
@@ -172,14 +150,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.BillingDetails,
                 GlobalConstants.Profile,
             });
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Post,
                 uri: PrepareUri(_client.Account() + "/standalonecredits"),
                 body: standalonecredits
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new StandaloneCredits(response);
         }
 
         /// <summary>
@@ -189,22 +164,7 @@ namespace Paysafe.DirectDebit
         /// <returns>Purchases</returns>
         public Purchases Cancel(Purchases purchases)
         {
-            purchases.SetRequiredFields(new List<string> {
-                GlobalConstants.Status,
-                GlobalConstants.Id
-            });
-            purchases.CheckRequiredFields();
-            purchases.SetOptionalFields(new List<string>{
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft,
-                GlobalConstants.Sepa,
-            });
-            Request request = new Request(
-                method: RequestType.Put,
-                uri: PrepareUri(_client.Account() + "/purchases/" + purchases.Id()),
-                body: purchases
-            );
+            var request = CancelInternal(purchases);
             dynamic response = _client.ProcessRequest(request);
 
             Purchases returnVal = new Purchases(response);
@@ -214,6 +174,16 @@ namespace Paysafe.DirectDebit
 
         public async Task<Purchases> CancelAsync(Purchases purchases)
         {
+            var request = CancelInternal(purchases);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            Purchases returnVal = new Purchases(response);
+            returnVal.Id(purchases.Id());
+            return returnVal;
+        }
+
+        private Request CancelInternal(Purchases purchases)
+        {
             purchases.SetRequiredFields(new List<string> {
                 GlobalConstants.Status,
                 GlobalConstants.Id
@@ -225,16 +195,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.Eft,
                 GlobalConstants.Sepa,
             });
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Put,
                 uri: PrepareUri(_client.Account() + "/purchases/" + purchases.Id()),
                 body: purchases
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            Purchases returnVal = new Purchases(response);
-            returnVal.Id(purchases.Id());
-            return returnVal;
         }
 
         /// <summary>
@@ -244,22 +209,7 @@ namespace Paysafe.DirectDebit
         /// <returns>StandaloneCredits</returns>
         public StandaloneCredits Cancel(StandaloneCredits standalonecredits)
         {
-            standalonecredits.SetRequiredFields(new List<string> {
-                GlobalConstants.Status,
-                GlobalConstants.Id
-            });
-            standalonecredits.CheckRequiredFields();
-            standalonecredits.SetOptionalFields(new List<string>{
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft,               
-            });
-
-            Request request = new Request(
-                method: RequestType.Put,
-                uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonecredits.Id()),
-                body: standalonecredits
-            );
+            var request = CancelInternal(standalonecredits);
             dynamic response = _client.ProcessRequest(request);
 
             StandaloneCredits returnVal = new StandaloneCredits(response);
@@ -269,6 +219,16 @@ namespace Paysafe.DirectDebit
 
         public async Task<StandaloneCredits> CancelAsync(StandaloneCredits standalonecredits)
         {
+            var request = CancelInternal(standalonecredits);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            StandaloneCredits returnVal = new StandaloneCredits(response);
+            returnVal.Id(standalonecredits.Id());
+            return returnVal;
+        }
+
+        private Request CancelInternal(StandaloneCredits standalonecredits)
+        {
             standalonecredits.SetRequiredFields(new List<string> {
                 GlobalConstants.Status,
                 GlobalConstants.Id
@@ -280,16 +240,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.Eft,
             });
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Put,
                 uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonecredits.Id()),
                 body: standalonecredits
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            StandaloneCredits returnVal = new StandaloneCredits(response);
-            returnVal.Id(standalonecredits.Id());
-            return returnVal;
         }
 
         /// <summary>
@@ -299,28 +254,21 @@ namespace Paysafe.DirectDebit
         /// <returns>Purchases</returns>
         public Purchases Get(Purchases purchase)
         {
-            purchase.SetRequiredFields(new List<string> {
-                GlobalConstants.Id,               
-            });
-            purchase.CheckRequiredFields();
-            purchase.SetOptionalFields(new List<string>{
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft,
-                GlobalConstants.Sepa,
-            });
-
-            Request request = new Request(
-                method: RequestType.Get,
-                uri: PrepareUri(_client.Account() + "/purchases/" + purchase.Id()),
-                body: purchase
-            );
+            var request = GetInternal(purchase);
             dynamic response = _client.ProcessRequest(request);
 
             return new Purchases(response);
         }
 
         public async Task<Purchases> GetAsync(Purchases purchase)
+        {
+            var request = GetInternal(purchase);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Purchases(response);
+        }
+
+        private Request GetInternal(Purchases purchase)
         {
             purchase.SetRequiredFields(new List<string> {
                 GlobalConstants.Id,
@@ -333,14 +281,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.Sepa,
             });
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Get,
                 uri: PrepareUri(_client.Account() + "/purchases/" + purchase.Id()),
                 body: purchase
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Purchases(response);
         }
 
         /// <summary>
@@ -351,43 +296,21 @@ namespace Paysafe.DirectDebit
         /// <returns></returns>
         public Pagerator<Purchases> GetPurchase(Purchases purchases = null, Filter filter = null)
         {
-            Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (purchases != null && !String.IsNullOrWhiteSpace(purchases.MerchantRefNum()))
-            {
-                queryStr.Add("merchantRefNum", purchases.MerchantRefNum());
-            }
-            if (filter != null)
-            {
-                if (filter.Limit != null)
-                {
-                    queryStr.Add("limit", filter.Limit.ToString());
-                }
-                if (filter.Offset != null)
-                {
-                    queryStr.Add("offset", filter.Offset.ToString());
-                }
-                if (!String.IsNullOrWhiteSpace(filter.StartDate))
-                {
-                    queryStr.Add("startDate", filter.StartDate);
-                }
-                if (!String.IsNullOrWhiteSpace(filter.EndDate))
-                {
-                    queryStr.Add("endDate", filter.EndDate);
-                }
-            }
-
-            Request request = new Request(
-                    method: RequestType.Get,
-                    uri: PrepareUri(_client.Account() + "/purchases"),
-                    queryString: queryStr
-            );
-
+            var request = GetPurchaseInternal(purchases, filter);
             dynamic response = _client.ProcessRequest(request);
 
             return new Pagerator<Purchases>(_client, typeof(Purchases), response);
         }
 
         public async Task<Pagerator<Purchases>> GetPurchaseAsync(Purchases purchases = null, Filter filter = null)
+        {
+            var request = GetPurchaseInternal(purchases, filter);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Pagerator<Purchases>(_client, typeof(Purchases), response);
+        }
+
+        private Request GetPurchaseInternal(Purchases purchases, Filter filter)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
             if (purchases != null && !String.IsNullOrWhiteSpace(purchases.MerchantRefNum()))
@@ -414,15 +337,11 @@ namespace Paysafe.DirectDebit
                 }
             }
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Get,
                 uri: PrepareUri(_client.Account() + "/purchases"),
                 queryString: queryStr
             );
-
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Pagerator<Purchases>(_client, typeof(Purchases), response);
         }
 
         /// <summary>
@@ -432,26 +351,21 @@ namespace Paysafe.DirectDebit
         /// <returns>StandaloneCredits</returns>
         public StandaloneCredits Get(StandaloneCredits standalonescredits)
         {
-            standalonescredits.SetRequiredFields(new List<string> {
-                GlobalConstants.Id,                
-            });
-            standalonescredits.CheckRequiredFields();
-            standalonescredits.SetOptionalFields(new List<string>{
-                GlobalConstants.Ach,
-                GlobalConstants.Bacs,
-                GlobalConstants.Eft,                  
-            });
-            Request request = new Request(
-                method: RequestType.Get,
-                uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonescredits.Id()),
-                body: standalonescredits
-            );
+            var request = GetInternal(standalonescredits);
             dynamic response = _client.ProcessRequest(request);
 
             return new StandaloneCredits(response);
         }
 
         public async Task<StandaloneCredits> GetAsync(StandaloneCredits standalonescredits)
+        {
+            var request = GetInternal(standalonescredits);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new StandaloneCredits(response);
+        }
+
+        private Request GetInternal(StandaloneCredits standalonescredits)
         {
             standalonescredits.SetRequiredFields(new List<string> {
                 GlobalConstants.Id,
@@ -462,14 +376,11 @@ namespace Paysafe.DirectDebit
                 GlobalConstants.Bacs,
                 GlobalConstants.Eft,
             });
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Get,
                 uri: PrepareUri(_client.Account() + "/standalonecredits/" + standalonescredits.Id()),
                 body: standalonescredits
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new StandaloneCredits(response);
         }
 
         /// <summary>
@@ -480,43 +391,21 @@ namespace Paysafe.DirectDebit
         /// <returns></returns>
         public Pagerator<StandaloneCredits> GetStandaloneCredits(StandaloneCredits standalonescredits = null, Filter filter = null)
         {
-            Dictionary<String, String> queryStr = new Dictionary<String, String>();
-            if (standalonescredits != null && !String.IsNullOrWhiteSpace(standalonescredits.MerchantRefNum()))
-            {
-                queryStr.Add("merchantRefNum", standalonescredits.MerchantRefNum());
-            }
-            if (filter != null)
-            {
-                if (filter.Limit != null)
-                {
-                    queryStr.Add("limit", filter.Limit.ToString());
-                }
-                if (filter.Offset != null)
-                {
-                    queryStr.Add("offset", filter.Offset.ToString());
-                }
-                if (!String.IsNullOrWhiteSpace(filter.StartDate))
-                {
-                    queryStr.Add("startDate", filter.StartDate);
-                }
-                if (!String.IsNullOrWhiteSpace(filter.EndDate))
-                {
-                    queryStr.Add("endDate", filter.EndDate);
-                }
-            }
-
-            Request request = new Request(
-                    method: RequestType.Get,
-                    uri: PrepareUri(_client.Account() + "/standalonecredits"),
-                    queryString: queryStr
-            );
-
+            var request = GetStandaloneCreditsInternal(standalonescredits, filter);
             dynamic response = _client.ProcessRequest(request);
 
             return new Pagerator<StandaloneCredits>(_client, typeof(StandaloneCredits), response);
         }
 
         public async Task<Pagerator<StandaloneCredits>> GetStandaloneCreditsAsync(StandaloneCredits standalonescredits = null, Filter filter = null)
+        {
+            var request = GetStandaloneCreditsInternal(standalonescredits, filter);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Pagerator<StandaloneCredits>(_client, typeof(StandaloneCredits), response);
+        }
+
+        private Request GetStandaloneCreditsInternal(StandaloneCredits standalonescredits, Filter filter)
         {
             Dictionary<String, String> queryStr = new Dictionary<String, String>();
             if (standalonescredits != null && !String.IsNullOrWhiteSpace(standalonescredits.MerchantRefNum()))
@@ -543,15 +432,11 @@ namespace Paysafe.DirectDebit
                 }
             }
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Get,
                 uri: PrepareUri(_client.Account() + "/standalonecredits"),
                 queryString: queryStr
             );
-
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Pagerator<StandaloneCredits>(_client, typeof(StandaloneCredits), response);
         }
 
         private string PrepareUri(string path)

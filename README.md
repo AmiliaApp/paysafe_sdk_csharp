@@ -16,7 +16,7 @@ Find it with nuget with PaysafeSDK
 ___
 
 ### Code coverage
-Every test is devided between the synchronous method causing an API call and its asynchronous counterpart.
+Every test is divided between the synchronous method causing an API call and its asynchronous counterpart.
 
 #### Covered by tests
 
@@ -58,6 +58,13 @@ Every test is devided between the synchronous method causing an API call and its
 #### Not covered by tests
 
 ##### Exceptions
+- PermissionException (403)
+- ApiException (415)
+- ApiException (501)
+- ApiException (502)
+- ApiException (503)
+- ApiException (504)
+- ApiException (505)
 
 ##### CardPaymentService
 - Approving held auhtorizations

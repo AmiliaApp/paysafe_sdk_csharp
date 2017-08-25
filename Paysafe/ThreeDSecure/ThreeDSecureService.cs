@@ -74,30 +74,21 @@ namespace Paysafe.ThreeDSecure
         /// <returns>EnrollmentChecks</returns>
         public EnrollmentChecks Submit(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.SetRequiredFields(new List<string> {
-                GlobalConstants.MerchantRefNum,
-                GlobalConstants.Amount,
-                GlobalConstants.Currency,
-                GlobalConstants.Card,
-                GlobalConstants.CustomerIp,
-                GlobalConstants.UserAgent,
-                GlobalConstants.AcceptHeader,
-                GlobalConstants.MerchantUrl
-            });
-
-            enrollmentChecks.CheckRequiredFields();
-
-            Request request = new Request(
-                method: RequestType.Post,
-                uri: PrepareUri("/accounts/" + _client.Account() +"/enrollmentchecks"),
-                body: enrollmentChecks
-            );
+            var request = SubmitInternal(enrollmentChecks);
             dynamic response = _client.ProcessRequest(request);
 
             return new EnrollmentChecks(response);
         }
 
         public async Task<EnrollmentChecks> SubmitAsync(EnrollmentChecks enrollmentChecks)
+        {
+            var request = SubmitInternal(enrollmentChecks);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new EnrollmentChecks(response);
+        }
+
+        private Request SubmitInternal(EnrollmentChecks enrollmentChecks)
         {
             enrollmentChecks.SetRequiredFields(new List<string> {
                 GlobalConstants.MerchantRefNum,
@@ -112,14 +103,11 @@ namespace Paysafe.ThreeDSecure
 
             enrollmentChecks.CheckRequiredFields();
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Post,
                 uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks"),
                 body: enrollmentChecks
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new EnrollmentChecks(response);
         }
 
         /// <summary>
@@ -129,13 +117,7 @@ namespace Paysafe.ThreeDSecure
         /// <returns>EnrollmentLookups</returns>
         public EnrollmentChecks Get(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
-            enrollmentChecks.CheckRequiredFields();
-
-            Request request = new Request(
-                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
-            );
-
+            var request = GetInternal(enrollmentChecks);
             dynamic response = _client.ProcessRequest(request);
 
             return new EnrollmentChecks(response);
@@ -143,16 +125,20 @@ namespace Paysafe.ThreeDSecure
 
         public async Task<EnrollmentChecks> GetAsync(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
-            enrollmentChecks.CheckRequiredFields();
-
-            Request request = new Request(
-                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
-            );
-
+            var request = GetInternal(enrollmentChecks);
             dynamic response = await _client.ProcessRequestAsync(request);
 
             return new EnrollmentChecks(response);
+        }
+
+        private Request GetInternal(EnrollmentChecks enrollmentChecks)
+        {
+            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            enrollmentChecks.CheckRequiredFields();
+
+            return new Request(
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
+            );
         }
 
         /// <summary>
@@ -162,17 +148,7 @@ namespace Paysafe.ThreeDSecure
         /// <returns>Authentications</returns>
         public Authentications Submit(Authentications authentications)
         {
-            authentications.SetRequiredFields(new List<string> {
-                GlobalConstants.MerchantRefNum,
-                GlobalConstants.PaResp,
-            });
-
-            authentications.CheckRequiredFields();                     
-            Request request = new Request(
-                method: RequestType.Post,
-                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + authentications.EnrollmentId() + "/authentications"),
-                body: authentications
-            );
+            var request = SubmitInternal(authentications);
             dynamic response = _client.ProcessRequest(request);
 
             return new Authentications(response);
@@ -180,20 +156,25 @@ namespace Paysafe.ThreeDSecure
 
         public async Task<Authentications> SubmitAsync(Authentications authentications)
         {
+            var request = SubmitInternal(authentications);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authentications(response);
+        }
+
+        private Request SubmitInternal(Authentications authentications)
+        {
             authentications.SetRequiredFields(new List<string> {
                 GlobalConstants.MerchantRefNum,
                 GlobalConstants.PaResp,
             });
 
             authentications.CheckRequiredFields();
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Post,
                 uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + authentications.EnrollmentId() + "/authentications"),
                 body: authentications
             );
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Authentications(response);
         }
 
         /// <summary>
@@ -203,29 +184,21 @@ namespace Paysafe.ThreeDSecure
         /// <returns>Authentications</returns>
         public Authentications Get(Authentications authentications, bool includeEnrollment = false)
         {
-            authentications.SetRequiredFields(new List<string> { GlobalConstants.Id });
-            authentications.CheckRequiredFields();
-
-            Dictionary<string, string> queryStr = new Dictionary<string, string>();
-            StringBuilder toInclude = new StringBuilder();
-
-            if (includeEnrollment)
-            {
-                toInclude.Append("enrollmentchecks");
-            }
-            queryStr.Add("fields", toInclude.ToString());                                          
-
-            Request request = new Request(
-                uri: PrepareUri("/accounts/" + _client.Account() + "/authentications/" + authentications.Id()),
-                queryString : queryStr
-            );
-
+            var request = GetInternal(authentications, includeEnrollment);
             dynamic response = _client.ProcessRequest(request);
 
             return new Authentications(response);
         }
 
         public async Task<Authentications> GetAsync(Authentications authentications, bool includeEnrollment = false)
+        {
+            var request = GetInternal(authentications, includeEnrollment);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authentications(response);
+        }
+
+        private Request GetInternal(Authentications authentications, bool includeEnrollment)
         {
             authentications.SetRequiredFields(new List<string> { GlobalConstants.Id });
             authentications.CheckRequiredFields();
@@ -239,14 +212,10 @@ namespace Paysafe.ThreeDSecure
             }
             queryStr.Add("fields", toInclude.ToString());
 
-            Request request = new Request(
+            return new Request(
                 uri: PrepareUri("/accounts/" + _client.Account() + "/authentications/" + authentications.Id()),
                 queryString: queryStr
             );
-
-            dynamic response = await _client.ProcessRequestAsync(request);
-
-            return new Authentications(response);
         }
 
         private string PrepareUri(string path)
