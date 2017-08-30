@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Paysafe.Common;
 
 namespace Paysafe.ThreeDSecure
@@ -58,12 +59,36 @@ namespace Paysafe.ThreeDSecure
             return ("READY".Equals((string)(response[GlobalConstants.Status])));
         }
 
+        public async Task<bool> MonitorAsync()
+        {
+            Request request = new Request(uri: "threedsecure/monitor");
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return ("READY".Equals((string)(response[GlobalConstants.Status])));
+        }
+
         /// <summary>
         /// Submit an enrollment lookup request
         /// </summary>
-        /// <param name="EnrollmentLookups">EnrollmentLookups</param>
-        /// <returns>EnrollmentLookups</returns>
+        /// <param name="enrollmentChecks"></param>
+        /// <returns>EnrollmentChecks</returns>
         public EnrollmentChecks Submit(EnrollmentChecks enrollmentChecks)
+        {
+            var request = SubmitInternal(enrollmentChecks);
+            dynamic response = _client.ProcessRequest(request);
+
+            return new EnrollmentChecks(response);
+        }
+
+        public async Task<EnrollmentChecks> SubmitAsync(EnrollmentChecks enrollmentChecks)
+        {
+            var request = SubmitInternal(enrollmentChecks);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new EnrollmentChecks(response);
+        }
+
+        private Request SubmitInternal(EnrollmentChecks enrollmentChecks)
         {
             enrollmentChecks.SetRequiredFields(new List<string> {
                 GlobalConstants.MerchantRefNum,
@@ -78,14 +103,11 @@ namespace Paysafe.ThreeDSecure
 
             enrollmentChecks.CheckRequiredFields();
 
-            Request request = new Request(
+            return new Request(
                 method: RequestType.Post,
-                uri: PrepareUri("/accounts/" + _client.Account() +"/enrollmentchecks"),
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks"),
                 body: enrollmentChecks
             );
-            dynamic response = _client.ProcessRequest(request);
-
-            return new EnrollmentChecks(response);
         }
 
         /// <summary>
@@ -95,16 +117,28 @@ namespace Paysafe.ThreeDSecure
         /// <returns>EnrollmentLookups</returns>
         public EnrollmentChecks Get(EnrollmentChecks enrollmentChecks)
         {
-            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
-            enrollmentChecks.CheckRequiredFields();
-
-            Request request = new Request(
-                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
-            );
-
+            var request = GetInternal(enrollmentChecks);
             dynamic response = _client.ProcessRequest(request);
 
             return new EnrollmentChecks(response);
+        }
+
+        public async Task<EnrollmentChecks> GetAsync(EnrollmentChecks enrollmentChecks)
+        {
+            var request = GetInternal(enrollmentChecks);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new EnrollmentChecks(response);
+        }
+
+        private Request GetInternal(EnrollmentChecks enrollmentChecks)
+        {
+            enrollmentChecks.SetRequiredFields(new List<string> { GlobalConstants.Id });
+            enrollmentChecks.CheckRequiredFields();
+
+            return new Request(
+                uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + enrollmentChecks.Id())
+            );
         }
 
         /// <summary>
@@ -114,20 +148,33 @@ namespace Paysafe.ThreeDSecure
         /// <returns>Authentications</returns>
         public Authentications Submit(Authentications authentications)
         {
+            var request = SubmitInternal(authentications);
+            dynamic response = _client.ProcessRequest(request);
+
+            return new Authentications(response);
+        }
+
+        public async Task<Authentications> SubmitAsync(Authentications authentications)
+        {
+            var request = SubmitInternal(authentications);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authentications(response);
+        }
+
+        private Request SubmitInternal(Authentications authentications)
+        {
             authentications.SetRequiredFields(new List<string> {
                 GlobalConstants.MerchantRefNum,
                 GlobalConstants.PaResp,
             });
 
-            authentications.CheckRequiredFields();                     
-            Request request = new Request(
+            authentications.CheckRequiredFields();
+            return new Request(
                 method: RequestType.Post,
                 uri: PrepareUri("/accounts/" + _client.Account() + "/enrollmentchecks/" + authentications.EnrollmentId() + "/authentications"),
                 body: authentications
             );
-            dynamic response = _client.ProcessRequest(request);
-
-            return new Authentications(response);
         }
 
         /// <summary>
@@ -136,6 +183,22 @@ namespace Paysafe.ThreeDSecure
         /// <param name="auth">Authentications</param>
         /// <returns>Authentications</returns>
         public Authentications Get(Authentications authentications, bool includeEnrollment = false)
+        {
+            var request = GetInternal(authentications, includeEnrollment);
+            dynamic response = _client.ProcessRequest(request);
+
+            return new Authentications(response);
+        }
+
+        public async Task<Authentications> GetAsync(Authentications authentications, bool includeEnrollment = false)
+        {
+            var request = GetInternal(authentications, includeEnrollment);
+            dynamic response = await _client.ProcessRequestAsync(request);
+
+            return new Authentications(response);
+        }
+
+        private Request GetInternal(Authentications authentications, bool includeEnrollment)
         {
             authentications.SetRequiredFields(new List<string> { GlobalConstants.Id });
             authentications.CheckRequiredFields();
@@ -147,16 +210,12 @@ namespace Paysafe.ThreeDSecure
             {
                 toInclude.Append("enrollmentchecks");
             }
-            queryStr.Add("fields", toInclude.ToString());                                          
+            queryStr.Add("fields", toInclude.ToString());
 
-            Request request = new Request(
+            return new Request(
                 uri: PrepareUri("/accounts/" + _client.Account() + "/authentications/" + authentications.Id()),
-                queryString : queryStr
+                queryString: queryStr
             );
-
-            dynamic response = _client.ProcessRequest(request);
-
-            return new Authentications(response);
         }
 
         private string PrepareUri(string path)
