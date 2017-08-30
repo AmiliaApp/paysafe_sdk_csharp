@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Paysafe;
-using Paysafe.CardPayments;
-using Paysafe.CustomerVault;
 using Paysafe.DirectDebit;
 using Profile = Paysafe.DirectDebit.Profile;
 using BillingDetails = Paysafe.DirectDebit.BillingDetails;
@@ -327,7 +319,6 @@ namespace Tests.DirectDebit
         }
 
         // Fail: Sometimes returns empty results
-        // Dates: 2017-08-24 5:50 pm
         [Test]
         public void When_I_lookup_an_eft_purchase_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_purchase_sync()
         {
@@ -344,7 +335,6 @@ namespace Tests.DirectDebit
         }
 
         // Fail: Sometimes returns empty results
-        // Dates: 2017-08-24 5:50 pm
         [Test]
         public async Task When_I_lookup_an_eft_purchase_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_purchase_async()
         {
@@ -643,7 +633,6 @@ namespace Tests.DirectDebit
         }
 
         // Fail: Sometimes returns empty results
-        // Dates: 2017-08-24 5:50 pm
         [Test]
         public void When_I_lookup_an_eft_standalone_credit_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_standalone_credit_sync()
         {
@@ -660,7 +649,6 @@ namespace Tests.DirectDebit
         }
 
         // Fail: Sometimes returns empty results
-        // Dates: 2017-08-24 5:50 pm
         [Test]
         public async Task When_I_lookup_an_eft_standalone_credit_using_a_merchant_refnum_Then_it_should_return_a_valid_eft_standalone_credit_async()
         {

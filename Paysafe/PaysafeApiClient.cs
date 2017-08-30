@@ -19,15 +19,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.Remoting.Messaging;
-using System.Threading.Tasks;
-using System.Web;
 using CardPaymentService = Paysafe.CardPayments.CardPaymentService;
 using CustomerVaultService = Paysafe.CustomerVault.CustomerVaultService;
 using DirectDebitService = Paysafe.DirectDebit.DirectDebitService;
@@ -221,6 +215,7 @@ namespace Paysafe
                 WebResponse responseObject = conn.EndGetResponse(responseRequest);
 
                 StreamReader sr = new StreamReader(responseObject.GetResponseStream());
+
                 return ParseResponse(sr.ReadToEnd());
             }
             catch (WebException ex)
@@ -271,7 +266,6 @@ namespace Paysafe
             throw new PaysafeException("An unhandled error has occured.");
         }
 
-        //Todo: Legacy code for synchronous method, to be removed
         public static Dictionary<string, object> ParseResponse(string response)
         {
             if (String.IsNullOrWhiteSpace(response))
@@ -287,11 +281,7 @@ namespace Paysafe
             using (StreamReader sr = new StreamReader(responseStream))
             {
                 string strContent = sr.ReadToEnd();
-                if (String.IsNullOrWhiteSpace(strContent))
-                {
-                    return null;
-                }
-                return JsonHelper.Deserialize(strContent) as Dictionary<string, object>;
+                return ParseResponse(strContent);
             }
         }
 

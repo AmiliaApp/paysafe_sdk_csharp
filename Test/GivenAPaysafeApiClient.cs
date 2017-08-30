@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Tests;
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
-using Paysafe;
 using Paysafe.CardPayments;
 using Authorization = Paysafe.CardPayments.Authorization;
-using Card = Paysafe.CustomerVault.Card;
 
 namespace Tests
 {
@@ -30,7 +22,7 @@ namespace Tests
 
         //400
         [Test]
-        public void When_a_card_without_billing_details_is_used_Then_it_should_throw_InvalidRequestException_synchronous()
+        public void When_a_card_without_billing_details_is_used_Then_it_should_throw_InvalidRequestException_sync()
         {
             var auth = SampleFactory.CreateSampleIncompleteAuthorization();
 
@@ -38,7 +30,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_a_card_without_billing_details_is_used_Then_it_should_throw_InvalidRequestException_asynchronous()
+        public void When_a_card_without_billing_details_is_used_Then_it_should_throw_InvalidRequestException_async()
         {
             var auth = SampleFactory.CreateSampleIncompleteAuthorization();
 
@@ -46,7 +38,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_I_send_an_auth_with_negative_amount_Then_it_should_throw_InvalidRequestException_synchronous()
+        public void When_I_send_an_auth_with_negative_amount_Then_it_should_throw_InvalidRequestException_sync()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
             auth.Amount(-1);
@@ -55,7 +47,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_I_send_an_auth_with_negative_amount_Then_it_should_throw_InvalidRequestException_asynchronous()
+        public void When_I_send_an_auth_with_negative_amount_Then_it_should_throw_InvalidRequestException_async()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
             auth.Amount(-1);
@@ -65,7 +57,7 @@ namespace Tests
 
         //401
         [Test]
-        public void When_I_use_a_client_with_invalid_creds_Then_it_should_throw_InvalidCredentialsException_synchronous()
+        public void When_I_use_a_client_with_invalid_creds_Then_it_should_throw_InvalidCredentialsException_sync()
         {
             var invalidCardPaymentService = SampleFactory.CreateSampleInvalidCardPaymentService();
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
@@ -74,7 +66,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_I_use_a_client_with_invalid_creds_Then_it_should_throw_InvalidCredentialsException_asynchronous()
+        public void When_I_use_a_client_with_invalid_creds_Then_it_should_throw_InvalidCredentialsException_async()
         {
             var invalidCardPaymentService = SampleFactory.CreateSampleInvalidCardPaymentService();
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
@@ -84,7 +76,7 @@ namespace Tests
 
         //402
         [Test]
-        public void When_a_request_is_declined_Then_it_should_throw_RequestDeclinedException_synchronous()
+        public void When_a_request_is_declined_Then_it_should_throw_RequestDeclinedException_sync()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("requestDeclined");
 
@@ -92,7 +84,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_a_request_is_declined_Then_it_should_throw_RequestDeclinedException__asynchronous()
+        public void When_a_request_is_declined_Then_it_should_throw_RequestDeclinedException__async()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("requestDeclined");
 
@@ -101,20 +93,20 @@ namespace Tests
 
         //404
         [Test]
-        public void When_I_get_an_auth_with_invalid_id_Then_it_should_throw_EntityNotFoundException_synchronous()
+        public void When_I_get_an_auth_with_invalid_id_Then_it_should_throw_EntityNotFoundException_sync()
         {
             Assert.Throws<Paysafe.Common.EntityNotFoundException>(() => _cardPaymentService.Get(new Authorization("Invalid_id")));
         }
 
         [Test]
-        public void When_I_get_an_auth_with_invalid_id_Then_it_should_throw_EntityNotFoundException_asynchronous()
+        public void When_I_get_an_auth_with_invalid_id_Then_it_should_throw_EntityNotFoundException_async()
         {
             Assert.ThrowsAsync<Paysafe.Common.EntityNotFoundException> (async () => await _cardPaymentService.GetAsync(new Authorization("Invalid_id")));
         }
 
         //409
         [Test]
-        public void When_I_send_an_auth_more_than_once_Then_it_should_throw_RequestConflictException_synchronous()
+        public void When_I_send_an_auth_more_than_once_Then_it_should_throw_RequestConflictException_sync()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
 
@@ -123,7 +115,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task When_I_send_an_auth_more_than_once_Then_it_should_throw_RequestConflictException_asynchronous()
+        public async Task When_I_send_an_auth_more_than_once_Then_it_should_throw_RequestConflictException_async()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("noException");
 
@@ -133,7 +125,7 @@ namespace Tests
 
         //500 (API Exception)
         [Test]
-        public void When_an_internal_error_occurs_Then_it_should_throw_ApiException_synchronous()
+        public void When_an_internal_error_occurs_Then_it_should_throw_ApiException_sync()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("apiException");
 
@@ -141,7 +133,7 @@ namespace Tests
         }
 
         [Test]
-        public void When_an_internal_error_occurs_Then_it_should_throw_ApiException_asynchronous()
+        public void When_an_internal_error_occurs_Then_it_should_throw_ApiException_async()
         {
             var auth = SampleFactory.CreateSampleCustomAuthorization("apiException");
 

@@ -53,7 +53,7 @@ namespace Tests.CardPayments
          */
 
         [Test]
-        public void When_I_send_a_valid_auth_Then_the_transaction_should_complete_synchronous()
+        public void When_I_send_a_valid_auth_Then_the_transaction_should_complete_sync()
         {
             var response = _cardService.Authorize(_auth);
 
@@ -61,7 +61,7 @@ namespace Tests.CardPayments
         }
 
         [Test]
-        public async Task When_I_send_a_valid_auth_Then_the_transaction_should_complete_asynchronous()
+        public async Task When_I_send_a_valid_auth_Then_the_transaction_should_complete_asyn()
         {
             var response = await _cardService.AuthorizeAsync(_auth);
 

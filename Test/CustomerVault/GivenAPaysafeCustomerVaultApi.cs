@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Paysafe;
 using Paysafe.CardPayments;
 using Paysafe.CustomerVault;
 using Profile = Paysafe.CustomerVault.Profile;
 using Card = Paysafe.CustomerVault.Card;
-using BillingAddress = Paysafe.CustomerVault.BillingAddress;
 
 namespace Tests.CustomerVault
 {

@@ -136,13 +136,14 @@ namespace Paysafe.Common
                 _parent = parent;
             }
 
+            //TODO: Method should be made async
             bool IEnumerator.MoveNext()
             {
                 _position++;
                 if (_parent.Results.Count >= _position && !String.IsNullOrWhiteSpace(_parent.NextPage))
                 {
                     Request request = new Request(url: _parent.NextPage);
-                    var response = _parent.Client.ProcessRequest(request); //Make Pagerator async
+                    var response = _parent.Client.ProcessRequest(request);
                     _parent.ParseResponse(response);
                 }
                 return _position < _parent.Results.Count;
