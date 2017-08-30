@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 using CardPaymentService = Paysafe.CardPayments.CardPaymentService;
 using CustomerVaultService = Paysafe.CustomerVault.CustomerVaultService;
 using DirectDebitService = Paysafe.DirectDebit.DirectDebitService;
@@ -261,7 +262,7 @@ namespace Paysafe
             }
             catch (WebException ex)
             {
-                await HandlePaysafeException(ex);
+                await HandlePaysafeExceptionAsync(ex);
             }
             throw new PaysafeException("An unhandled error has occured.");
         }
@@ -285,7 +286,7 @@ namespace Paysafe
             }
         }
 
-        public async Task HandlePaysafeException(WebException ex)
+        public async Task HandlePaysafeExceptionAsync(WebException ex)
         {
             var response = (HttpWebResponse) ex.Response;
             var statusCode = response.StatusCode;
@@ -293,60 +294,9 @@ namespace Paysafe
             var body = await sr.ReadToEndAsync();
             var innerException = ex.InnerException;
 
-            string exceptionType = null;
-            switch (statusCode)
-            {
-                case HttpStatusCode.BadRequest: // 400
-                    exceptionType = "InvalidRequestException";
-                    break;
-                case HttpStatusCode.Unauthorized: // 401
-                    exceptionType = "InvalidCredentialsException";
-                    break;
-                case HttpStatusCode.PaymentRequired: //402
-                    exceptionType = "RequestDeclinedException";
-                    break;
-                case HttpStatusCode.Forbidden: //403
-                    exceptionType = "PermissionException";
-                    break;
-                case HttpStatusCode.NotFound: //404
-                    exceptionType = "EntityNotFoundException";
-                    break;
-                case HttpStatusCode.Conflict: //409
-                    exceptionType = "RequestConflictException";
-                    break;
-                case HttpStatusCode.NotAcceptable: //406
-                case HttpStatusCode.UnsupportedMediaType: //415
-                case HttpStatusCode.InternalServerError: //500
-                case HttpStatusCode.NotImplemented: //501
-                case HttpStatusCode.BadGateway: //502
-                case HttpStatusCode.ServiceUnavailable: //503
-                case HttpStatusCode.GatewayTimeout: //504
-                case HttpStatusCode.HttpVersionNotSupported: //505
-                    exceptionType = "ApiException";
-                    break;
-            }
-            if (exceptionType != null)
-            {
-                String message = body;
-                Dictionary<string, dynamic> rawResponse = ParseResponse(body);
-                if (rawResponse.ContainsKey("error"))
-                {
-                    message = rawResponse["error"]["message"];
-                }
-
-                Object[] args = {message, innerException};
-                PaysafeException paysafeException = Activator.CreateInstance
-                    (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
-                paysafeException.RawResponse(rawResponse);
-                if (rawResponse.ContainsKey("error"))
-                {
-                    paysafeException.Code(int.Parse(rawResponse["error"]["code"]));
-                }
-                throw paysafeException;
-            }
+            HandlePaysafeExceptionInternal(statusCode, body, innerException);
         }
 
-        //Legacy code for synchronous method, to be removed
         public void HandlePaysafeExceptionSync(WebException ex)
         {
             var response = (HttpWebResponse) ex.Response;
@@ -355,6 +305,11 @@ namespace Paysafe
             var body = sr.ReadToEnd();
             var innerException = ex.InnerException;
 
+            HandlePaysafeExceptionInternal(statusCode, body, innerException);
+        }
+
+        private void HandlePaysafeExceptionInternal(HttpStatusCode statusCode, string body, Exception innerException)
+        {
             string exceptionType = null;
             switch (statusCode)
             {
@@ -396,7 +351,7 @@ namespace Paysafe
                     message = rawResponse["error"]["message"];
                 }
 
-                Object[] args = {message, innerException};
+                Object[] args = { message, innerException };
                 PaysafeException paysafeException = Activator.CreateInstance
                     (Type.GetType("Paysafe.Common." + exceptionType), args) as PaysafeException;
                 paysafeException.RawResponse(rawResponse);
@@ -407,8 +362,6 @@ namespace Paysafe
                 throw paysafeException;
             }
         }
-
-
 
     }
 }
