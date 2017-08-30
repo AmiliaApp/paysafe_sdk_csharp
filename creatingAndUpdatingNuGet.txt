@@ -13,7 +13,7 @@ https://github.com/AmiliaApp/paysafe_sdk_csharp/
 Create a release zip the release folder binaires and drag&drop the binaries in github
 
 #4
-update the nuspec file for assembly and version information plus release project link
+update the ./Paysafe/Paysafe.nuspec file for assembly and version information plus release project link
 
 #5
 run 

@@ -5,7 +5,7 @@
 	<version>$version$</version>
 	<title>$title$</title>
 	<description>PaySafe SDK - maintained by Amilia</description>
-	<authors>Patrick, Paquet</authors>
+	<authors>Patrick Paquet, Arnaud Foulem Malouin</authors>
 	<owners>kumarvipin, asawarivaidya</owners>
 	<licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
 	<projectUrl>https://github.com/AmiliaApp/paysafe_sdk_csharp</projectUrl>
@@ -13,7 +13,7 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<copyright>Copyright 2017</copyright>
     <tags>PaysafeSdk</tags>
-    <releaseNotes>First release</releaseNotes>
+    <releaseNotes>Added async methods and test suite</releaseNotes>
     <dependencies>
         <dependency id="Newtonsoft.Json" version="9.0.1"/>
     </dependencies>
