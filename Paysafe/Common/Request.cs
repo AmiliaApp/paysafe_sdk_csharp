@@ -117,7 +117,7 @@ namespace Paysafe.Common
         /// <returns></returns>
         public string Body()
         {
-            return _requestBody.ToString();
+            return _requestBody?.ToString();
         }
     }
 }
