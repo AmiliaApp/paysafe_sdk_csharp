@@ -193,6 +193,10 @@ namespace Paysafe
         /// <returns>Dictionary<string,object></returns>
         public Dictionary<string, object> ProcessRequest(Request request)
         {
+#if DEBUG
+            LogRequestAndEndpoint(request);
+#endif
+
             HttpWebRequest conn = (HttpWebRequest) WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
             conn.Headers["Authorization"] = "Basic " + GetAuthString();
             conn.ContentType = "application/json; charset=utf-8";
@@ -233,6 +237,10 @@ namespace Paysafe
         /// <returns>Task<Dictionary<string,object>></returns>
         public async Task<Dictionary<string, object>> ProcessRequestAsync(Request request)
         {
+#if DEBUG
+            LogRequestAndEndpoint(request);
+#endif
+
             HttpWebRequest conn = WebRequest.CreateHttp(request.BuildUrl(_apiEndPoint));
             conn.Headers["Authorization"] = "Basic " + GetAuthString();
             conn.ContentType = "application/json; charset=utf-8";
@@ -264,11 +272,15 @@ namespace Paysafe
             {
                 await HandlePaysafeExceptionAsync(ex);
             }
+
             throw new PaysafeException("An unhandled error has occured.");
         }
 
         public static Dictionary<string, object> ParseResponse(string response)
         {
+#if DEBUG
+            LogResponse(response);
+#endif
             if (String.IsNullOrWhiteSpace(response))
             {
                 return null;
@@ -361,6 +373,41 @@ namespace Paysafe
                 }
                 throw paysafeException;
             }
+        }
+
+        private void LogRequestAndEndpoint(Request request)
+        {
+            string path = @"c:\logs\logs.txt";
+
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, "------------Paysafe V1 API C# SDK test suite logs------------\r\n");
+            }
+
+            File.AppendAllText(path, "----------New call----------\r\n");
+            string appendText;
+
+            if (request.Body() != null)
+            {
+                appendText = "Request body: " + request.Body() + "\r\nRequest endpoint: " +
+                                    request.BuildUrl(_apiEndPoint) + "\r\n";
+            }
+            else
+            {
+                appendText = "Request body: null \r\nRequest endpoint: " +
+                                    request.BuildUrl(_apiEndPoint) + "\r\n";
+            }
+            File.AppendAllText(path, appendText);
+
+        }
+
+        private static void LogResponse(string response)
+        {
+            string path = @"c:\logs\logs.txt";
+
+            string appendText = "Response: " + response + "\r\n";
+            File.AppendAllText(path, appendText);
+
         }
 
     }
